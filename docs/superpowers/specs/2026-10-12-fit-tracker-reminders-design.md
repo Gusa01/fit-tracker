@@ -77,7 +77,7 @@ function planReminders(input: PlanInput): PlannedReminder[]; // sorted by date
 - If the current week (Monday–Sunday containing `now`) has **no** completed session: one alert on this week's Saturday.
 - If the current week **has** a completed session: one alert on next week's Saturday. The plan assumes no future training; training makes the user open the app, which reschedules.
 - At most one streak alert is ever planned. If its time is not after `now` (e.g. it's already Sunday), none.
-- Title `🔥 Tu racha está en riesgo`, body `Llevás <streak> semana(s) seguidas. Entrená antes del domingo para no perderla.` (`semana` when 1, `semanas` otherwise).
+- Title `🔥 Tu racha está en riesgo`, body `Llevás 1 semana seguida. Entrená antes del domingo para no perderla.` when the streak is 1, otherwise `Llevás <streak> semanas seguidas. Entrená antes del domingo para no perderla.`
 
 ## 5. Scheduler — `syncReminders` (side effects)
 
