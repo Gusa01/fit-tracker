@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { View, Text, Switch, Pressable, Modal, FlatList, StyleSheet, Linking, Alert, ScrollView } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 import { DEFAULT_REMINDER_SETTINGS, loadReminderSettings, saveReminderSettings } from '../../src/lib/reminders/storage';
@@ -21,11 +21,14 @@ export default function SettingsScreen() {
   const [permissionDenied, setPermissionDenied] = useState(false);
   const [hasRoutine, setHasRoutine] = useState(true);
   const [pickerOpen, setPickerOpen] = useState(false);
+  // Handlers read the latest settings from here, not from the render-time snapshot.
+  const settingsRef = useRef<ReminderSettings>(DEFAULT_REMINDER_SETTINGS);
 
   useFocusEffect(
     useCallback(() => {
       (async () => {
         const loaded = await loadReminderSettings();
+        settingsRef.current = loaded;
         setSettings(loaded);
         const anyOn = loaded.trainingEnabled || loaded.streakEnabled;
         setPermissionDenied(anyOn && !(await hasNotificationPermission()));
@@ -34,7 +37,9 @@ export default function SettingsScreen() {
     }, [])
   );
 
-  async function apply(next: ReminderSettings) {
+  async function apply(change: Partial<ReminderSettings>) {
+    const next = { ...settingsRef.current, ...change };
+    settingsRef.current = next;
     setSettings(next);
     await saveReminderSettings(next).catch((err) => console.warn('Could not save reminder settings', err));
     syncReminders();
@@ -46,7 +51,7 @@ export default function SettingsScreen() {
       setPermissionDenied(!granted);
       if (!granted) return;
     }
-    await apply({ ...settings, [key]: value });
+    await apply({ [key]: value });
   }
 
   async function handleTest() {
@@ -106,9 +111,10 @@ export default function SettingsScreen() {
             <FlatList
               style={styles.column}
               data={HOURS}
+              extraData={settings}
               keyExtractor={(h) => `h${h}`}
               renderItem={({ item }) => (
-                <Pressable style={styles.option} onPress={() => apply({ ...settings, hour: item })}>
+                <Pressable style={styles.option} onPress={() => apply({ hour: item })}>
                   <Text style={[styles.optionText, item === settings.hour && styles.optionActive]}>{pad(item)}</Text>
                 </Pressable>
               )}
@@ -116,9 +122,10 @@ export default function SettingsScreen() {
             <FlatList
               style={styles.column}
               data={MINUTES}
+              extraData={settings}
               keyExtractor={(m) => `m${m}`}
               renderItem={({ item }) => (
-                <Pressable style={styles.option} onPress={() => apply({ ...settings, minute: item })}>
+                <Pressable style={styles.option} onPress={() => apply({ minute: item })}>
                   <Text style={[styles.optionText, item === settings.minute && styles.optionActive]}>{pad(item)}</Text>
                 </Pressable>
               )}
