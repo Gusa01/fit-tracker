@@ -17,6 +17,8 @@ import { shouldSuggestRoutineSwitch } from '../lib/progression/routineSwitch';
 import { recordDeload } from '../lib/progression/mutations';
 import { activateRoutine } from '../lib/routines/mutations';
 import { getRoutine } from '../lib/routines/queries';
+import { saveCompletedDates } from '../lib/reminders/storage';
+import { syncReminders } from '../lib/reminders/scheduler';
 
 type SessionStatus = 'none' | 'in_progress' | 'completed';
 
@@ -84,6 +86,7 @@ export function useHomeData() {
       if (recentSessions !== null) {
         setRecentActivity(recentSessions.slice(0, 5));
         setConsistencyStreak(computeConsecutiveActiveWeeks(recentSessions.map((s) => s.sessionDate), new Date()));
+        await saveCompletedDates(recentSessions.map((s) => s.sessionDate)).catch(() => {});
       }
       // else: offline / request failure — preserve whatever recentActivity/consistencyStreak
       // already held from the last successful load, instead of flashing them to empty/0.
@@ -150,6 +153,9 @@ export function useHomeData() {
       setError(err instanceof Error ? err.message : 'No se pudo cargar el inicio.');
     } finally {
       setLoading(false);
+      // Fire-and-forget: reminders never block Home (and run even when there's no routine,
+      // so turning a routine off clears its alerts).
+      syncReminders();
     }
   }, [userId]);
 
