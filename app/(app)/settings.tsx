@@ -54,6 +54,7 @@ export default function SettingsScreen() {
       if (!granted) return;
     }
     await apply({ [key]: value });
+    if (!settingsRef.current.trainingEnabled && !settingsRef.current.streakEnabled) setPermissionDenied(false);
   }
 
   async function handleTest() {
