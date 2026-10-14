@@ -48,11 +48,34 @@ export async function loadCompletedDates(): Promise<string[]> {
   return parsed.filter((d): d is string => typeof d === 'string' && DATE_PATTERN.test(d));
 }
 
-export async function saveCompletedDates(dates: string[]): Promise<void> {
+// Every write to the dates key runs one at a time so concurrent read-modify-writes can't drop a date.
+let datesChain: Promise<unknown> = Promise.resolve();
+
+function serializeDatesWrite<T>(task: () => Promise<T>): Promise<T> {
+  const result = datesChain.then(task);
+  datesChain = result.catch(() => {});
+  return result;
+}
+
+async function writeDates(dates: string[]): Promise<void> {
   await AsyncStorage.setItem(DATES_KEY, JSON.stringify(dates));
 }
 
-export async function addCompletedDate(date: string): Promise<void> {
-  const dates = await loadCompletedDates();
-  if (!dates.includes(date)) await saveCompletedDates([...dates, date]);
+export function saveCompletedDates(dates: string[]): Promise<void> {
+  return serializeDatesWrite(() => writeDates(dates));
+}
+
+export function addCompletedDate(date: string): Promise<void> {
+  return serializeDatesWrite(async () => {
+    const dates = await loadCompletedDates();
+    if (!dates.includes(date)) await writeDates([...dates, date]);
+  });
+}
+
+/** Completed sessions are never un-completed, so the union of stored and server dates is correct. */
+export function mergeCompletedDates(serverDates: string[]): Promise<void> {
+  return serializeDatesWrite(async () => {
+    const stored = await loadCompletedDates();
+    await writeDates([...new Set([...stored, ...serverDates])].sort());
+  });
 }

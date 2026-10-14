@@ -10,6 +10,7 @@ import {
   loadCompletedDates,
   saveCompletedDates,
   addCompletedDate,
+  mergeCompletedDates,
 } from '../../../src/lib/reminders/storage';
 
 beforeEach(async () => {
@@ -56,5 +57,16 @@ describe('completed session dates', () => {
     await addCompletedDate('2026-10-07');
     await addCompletedDate('2026-10-12');
     expect(await loadCompletedDates()).toEqual(['2026-10-05', '2026-10-07', '2026-10-12']);
+  });
+
+  it('merges server dates with stored ones, sorted and without duplicates', async () => {
+    await saveCompletedDates(['2026-10-12', '2026-10-05']);
+    await mergeCompletedDates(['2026-10-07', '2026-10-05']);
+    expect(await loadCompletedDates()).toEqual(['2026-10-05', '2026-10-07', '2026-10-12']);
+  });
+
+  it('keeps both writes when add and merge run concurrently', async () => {
+    await Promise.all([addCompletedDate('2026-10-12'), mergeCompletedDates(['2026-10-05'])]);
+    expect(await loadCompletedDates()).toEqual(['2026-10-05', '2026-10-12']);
   });
 });
