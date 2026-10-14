@@ -6,6 +6,8 @@ import { useAuthSession } from '../src/hooks/useAuthSession';
 import { initDatabase, getDatabase } from '../src/lib/sqlite/db';
 import { supabase } from '../src/lib/supabase';
 import { startSyncListener } from '../src/lib/sync/syncService';
+import * as Notifications from 'expo-notifications';
+import { setupNotifications } from '../src/lib/reminders/scheduler';
 
 initDatabase();
 
@@ -31,6 +33,14 @@ export default function RootLayout() {
     const stop = startSyncListener(getDatabase(), supabase, userId);
     return stop;
   }, [session?.user.id]);
+
+  useEffect(() => {
+    setupNotifications().catch((err) => console.warn('Could not set up notifications', err));
+    const subscription = Notifications.addNotificationResponseReceivedListener(() => {
+      router.push('/(app)' as any);
+    });
+    return () => subscription.remove();
+  }, []);
 
   if (isLoading) return null;
 
