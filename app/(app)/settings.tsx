@@ -34,7 +34,8 @@ export default function SettingsScreen() {
         setLoaded(true);
         const anyOn = stored.trainingEnabled || stored.streakEnabled;
         setPermissionDenied(anyOn && (await getNotificationPermissionStatus()) === 'denied');
-        setHasRoutine(getCachedActiveRoutine(getDatabase()) !== null);
+        const routine = getCachedActiveRoutine(getDatabase());
+        setHasRoutine(routine !== null && routine.started_at !== null);
       })().catch((err) => console.warn('Could not load reminder settings', err));
     }, [])
   );
