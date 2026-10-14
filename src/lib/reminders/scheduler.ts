@@ -29,6 +29,13 @@ export async function hasNotificationPermission(): Promise<boolean> {
   return (await Notifications.getPermissionsAsync()).granted;
 }
 
+/** 'undetermined' = the system prompt can still be shown; 'denied' = only the phone settings can change it. */
+export async function getNotificationPermissionStatus(): Promise<'granted' | 'denied' | 'undetermined'> {
+  const permissions = await Notifications.getPermissionsAsync();
+  if (permissions.granted) return 'granted';
+  return permissions.canAskAgain ? 'undetermined' : 'denied';
+}
+
 export async function requestNotificationPermission(): Promise<boolean> {
   if (await hasNotificationPermission()) return true;
   return (await Notifications.requestPermissionsAsync()).granted;

@@ -4,7 +4,7 @@ import { useFocusEffect } from 'expo-router';
 import { DEFAULT_REMINDER_SETTINGS, loadReminderSettings, saveReminderSettings } from '../../src/lib/reminders/storage';
 import { ReminderSettings } from '../../src/lib/reminders/types';
 import {
-  hasNotificationPermission,
+  getNotificationPermissionStatus,
   requestNotificationPermission,
   sendTestReminder,
   syncReminders,
@@ -33,7 +33,7 @@ export default function SettingsScreen() {
         setSettings(stored);
         setLoaded(true);
         const anyOn = stored.trainingEnabled || stored.streakEnabled;
-        setPermissionDenied(anyOn && !(await hasNotificationPermission()));
+        setPermissionDenied(anyOn && (await getNotificationPermissionStatus()) === 'denied');
         setHasRoutine(getCachedActiveRoutine(getDatabase()) !== null);
       })().catch((err) => console.warn('Could not load reminder settings', err));
     }, [])
