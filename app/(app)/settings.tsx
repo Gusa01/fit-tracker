@@ -21,16 +21,18 @@ export default function SettingsScreen() {
   const [permissionDenied, setPermissionDenied] = useState(false);
   const [hasRoutine, setHasRoutine] = useState(true);
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   // Handlers read the latest settings from here, not from the render-time snapshot.
   const settingsRef = useRef<ReminderSettings>(DEFAULT_REMINDER_SETTINGS);
 
   useFocusEffect(
     useCallback(() => {
       (async () => {
-        const loaded = await loadReminderSettings();
-        settingsRef.current = loaded;
-        setSettings(loaded);
-        const anyOn = loaded.trainingEnabled || loaded.streakEnabled;
+        const stored = await loadReminderSettings();
+        settingsRef.current = stored;
+        setSettings(stored);
+        setLoaded(true);
+        const anyOn = stored.trainingEnabled || stored.streakEnabled;
         setPermissionDenied(anyOn && !(await hasNotificationPermission()));
         setHasRoutine(getCachedActiveRoutine(getDatabase()) !== null);
       })().catch((err) => console.warn('Could not load reminder settings', err));
@@ -79,7 +81,7 @@ export default function SettingsScreen() {
       <View style={styles.card}>
         <View style={styles.row}>
           <Text style={styles.title}>Recordatorio de entrenamiento</Text>
-          <Switch value={settings.trainingEnabled} onValueChange={(v) => toggle('trainingEnabled', v)} />
+          <Switch disabled={!loaded} value={settings.trainingEnabled} onValueChange={(v) => toggle('trainingEnabled', v)} />
         </View>
         <Text style={styles.muted}>Te avisa los días que toca entrenar, si todavía no lo hiciste.</Text>
       </View>
@@ -87,19 +89,19 @@ export default function SettingsScreen() {
       <View style={styles.card}>
         <View style={styles.row}>
           <Text style={styles.title}>Racha en riesgo</Text>
-          <Switch value={settings.streakEnabled} onValueChange={(v) => toggle('streakEnabled', v)} />
+          <Switch disabled={!loaded} value={settings.streakEnabled} onValueChange={(v) => toggle('streakEnabled', v)} />
         </View>
         <Text style={styles.muted}>Te avisa el sábado si todavía no entrenaste en la semana.</Text>
       </View>
 
-      <Pressable style={[styles.card, styles.row]} onPress={() => setPickerOpen(true)}>
+      <Pressable style={[styles.card, styles.row]} disabled={!loaded} onPress={() => setPickerOpen(true)}>
         <Text style={styles.title}>Hora</Text>
         <Text style={styles.time}>
           {pad(settings.hour)}:{pad(settings.minute)} ▾
         </Text>
       </Pressable>
 
-      <Pressable style={styles.testButton} onPress={handleTest}>
+      <Pressable style={styles.testButton} disabled={!loaded} onPress={handleTest}>
         <Text style={styles.testButtonText}>Enviar aviso de prueba</Text>
       </Pressable>
 
