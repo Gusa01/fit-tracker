@@ -42,7 +42,7 @@ export default function RootLayout() {
   useEffect(() => {
     setupNotifications().catch((err) => console.warn('Could not set up notifications', err));
     const subscription = Notifications.addNotificationResponseReceivedListener(() => {
-      router.push('/(app)' as any);
+      router.navigate('/(app)' as any);
     });
     return () => subscription.remove();
   }, []);
