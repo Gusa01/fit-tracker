@@ -20,6 +20,9 @@ jest.mock('expo-notifications', () => ({
     return 'id';
   }),
 }));
+jest.mock('../../../src/lib/supabase', () => ({
+  supabase: { auth: { getSession: jest.fn(async () => ({ data: { session: { user: { id: 'u' } } } })) } },
+}));
 jest.mock('../../../src/lib/sqlite/db', () => ({ getDatabase: () => ({}) }));
 const mockRoutine = { id: 'r', started_at: '2026-10-05T09:00:00', weekday_schedule: { mon: 'a' } };
 jest.mock('../../../src/lib/sqlite/cache', () => ({
@@ -30,7 +33,8 @@ jest.mock('../../../src/lib/sqlite/cache', () => ({
 import * as Notifications from 'expo-notifications';
 import { getCachedActiveRoutine } from '../../../src/lib/sqlite/cache';
 import { saveReminderSettings } from '../../../src/lib/reminders/storage';
-import { syncReminders } from '../../../src/lib/reminders/scheduler';
+import { supabase } from '../../../src/lib/supabase';
+import { cancelAllReminders, syncReminders } from '../../../src/lib/reminders/scheduler';
 
 beforeEach(async () => {
   calls.length = 0;
@@ -73,6 +77,20 @@ describe('syncReminders', () => {
     (getCachedActiveRoutine as jest.Mock).mockReturnValueOnce({ ...mockRoutine, started_at: null });
     await syncReminders();
     expect(calls).toEqual(['cancel']);
+  });
+
+  it('only cancels when there is no signed-in session', async () => {
+    (supabase.auth.getSession as jest.Mock).mockResolvedValueOnce({ data: { session: null } });
+    await syncReminders();
+    expect(calls).toEqual(['cancel']);
+  });
+
+  it('runs cancelAllReminders after a sync that is already running', async () => {
+    const sync = syncReminders();
+    const cancel = cancelAllReminders();
+    await Promise.all([sync, cancel]);
+    expect(calls.length).toBeGreaterThan(2);
+    expect(calls[calls.length - 1]).toBe('cancel');
   });
 
   it('never rejects when scheduling fails', async () => {

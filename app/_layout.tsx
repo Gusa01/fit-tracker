@@ -7,7 +7,7 @@ import { initDatabase, getDatabase } from '../src/lib/sqlite/db';
 import { supabase } from '../src/lib/supabase';
 import { startSyncListener } from '../src/lib/sync/syncService';
 import * as Notifications from 'expo-notifications';
-import { setupNotifications } from '../src/lib/reminders/scheduler';
+import { cancelAllReminders, setupNotifications } from '../src/lib/reminders/scheduler';
 
 initDatabase();
 
@@ -26,6 +26,11 @@ export default function RootLayout() {
       router.replace('/(app)');
     }
   }, [session, isLoading, segments]);
+
+  // Covers token expiry and remote sign-out, not just the drawer button.
+  useEffect(() => {
+    if (!isLoading && !session) cancelAllReminders();
+  }, [isLoading, session]);
 
   useEffect(() => {
     const userId = session?.user.id;

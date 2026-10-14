@@ -1,5 +1,6 @@
 import { Platform } from 'react-native';
 import * as Notifications from 'expo-notifications';
+import { supabase } from '../supabase';
 import { getDatabase } from '../sqlite/db';
 import { getCachedActiveRoutine, getCachedRoutineDays } from '../sqlite/cache';
 import { loadCompletedDates, loadReminderSettings } from './storage';
@@ -34,6 +35,13 @@ export async function requestNotificationPermission(): Promise<boolean> {
 }
 
 async function syncOnce(): Promise<void> {
+  // Reads the locally stored session (no network): never schedule on a signed-out device.
+  const { data } = await supabase.auth.getSession();
+  if (!data.session) {
+    await Notifications.cancelAllScheduledNotificationsAsync();
+    return;
+  }
+
   const settings = await loadReminderSettings();
   if ((!settings.trainingEnabled && !settings.streakEnabled) || !(await hasNotificationPermission())) {
     await Notifications.cancelAllScheduledNotificationsAsync();
@@ -81,11 +89,14 @@ export function syncReminders(): Promise<void> {
   return syncChain;
 }
 
-/** Used on sign-out. Never rejects. */
-export async function cancelAllReminders(): Promise<void> {
-  await Notifications.cancelAllScheduledNotificationsAsync().catch((err) => {
-    console.warn('Could not cancel reminders', err);
-  });
+/** Used on sign-out. Runs in the sync chain so it can't interleave with a sync. Never rejects. */
+export function cancelAllReminders(): Promise<void> {
+  syncChain = syncChain.then(() =>
+    Notifications.cancelAllScheduledNotificationsAsync().catch((err) => {
+      console.warn('Could not cancel reminders', err);
+    })
+  );
+  return syncChain;
 }
 
 export async function sendTestReminder(): Promise<void> {
