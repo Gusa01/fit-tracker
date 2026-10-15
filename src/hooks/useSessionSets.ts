@@ -23,6 +23,9 @@ import { isExerciseHit, computeWeightIncrement, computeNextExerciseState } from 
 import { detectLiveRecord } from '../lib/progress/live';
 import { computeRecords, toCachedRecords } from '../lib/progress/records';
 import { PrBannerData, ProgressSet } from '../lib/progress/types';
+import { addCompletedDate } from '../lib/reminders/storage';
+import { syncReminders } from '../lib/reminders/scheduler';
+import { formatDateOnly } from '../lib/sessions/weekResolution';
 
 export function useSessionSets(sessionId: string | undefined) {
   const { session } = useAuthSession();
@@ -159,6 +162,9 @@ export function useSessionSets(sessionId: string | undefined) {
       await saveCurrentSession({ ...pointer, status: 'completed' });
     }
     if (userId) await flushOnly(getDatabase(), supabase).catch(() => {});
+    // Today's reminder and this week's streak alert no longer apply.
+    await addCompletedDate(formatDateOnly(new Date())).catch(() => {});
+    syncReminders();
   }
 
   /**

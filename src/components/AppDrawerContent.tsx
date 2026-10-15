@@ -1,6 +1,7 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { DrawerContentScrollView, DrawerItemList, DrawerContentComponentProps } from 'expo-router/drawer';
 import { supabase } from '../lib/supabase';
+import { cancelAllReminders } from '../lib/reminders/scheduler';
 
 export function AppDrawerContent(props: DrawerContentComponentProps) {
   return (
@@ -8,7 +9,10 @@ export function AppDrawerContent(props: DrawerContentComponentProps) {
       <View style={styles.items}>
         <DrawerItemList {...props} />
       </View>
-      <Pressable style={styles.signOutButton} onPress={() => supabase.auth.signOut()}>
+      <Pressable style={styles.signOutButton} onPress={async () => {
+          await cancelAllReminders();
+          await supabase.auth.signOut();
+        }}>
         <Text style={styles.signOutText}>Cerrar sesión</Text>
       </Pressable>
     </DrawerContentScrollView>

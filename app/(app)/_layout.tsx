@@ -8,6 +8,7 @@ export default function AppLayout() {
       <Drawer.Screen name="routines" options={{ title: 'Rutinas', swipeEnabled: false }} />
       <Drawer.Screen name="progress" options={{ title: 'Progreso', swipeEnabled: false }} />
       <Drawer.Screen name="history" options={{ title: 'Historial', swipeEnabled: false }} />
+      <Drawer.Screen name="settings" options={{ title: 'Ajustes' }} />
       <Drawer.Screen
         name="session"
         options={{ headerShown: false, drawerItemStyle: { display: 'none' }, swipeEnabled: false }}
