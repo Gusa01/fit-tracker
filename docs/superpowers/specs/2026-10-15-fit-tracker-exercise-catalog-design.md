@@ -138,6 +138,8 @@ Merging rules (in the migration):
 - `user_exercise_state` rows are repointed; if a user ends up with two rows for the same catalog exercise, keep the one with the latest `updated_at` and drop the other.
 - History (`logged_sets`) needs no change: it points to `routine_exercises`, and the view joins through them, so merged exercises show one combined chart.
 - Exercises that are neither in the catalog nor in the mapping, and are referenced by exactly one user's routines, become that user's private exercise (`owner_id` set). Unreferenced leftovers are deleted (as the 2026-09-16 reset did).
+- Exercises that are neither in the catalog nor in the mapping but are referenced by two or more users stay shared (`owner_id` null, `slug` null), with `primary_muscle` taken from the old `muscle_group` as a best effort (`upper` → `chest`, `lower` → `quadriceps`, `core` → `core`) and `equipment` = `bodyweight`. Before migrating the hosted project, the plan lists every row that would hit this rule (none are expected) so the user can see them.
+- Unmapped rows getting `primary_muscle`/`equipment` for the first time (the private ones above) use the same best-effort defaults.
 
 ## 6. Migrations
 
