@@ -1,8 +1,8 @@
 import { View, Text, FlatList, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
 import { router } from 'expo-router';
-import { useAuthSession } from '../../../src/hooks/useAuthSession';
-import { useSessionHistory } from '../../../src/hooks/useSessionHistory';
-import { formatSessionTitle } from '../../../src/lib/history/format';
+import { useAuthSession } from '../../../../src/hooks/useAuthSession';
+import { useSessionHistory } from '../../../../src/hooks/useSessionHistory';
+import { formatSessionTitle } from '../../../../src/lib/history/format';
 
 export default function HistoryList() {
   const { session } = useAuthSession();
@@ -57,7 +57,7 @@ export default function HistoryList() {
         ) : null
       }
       renderItem={({ item }) => (
-        <Pressable style={styles.row} onPress={() => router.push(`/(app)/history/${item.id}` as any)}>
+        <Pressable style={styles.row} onPress={() => router.push(`/(app)/(tabs)/history/${item.id}` as any)}>
           <View style={styles.rowMain}>
             <Text style={styles.title}>{formatSessionTitle(item.sessionDate, item.dayName)}</Text>
             <Text style={styles.subtitle}>

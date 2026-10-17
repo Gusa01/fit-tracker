@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 import { View, Text, FlatList, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
 import { router } from 'expo-router';
-import { useAuthSession } from '../../../src/hooks/useAuthSession';
-import { useProgressSummary } from '../../../src/hooks/useExerciseProgress';
-import { Sparkline } from '../../../src/components/Sparkline';
-import { formatDaysAgo, formatMetricValue } from '../../../src/lib/progress/format';
-import { sparklinesByExercise } from '../../../src/lib/progress/spotlight';
-import { Trend } from '../../../src/lib/progress/types';
+import { useAuthSession } from '../../../../src/hooks/useAuthSession';
+import { useProgressSummary } from '../../../../src/hooks/useExerciseProgress';
+import { Sparkline } from '../../../../src/components/Sparkline';
+import { formatDaysAgo, formatMetricValue } from '../../../../src/lib/progress/format';
+import { sparklinesByExercise } from '../../../../src/lib/progress/spotlight';
+import { Trend } from '../../../../src/lib/progress/types';
 
 const TREND_ARROW: Record<Trend, string> = { up: '↑', flat: '→', down: '↓' };
 const TREND_COLOR: Record<Trend, string> = { up: '#16a34a', flat: '#666', down: '#dc2626' };
@@ -49,7 +49,7 @@ export default function ProgressList() {
         </Text>
       }
       renderItem={({ item }) => (
-        <Pressable style={styles.row} onPress={() => router.push(`/(app)/progress/${item.exerciseId}` as any)}>
+        <Pressable style={styles.row} onPress={() => router.push(`/(app)/(tabs)/progress/${item.exerciseId}` as any)}>
           <View style={styles.rowMain}>
             <Text style={styles.name}>{item.exerciseName}</Text>
             <Text style={styles.subtitle}>{formatDaysAgo(item.lastTrainedDate, today)}</Text>

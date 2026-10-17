@@ -1,22 +1,11 @@
-import { Drawer } from 'expo-router/drawer';
-import { AppDrawerContent } from '../../src/components/AppDrawerContent';
+import { Stack } from 'expo-router';
 
 export default function AppLayout() {
   return (
-    <Drawer screenOptions={{ headerShown: true }} drawerContent={(props) => <AppDrawerContent {...props} />}>
-      <Drawer.Screen name="index" options={{ title: 'Inicio' }} />
-      <Drawer.Screen name="routines" options={{ title: 'Rutinas', swipeEnabled: false }} />
-      <Drawer.Screen name="progress" options={{ title: 'Progreso', swipeEnabled: false }} />
-      <Drawer.Screen name="history" options={{ title: 'Historial', swipeEnabled: false }} />
-      <Drawer.Screen name="settings" options={{ title: 'Ajustes' }} />
-      <Drawer.Screen
-        name="credits"
-        options={{ title: 'Créditos de imágenes', drawerItemStyle: { display: 'none' } }}
-      />
-      <Drawer.Screen
-        name="session"
-        options={{ headerShown: false, drawerItemStyle: { display: 'none' }, swipeEnabled: false }}
-      />
-    </Drawer>
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="(tabs)" />
+      {/* Full screen, no tab bar, so a set isn't logged on a stray tab tap between sets. */}
+      <Stack.Screen name="session" options={{ gestureEnabled: false }} />
+    </Stack>
   );
 }

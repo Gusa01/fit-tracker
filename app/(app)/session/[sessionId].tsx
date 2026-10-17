@@ -33,7 +33,7 @@ export default function SessionScreen() {
 
   async function handleFinish() {
     await completeSession();
-    router.replace('/(app)' as any);
+    router.replace('/(app)/(tabs)' as any);
   }
 
   if (loading) {

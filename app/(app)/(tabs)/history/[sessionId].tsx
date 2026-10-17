@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react';
 import { View, Text, Pressable, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { useSessionDetail } from '../../../src/hooks/useSessionHistory';
-import { groupSessionSets } from '../../../src/lib/history/logic';
-import { formatSessionTitle, formatSetLabel, formatSetValues } from '../../../src/lib/history/format';
-import { HistoryExercise } from '../../../src/lib/history/types';
-import { LoggedSet } from '../../../src/lib/sessions/types';
-import { SetEditor } from '../../../src/components/SetEditor';
+import { useSessionDetail } from '../../../../src/hooks/useSessionHistory';
+import { groupSessionSets } from '../../../../src/lib/history/logic';
+import { formatSessionTitle, formatSetLabel, formatSetValues } from '../../../../src/lib/history/format';
+import { HistoryExercise } from '../../../../src/lib/history/types';
+import { LoggedSet } from '../../../../src/lib/sessions/types';
+import { SetEditor } from '../../../../src/components/SetEditor';
 
 export default function SessionHistoryDetail() {
   const { sessionId } = useLocalSearchParams<{ sessionId: string }>();

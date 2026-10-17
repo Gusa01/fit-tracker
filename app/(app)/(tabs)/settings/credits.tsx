@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { View, Text, FlatList, Pressable, ActivityIndicator, Linking, StyleSheet } from 'react-native';
-import { supabase } from '../../src/lib/supabase';
-import { CreditedExercise, listCreditedExercises } from '../../src/lib/exercises/queries';
+import { supabase } from '../../../../src/lib/supabase';
+import { CreditedExercise, listCreditedExercises } from '../../../../src/lib/exercises/queries';
 
 export default function CreditsScreen() {
   const [items, setItems] = useState<CreditedExercise[]>([]);

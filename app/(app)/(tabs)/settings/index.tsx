@@ -1,19 +1,21 @@
 import { useCallback, useRef, useState } from 'react';
 import { View, Text, Switch, Pressable, Modal, FlatList, StyleSheet, Linking, Alert, ScrollView } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
-import { DEFAULT_REMINDER_SETTINGS, loadReminderSettings, saveReminderSettings } from '../../src/lib/reminders/storage';
-import { ReminderSettings } from '../../src/lib/reminders/types';
+import { DEFAULT_REMINDER_SETTINGS, loadReminderSettings, saveReminderSettings } from '../../../../src/lib/reminders/storage';
+import { ReminderSettings } from '../../../../src/lib/reminders/types';
 import {
   getNotificationPermissionStatus,
   requestNotificationPermission,
   sendTestReminder,
   syncReminders,
-} from '../../src/lib/reminders/scheduler';
-import { getDatabase } from '../../src/lib/sqlite/db';
-import { getCachedActiveRoutine } from '../../src/lib/sqlite/cache';
-import { Chip } from '../../src/components/ui';
-import { useTheme } from '../../src/theme/ThemeProvider';
-import { ThemePreference } from '../../src/theme/preference';
+  cancelAllReminders,
+} from '../../../../src/lib/reminders/scheduler';
+import { supabase } from '../../../../src/lib/supabase';
+import { getDatabase } from '../../../../src/lib/sqlite/db';
+import { getCachedActiveRoutine } from '../../../../src/lib/sqlite/cache';
+import { Button, Chip } from '../../../../src/components/ui';
+import { useTheme } from '../../../../src/theme/ThemeProvider';
+import { ThemePreference } from '../../../../src/theme/preference';
 
 const THEME_OPTIONS: { value: ThemePreference; label: string }[] = [
   { value: 'system', label: 'Sistema' },
@@ -132,9 +134,18 @@ export default function SettingsScreen() {
         <Text style={styles.testButtonText}>Enviar aviso de prueba</Text>
       </Pressable>
 
-      <Pressable style={[styles.card, styles.row]} onPress={() => router.push('/(app)/credits' as any)}>
+      <Pressable style={[styles.card, styles.row]} onPress={() => router.push('/(app)/(tabs)/settings/credits' as any)}>
         <Text style={styles.title}>Créditos de imágenes ›</Text>
       </Pressable>
+
+      <Button
+        title="Cerrar sesión"
+        variant="danger"
+        onPress={async () => {
+          await cancelAllReminders();
+          await supabase.auth.signOut();
+        }}
+      />
 
       <Modal visible={pickerOpen} transparent animationType="slide" onRequestClose={() => setPickerOpen(false)}>
         <Pressable style={styles.backdrop} onPress={() => setPickerOpen(false)} />

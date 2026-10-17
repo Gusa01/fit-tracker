@@ -1,8 +1,8 @@
 import { View, Text, Pressable, StyleSheet, Alert, ActivityIndicator, ScrollView } from 'react-native';
 import { router } from 'expo-router';
-import { useHomeData } from '../../src/hooks/useHomeData';
-import { WeekCalendarStrip } from '../../src/components/WeekCalendarStrip';
-import { HomeProgressCard } from '../../src/components/HomeProgressCard';
+import { useHomeData } from '../../../src/hooks/useHomeData';
+import { WeekCalendarStrip } from '../../../src/components/WeekCalendarStrip';
+import { HomeProgressCard } from '../../../src/components/HomeProgressCard';
 
 function formatShortDate(dateStr: string): string {
   const [, month, day] = dateStr.split('-');
@@ -114,7 +114,7 @@ export default function Home() {
                     <Pressable
                       key={entry.sessionId}
                       style={styles.activityPressable}
-                      onPress={() => router.push(`/(app)/history/${entry.sessionId}` as any, { withAnchor: true })}
+                      onPress={() => router.push(`/(app)/(tabs)/history/${entry.sessionId}` as any, { withAnchor: true })}
                     >
                       <Text style={styles.activityRow}>
                         {entry.dayName} — {formatShortDate(entry.sessionDate)}

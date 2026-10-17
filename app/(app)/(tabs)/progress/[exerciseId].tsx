@@ -9,19 +9,19 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { useAuthSession } from '../../../src/hooks/useAuthSession';
-import { useExerciseProgress } from '../../../src/hooks/useExerciseProgress';
-import { ProgressChart } from '../../../src/components/ProgressChart';
-import { bestSetPerSession, metricKind, primaryMetric } from '../../../src/lib/progress/metrics';
-import { computeRecords } from '../../../src/lib/progress/records';
+import { useAuthSession } from '../../../../src/hooks/useAuthSession';
+import { useExerciseProgress } from '../../../../src/hooks/useExerciseProgress';
+import { ProgressChart } from '../../../../src/components/ProgressChart';
+import { bestSetPerSession, metricKind, primaryMetric } from '../../../../src/lib/progress/metrics';
+import { computeRecords } from '../../../../src/lib/progress/records';
 import {
   RECORD_LABEL,
   TOGGLE_LABEL,
   formatMetricValue,
   formatShortDate,
   formatSourceSet,
-} from '../../../src/lib/progress/format';
-import { Metric, RecordEntry } from '../../../src/lib/progress/types';
+} from '../../../../src/lib/progress/format';
+import { Metric, RecordEntry } from '../../../../src/lib/progress/types';
 
 export default function ExerciseProgressDetail() {
   const { exerciseId } = useLocalSearchParams<{ exerciseId: string }>();

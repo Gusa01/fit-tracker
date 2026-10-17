@@ -33,11 +33,11 @@ export default function RootLayout() {
     if (!session && !inAuthGroup) {
       router.replace('/(auth)/sign-in');
     } else if (session && inAuthGroup) {
-      router.replace('/(app)');
+      router.replace('/(app)/(tabs)' as any);
     }
   }, [session, isLoading, segments]);
 
-  // Covers token expiry and remote sign-out, not just the drawer button.
+  // Covers token expiry and remote sign-out, not just the sign-out button.
   useEffect(() => {
     if (!isLoading && !session) cancelAllReminders();
   }, [isLoading, session]);
@@ -52,7 +52,7 @@ export default function RootLayout() {
   useEffect(() => {
     setupNotifications().catch((err) => console.warn('Could not set up notifications', err));
     const subscription = Notifications.addNotificationResponseReceivedListener(() => {
-      router.navigate('/(app)' as any);
+      router.navigate('/(app)/(tabs)' as any);
     });
     return () => subscription.remove();
   }, []);

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { View, Text, FlatList, Pressable, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { router } from 'expo-router';
-import { useAuthSession } from '../../../src/hooks/useAuthSession';
-import { useRoutines } from '../../../src/hooks/useRoutines';
-import { supabase } from '../../../src/lib/supabase';
-import { activateRoutine, softDeleteRoutine } from '../../../src/lib/routines/mutations';
+import { useAuthSession } from '../../../../src/hooks/useAuthSession';
+import { useRoutines } from '../../../../src/hooks/useRoutines';
+import { supabase } from '../../../../src/lib/supabase';
+import { activateRoutine, softDeleteRoutine } from '../../../../src/lib/routines/mutations';
 
 export default function RoutinesList() {
   const { session } = useAuthSession();
@@ -69,7 +69,7 @@ export default function RoutinesList() {
         keyExtractor={(item) => item.id}
         ListEmptyComponent={<Text style={styles.empty}>Todavía no tenés rutinas.</Text>}
         renderItem={({ item }) => (
-          <Pressable style={styles.row} onPress={() => router.push(`/(app)/routines/${item.id}` as any)}>
+          <Pressable style={styles.row} onPress={() => router.push(`/(app)/(tabs)/routines/${item.id}` as any)}>
             <View style={styles.rowText}>
               <Text style={styles.rowTitle}>
                 {item.name}
@@ -97,7 +97,7 @@ export default function RoutinesList() {
           </Pressable>
         )}
       />
-      <Pressable style={styles.newButton} onPress={() => router.push('/(app)/routines/new' as any)}>
+      <Pressable style={styles.newButton} onPress={() => router.push('/(app)/(tabs)/routines/new' as any)}>
         <Text style={styles.newButtonText}>+ Nueva rutina</Text>
       </Pressable>
     </View>
