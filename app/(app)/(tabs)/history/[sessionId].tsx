@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { View, Text, Pressable, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Pressable, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSessionDetail } from '../../../../src/hooks/useSessionHistory';
 import { groupSessionSets } from '../../../../src/lib/history/logic';
@@ -7,8 +7,13 @@ import { formatSessionTitle, formatSetLabel, formatSetValues } from '../../../..
 import { HistoryExercise } from '../../../../src/lib/history/types';
 import { LoggedSet } from '../../../../src/lib/sessions/types';
 import { SetEditor } from '../../../../src/components/SetEditor';
+import { AppText, Banner, Button, Card, Screen } from '../../../../src/components/ui';
+import { useTheme } from '../../../../src/theme/ThemeProvider';
+import { ColorTokens } from '../../../../src/theme/colors';
 
 export default function SessionHistoryDetail() {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { sessionId } = useLocalSearchParams<{ sessionId: string }>();
   const { detail, isLoading, error, refetch, correctSet } = useSessionDetail(sessionId);
   const [editing, setEditing] = useState<{ set: LoggedSet; exercise: HistoryExercise } | null>(null);
@@ -18,20 +23,26 @@ export default function SessionHistoryDetail() {
 
   if (isLoading && !detail) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator />
-      </View>
+      <Screen>
+        <View style={styles.centered}>
+          <ActivityIndicator color={colors.accent} />
+        </View>
+      </Screen>
     );
   }
 
   if (!detail) {
     return (
-      <View style={styles.centered}>
-        <Text style={styles.message}>{error ?? 'Conectate para ver tu historial'}</Text>
-        <Pressable style={styles.retryButton} onPress={refetch}>
-          <Text style={styles.retryText}>Reintentar</Text>
-        </Pressable>
-      </View>
+      <Screen>
+        <View style={styles.centered}>
+          <AppText variant="muted" style={styles.message}>
+            {error ?? 'Conectate para ver tu historial'}
+          </AppText>
+          <View style={styles.retry}>
+            <Button title="Reintentar" onPress={refetch} />
+          </View>
+        </View>
+      </Screen>
     );
   }
 
@@ -43,67 +54,82 @@ export default function SessionHistoryDetail() {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Pressable onPress={() => router.back()} style={styles.backRow}>
-        <Text style={styles.back}>←</Text>
-        <Text style={styles.title}>{formatSessionTitle(detail.sessionDate, detail.dayName)}</Text>
-      </Pressable>
-
-      {error ? (
-        <Pressable style={styles.banner} onPress={refetch}>
-          <Text style={styles.bannerText}>No se pudo actualizar. Tocá para reintentar.</Text>
+    <Screen padded={false}>
+      <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
+        <Pressable onPress={() => router.back()} hitSlop={12} style={styles.backRow}>
+          <AppText style={styles.back}>←</AppText>
+          <AppText variant="title" style={styles.title}>
+            {formatSessionTitle(detail.sessionDate, detail.dayName)}
+          </AppText>
         </Pressable>
-      ) : null}
 
-      {corrected && (
-        <Text style={styles.note}>Corregido. El peso sugerido no cambia; si quedó mal, ajustalo en tu próxima sesión.</Text>
-      )}
+        {error ? (
+          <Pressable onPress={refetch}>
+            <Banner tone="danger">No se pudo actualizar. Tocá para reintentar.</Banner>
+          </Pressable>
+        ) : null}
 
-      {groups.length === 0 && <Text style={styles.message}>Esta sesión no tiene series.</Text>}
+        {corrected && (
+          <Banner tone="success">
+            Corregido. El peso sugerido no cambia; si quedó mal, ajustalo en tu próxima sesión.
+          </Banner>
+        )}
 
-      {groups.map(({ exercise, sets }) => (
-        <View key={exercise.id} style={styles.card}>
-          <Text style={styles.exerciseName}>{exercise.exercise_name}</Text>
-          {sets.map((set) => (
-            <View key={set.id} style={styles.setRow}>
-              <Text style={styles.setLabel}>{formatSetLabel(set)}</Text>
-              <Text style={styles.setValues}>{formatSetValues(set, exercise.rep_unit)}</Text>
-              <Pressable onPress={() => setEditing({ set, exercise })} hitSlop={8} accessibilityLabel="Corregir serie">
-                <Text style={styles.editIcon}>✎</Text>
-              </Pressable>
-            </View>
-          ))}
-        </View>
-      ))}
+        {groups.length === 0 && (
+          <AppText variant="muted" style={styles.message}>
+            Esta sesión no tiene series.
+          </AppText>
+        )}
 
-      <SetEditor
-        set={editing?.set ?? null}
-        exercise={editing?.exercise ?? null}
-        onClose={() => setEditing(null)}
-        onSave={finish}
-        onDelete={() => finish({ kind: 'delete' })}
-      />
-    </ScrollView>
+        {groups.map(({ exercise, sets }) => (
+          <Card key={exercise.id} style={styles.card}>
+            <AppText variant="heading">{exercise.exercise_name}</AppText>
+            {sets.map((set) => (
+              <View key={set.id} style={styles.setRow}>
+                <AppText variant="muted" style={styles.setLabel}>
+                  {formatSetLabel(set)}
+                </AppText>
+                <AppText variant="label" style={styles.setValues}>
+                  {formatSetValues(set, exercise.rep_unit)}
+                </AppText>
+                <Pressable
+                  onPress={() => setEditing({ set, exercise })}
+                  hitSlop={12}
+                  accessibilityLabel="Corregir serie"
+                >
+                  <AppText style={styles.editIcon}>✎</AppText>
+                </Pressable>
+              </View>
+            ))}
+          </Card>
+        ))}
+
+        <SetEditor
+          set={editing?.set ?? null}
+          exercise={editing?.exercise ?? null}
+          onClose={() => setEditing(null)}
+          onSave={finish}
+          onDelete={() => finish({ kind: 'delete' })}
+        />
+      </ScrollView>
+    </Screen>
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1 },
-  content: { padding: 16, gap: 12 },
-  centered: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
-  message: { textAlign: 'center', color: '#666' },
-  retryButton: { backgroundColor: '#111', borderRadius: 8, paddingVertical: 10, paddingHorizontal: 20, marginTop: 16 },
-  retryText: { color: '#fff', fontWeight: '600' },
-  backRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  back: { fontSize: 22 },
-  title: { fontSize: 20, fontWeight: '700', flexShrink: 1 },
-  note: { color: '#166534', backgroundColor: '#f0fdf4', borderRadius: 8, padding: 10 },
-  banner: { backgroundColor: '#fef2f2', borderRadius: 8, padding: 10 },
-  bannerText: { color: '#991b1b', textAlign: 'center' },
-  card: { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 12, gap: 6 },
-  exerciseName: { fontSize: 16, fontWeight: '700' },
-  setRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  setLabel: { width: 84, color: '#666' },
-  setValues: { flex: 1, fontWeight: '600' },
-  editIcon: { fontSize: 18, color: '#111', paddingHorizontal: 4 },
-});
+function makeStyles(c: ColorTokens) {
+  return StyleSheet.create({
+    scroll: { flex: 1 },
+    content: { padding: 16, gap: 12 },
+    centered: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
+    message: { textAlign: 'center' },
+    retry: { marginTop: 16 },
+    backRow: { flexDirection: 'row', alignItems: 'center', gap: 8, minHeight: 44 },
+    back: { fontSize: 22, color: c.accent },
+    title: { flexShrink: 1 },
+    card: { padding: 12, gap: 6 },
+    setRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+    setLabel: { width: 84 },
+    setValues: { flex: 1 },
+    editIcon: { fontSize: 18, paddingHorizontal: 4 },
+  });
+}
