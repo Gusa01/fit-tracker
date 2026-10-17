@@ -2,87 +2,12 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { parseRoutineMarkdown } from './parseRoutineMarkdown';
+import { findOrCreateExercise } from '../src/lib/routines/mutations';
 
 export interface ImportResult {
   imported: boolean;
   reason?: string;
   routineIds?: Record<string, string>;
-}
-
-const MUSCLE_GROUP_BY_EXERCISE: Record<string, 'upper' | 'lower' | 'core'> = {
-  'Sentadilla (o Prensa)': 'lower',
-  'Press banca': 'upper',
-  'Remo en máquina o mancuerna': 'upper',
-  'Press militar mancuernas': 'upper',
-  'Curl bíceps': 'upper',
-  'Extensión tríceps': 'upper',
-  'Peso muerto rumano': 'lower',
-  'Jalón al pecho o Dominada asistida': 'upper',
-  'Press inclinado mancuernas': 'upper',
-  Zancadas: 'lower',
-  'Elevaciones laterales': 'upper',
-  'Curl femoral o gemelos': 'lower',
-  Plancha: 'core',
-  'Elevación de piernas colgado o en banco': 'core',
-  'Rueda abdominal o Pallof press': 'core',
-  'Anti-rotación (Pallof press o similar)': 'core',
-  'Remo con barra o mancuerna': 'upper',
-  'Press militar': 'upper',
-  'Dominadas o Jalón': 'upper',
-  Sentadilla: 'lower',
-  Prensa: 'lower',
-  'Elevación de talón': 'lower',
-  'Elevación de piernas': 'core',
-  'Aperturas o Cruces en polea': 'upper',
-  'Jalón al pecho': 'upper',
-  'Remo en máquina': 'upper',
-  'Face pulls': 'upper',
-  'Curl martillo': 'upper',
-  'Anti-rotación': 'core',
-  'Prensa o Sentadilla': 'lower',
-  'Curl femoral': 'lower',
-  Gemelos: 'lower',
-};
-
-function muscleGroupForExercise(name: string): 'upper' | 'lower' | 'core' {
-  const group = MUSCLE_GROUP_BY_EXERCISE[name];
-  if (!group) {
-    throw new Error(
-      `No muscle_group mapping for exercise "${name}" — add it to MUSCLE_GROUP_BY_EXERCISE.`
-    );
-  }
-  return group;
-}
-
-async function findOrCreateExercise(supabase: SupabaseClient, name: string): Promise<string> {
-  const { data: existing, error: existingError } = await supabase
-    .from('exercises')
-    .select('id')
-    .eq('name', name)
-    .maybeSingle();
-  if (existingError) throw existingError;
-  if (existing) return existing.id;
-
-  const { data: created, error: createError } = await supabase
-    .from('exercises')
-    .insert({ name, muscle_group: muscleGroupForExercise(name) })
-    .select()
-    .single();
-  if (createError) {
-    // Another concurrent caller created the same name between our select and insert —
-    // fetch what they created instead of failing on the unique constraint.
-    if (createError.code === '23505') {
-      const { data: raceWinner, error: raceError } = await supabase
-        .from('exercises')
-        .select('id')
-        .eq('name', name)
-        .single();
-      if (raceError) throw raceError;
-      return raceWinner.id;
-    }
-    throw createError;
-  }
-  return created.id;
 }
 
 export async function importRoutine(
@@ -139,7 +64,13 @@ export async function importRoutine(
       dayIdsByName[day.name] = dayRow.id;
 
       for (const [exerciseIndex, exercise] of day.exercises.entries()) {
-        const exerciseId = await findOrCreateExercise(supabase, exercise.name);
+        const catalogExercise = await findOrCreateExercise(supabase, {
+          name: exercise.name,
+          primaryMuscle: 'chest',
+          equipment: 'bodyweight',
+          ownerId: userId,
+        });
+        const exerciseId = catalogExercise.id;
         const { error: routineExerciseError } = await supabase.from('routine_exercises').insert({
           routine_day_id: dayRow.id,
           exercise_id: exerciseId,

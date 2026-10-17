@@ -35,7 +35,7 @@ async function seedTopSetExercise(dayId: string): Promise<RoutineExerciseWithNam
   const suffix = Date.now() + Math.random();
   const { data: exercise, error: exerciseError } = await supabase
     .from('exercises')
-    .insert({ name: `[test-fixture] Sentadilla ${suffix}`, muscle_group: 'lower' })
+    .insert({ name: `[test-fixture] Sentadilla ${suffix}`, primary_muscle: 'quadriceps', equipment: 'barbell' })
     .select()
     .single();
   if (exerciseError) throw exerciseError;

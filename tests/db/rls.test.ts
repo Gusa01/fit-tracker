@@ -101,22 +101,37 @@ describe('row level security', () => {
     expect(data).toEqual([]);
   });
 
-  it('lets any authenticated user read the shared exercise catalog', async () => {
-    const { data: exercise } = await admin
+  it('lets any authenticated user read catalog exercises but only their own custom ones', async () => {
+    const { data: catalogExercise, error: catalogError } = await admin
       .from('exercises')
-      .upsert({ name: '[test-fixture] RLS Catalog Test Exercise', muscle_group: 'legs' }, { onConflict: 'name' })
+      .insert({ name: '[test-fixture] RLS Catalog Test Exercise', primary_muscle: 'chest', equipment: 'barbell', owner_id: null })
       .select()
       .single();
-
-    const { data, error } = await userB.client
+    if (catalogError) throw catalogError;
+    const { data: ownedByA, error: ownedError } = await admin
       .from('exercises')
+      .insert({ name: '[test-fixture] RLS Private Test Exercise', primary_muscle: 'core', equipment: 'bodyweight', owner_id: userA.userId })
       .select()
-      .eq('id', exercise!.id)
-      .maybeSingle();
-    expect(error).toBeNull();
-    expect(data?.id).toBe(exercise!.id);
+      .single();
+    if (ownedError) throw ownedError;
 
-    await admin.from('exercises').delete().eq('id', exercise!.id);
+    try {
+      const { data: catalogForB, error } = await userB.client
+        .from('exercises')
+        .select()
+        .eq('id', catalogExercise!.id)
+        .maybeSingle();
+      expect(error).toBeNull();
+      expect(catalogForB?.id).toBe(catalogExercise!.id);
+
+      const { data: privateForB } = await userB.client.from('exercises').select().eq('id', ownedByA!.id);
+      expect(privateForB).toEqual([]);
+
+      const { data: privateForA } = await userA.client.from('exercises').select().eq('id', ownedByA!.id);
+      expect(privateForA).toHaveLength(1);
+    } finally {
+      await admin.from('exercises').delete().in('id', [catalogExercise!.id, ownedByA!.id]);
+    }
   });
 
   it("blocks user B from deleting user A's routine (RLS filters, admin confirms it survives)", async () => {

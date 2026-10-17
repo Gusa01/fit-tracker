@@ -1,9 +1,18 @@
 import { useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet, ScrollView, Alert } from 'react-native';
 import { useExercises } from '../hooks/useExercises';
+import { useAuthSession } from '../hooks/useAuthSession';
+import { Equipment, Muscle } from '../lib/exercises/taxonomy';
 import { supabase } from '../lib/supabase';
 import { createRoutineExercise, findOrCreateExercise } from '../lib/routines/mutations';
 import { Exercise } from '../lib/routines/types';
+
+// Temporary bridge until the exercise form asks for muscle and equipment directly.
+const LEGACY_GROUP_DEFAULTS: Record<'upper' | 'lower' | 'core', { primaryMuscle: Muscle; equipment: Equipment }> = {
+  upper: { primaryMuscle: 'chest', equipment: 'bodyweight' },
+  lower: { primaryMuscle: 'quadriceps', equipment: 'bodyweight' },
+  core: { primaryMuscle: 'core', equipment: 'bodyweight' },
+};
 
 interface ExercisePickerProps {
   dayId: string;
@@ -28,6 +37,7 @@ const DEFAULTS = {
 
 export function ExercisePicker({ dayId, onDone, onCancel }: ExercisePickerProps) {
   const { exercises: catalog, refetch: refetchCatalog } = useExercises();
+  const { session } = useAuthSession();
   const [extraCatalog, setExtraCatalog] = useState<Exercise[]>([]);
   const [search, setSearch] = useState('');
   const [browseFilter, setBrowseFilter] = useState<'upper' | 'lower' | 'core' | null>(null);
@@ -53,7 +63,11 @@ export function ExercisePicker({ dayId, onDone, onCancel }: ExercisePickerProps)
   async function handleAddCustom() {
     if (!newName.trim()) return;
     try {
-      const exercise = await findOrCreateExercise(supabase, newName.trim(), newMuscleGroup);
+      const exercise = await findOrCreateExercise(supabase, {
+        name: newName,
+        ...LEGACY_GROUP_DEFAULTS[newMuscleGroup],
+        ownerId: session?.user.id ?? null,
+      });
       setExtraCatalog((prev) => (prev.some((e) => e.id === exercise.id) ? prev : [...prev, exercise]));
       setSelectedIds((prev) => (prev.includes(exercise.id) ? prev : [...prev, exercise.id]));
       setNewName('');

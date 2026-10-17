@@ -3,6 +3,8 @@ import { View, Text, Pressable, StyleSheet, Alert, Modal, ActivityIndicator } fr
 import { NestableDraggableFlatList, RenderItemParams } from 'react-native-draggable-flatlist';
 import { useDayExercises } from '../hooks/useDayExercises';
 import { useExercises } from '../hooks/useExercises';
+import { useAuthSession } from '../hooks/useAuthSession';
+import { Equipment, Muscle } from '../lib/exercises/taxonomy';
 import { supabase } from '../lib/supabase';
 import {
   updateRoutineExercise,
@@ -14,6 +16,13 @@ import { ExerciseForm, ExerciseFormValues } from './ExerciseForm';
 import { ExercisePicker } from './ExercisePicker';
 import { RoutineExerciseWithName } from '../lib/routines/types';
 import { formatTargetScheme } from '../lib/sessions/prescribedSets';
+
+// Temporary bridge until the exercise form asks for muscle and equipment directly.
+const LEGACY_GROUP_DEFAULTS: Record<'upper' | 'lower' | 'core', { primaryMuscle: Muscle; equipment: Equipment }> = {
+  upper: { primaryMuscle: 'chest', equipment: 'bodyweight' },
+  lower: { primaryMuscle: 'quadriceps', equipment: 'bodyweight' },
+  core: { primaryMuscle: 'core', equipment: 'bodyweight' },
+};
 
 interface DayExercisesSectionProps {
   dayId: string;
@@ -40,6 +49,7 @@ function toMutationInput(values: ExerciseFormValues) {
 export function DayExercisesSection({ dayId }: DayExercisesSectionProps) {
   const { exercises, isLoading, error, refetch } = useDayExercises(dayId);
   const { exercises: catalog } = useExercises();
+  const { session } = useAuthSession();
 
   const [addingExercise, setAddingExercise] = useState(false);
   const [editingExerciseId, setEditingExerciseId] = useState<string | null>(null);
@@ -51,7 +61,11 @@ export function DayExercisesSection({ dayId }: DayExercisesSectionProps) {
 
   async function handleUpdateExercise(routineExerciseId: string, values: ExerciseFormValues) {
     try {
-      const exercise = await findOrCreateExercise(supabase, values.exerciseName.trim(), values.muscleGroup);
+      const exercise = await findOrCreateExercise(supabase, {
+        name: values.exerciseName,
+        ...LEGACY_GROUP_DEFAULTS[values.muscleGroup],
+        ownerId: session?.user.id ?? null,
+      });
       await updateRoutineExercise(supabase, routineExerciseId, {
         exerciseId: exercise.id,
         ...toMutationInput(values),

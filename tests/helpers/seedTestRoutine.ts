@@ -11,7 +11,7 @@ const FIXTURE_EXERCISE_NAME_USER_SCOPED = '[test-fixture] Shared Exercise (RLS-s
 export async function seedTestRoutine(supabase: SupabaseClient, userId: string) {
   const suffix = Date.now() + Math.random();
 
-  const exercise = await findOrCreateExercise(supabase, FIXTURE_EXERCISE_NAME, 'legs');
+  const exercise = await findOrCreateExercise(supabase, { name: FIXTURE_EXERCISE_NAME, primaryMuscle: 'quadriceps', equipment: 'barbell', ownerId: null });
 
   const { data: routine, error: routineError } = await supabase
     .from('routines')
@@ -57,7 +57,12 @@ export async function seedTestRoutine(supabase: SupabaseClient, userId: string) 
 export async function seedTestRoutineAsUser(supabase: SupabaseClient, userId: string) {
   const suffix = Date.now() + Math.random();
 
-  const exercise = await findOrCreateExercise(supabase, FIXTURE_EXERCISE_NAME_USER_SCOPED, 'legs');
+  const exercise = await findOrCreateExercise(supabase, {
+    name: FIXTURE_EXERCISE_NAME_USER_SCOPED,
+    primaryMuscle: 'quadriceps',
+    equipment: 'barbell',
+    ownerId: userId,
+  });
 
   const { data: routine, error: routineError } = await supabase
     .from('routines')
