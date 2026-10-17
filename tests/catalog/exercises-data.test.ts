@@ -63,6 +63,15 @@ describe('exercise catalog data', () => {
     }
   });
 
+  it('matches every legacy name exactly under lower() (the SQL merge does not strip accents)', () => {
+    for (const legacy of LEGACY_EXERCISE_NAMES) {
+      const target = entries.find((e) => e.name === legacy.target);
+      const lower = legacy.name.toLowerCase();
+      const hit = [target?.name, ...(target?.aliases ?? [])].some((n) => n?.toLowerCase() === lower);
+      expect({ legacy: legacy.name, hit }).toEqual({ legacy: legacy.name, hit: true });
+    }
+  });
+
   it('only carries credited Creative Commons images', () => {
     for (const e of entries.filter((x) => x.image)) {
       expect(e.image!.url).toMatch(/^https:\/\/wger\.de\/media\//);

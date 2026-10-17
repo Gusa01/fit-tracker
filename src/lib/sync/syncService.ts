@@ -10,8 +10,9 @@ import { flushPendingWrites } from './flushQueue';
 async function flushQueueOnce(db: SQLiteDatabase, supabase: SupabaseClient): Promise<void> {
   const writes = listPendingWrites(db);
   if (writes.length === 0) return;
-  const { succeededIds, failedIds } = await flushPendingWrites(supabase, writes);
+  const { succeededIds, failedIds, droppedIds } = await flushPendingWrites(supabase, writes);
   succeededIds.forEach((id) => removePendingWrite(db, id));
+  droppedIds.forEach((id) => removePendingWrite(db, id));
   failedIds.forEach((id) => incrementAttempts(db, id));
 }
 

@@ -63,7 +63,7 @@ export function SessionExerciseCard({ exercise, initialWeight, loggedSets, onLog
         <Pressable disabled={!imageUrl} onPress={() => setViewerOpen(true)} accessibilityLabel="Ver ilustración">
           <ExerciseThumbnail
             imagePath={exercise.image_path ?? null}
-            muscle={exercise.muscle_group === 'core' ? 'core' : ''}
+            muscle={exercise.primary_muscle ?? (exercise.muscle_group === 'core' ? 'core' : '')}
             size={48}
           />
         </Pressable>

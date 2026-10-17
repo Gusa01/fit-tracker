@@ -22,6 +22,7 @@ function baseExercise(overrides: Partial<RoutineExerciseWithName>): RoutineExerc
     backoff_rep_max: null,
     is_deleted: false,
     image_path: null,
+    primary_muscle: null,
     ...overrides,
   };
 }

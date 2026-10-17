@@ -64,5 +64,6 @@ export interface RoutineExercise {
 export interface RoutineExerciseWithName extends RoutineExercise {
   exercise_name: string;
   muscle_group?: string | null;
+  primary_muscle: string | null;
   image_path: string | null;
 }
