@@ -36,7 +36,8 @@ export const CREATE_TABLES_SQL = `
     backoff_sets integer,
     backoff_rep_min integer,
     backoff_rep_max integer,
-    muscle_group text
+    muscle_group text,
+    image_path text
   );
 
   create table if not exists user_exercise_state_cache (
@@ -68,4 +69,5 @@ export const MIGRATION_STATEMENTS = [
   'alter table routine_exercises_cache add column muscle_group text',
   'alter table user_exercise_state_cache add column consecutive_hit_count integer not null default 0',
   'alter table user_exercise_state_cache add column consecutive_miss_count integer not null default 0',
+  'alter table routine_exercises_cache add column image_path text',
 ];

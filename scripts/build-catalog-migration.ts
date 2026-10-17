@@ -15,7 +15,7 @@ export interface CatalogEntry {
 const q = (s: string) => `'${s.replace(/'/g, "''")}'`;
 const arr = (xs: string[]) => (xs.length ? `array[${xs.map(q).join(', ')}]::text[]` : `'{}'::text[]`);
 
-function imagePath(entry: CatalogEntry): string | null {
+export function imagePath(entry: CatalogEntry): string | null {
   if (!entry.image) return null;
   const ext = (entry.image.url.split('?')[0].match(/\.([a-z0-9]+)$/i)?.[1] ?? 'png').toLowerCase();
   return `${entry.slug}.${ext}`;
