@@ -4,7 +4,6 @@ import { NestableDraggableFlatList, RenderItemParams } from 'react-native-dragga
 import { useDayExercises } from '../hooks/useDayExercises';
 import { useExercises } from '../hooks/useExercises';
 import { useAuthSession } from '../hooks/useAuthSession';
-import { Equipment, Muscle } from '../lib/exercises/taxonomy';
 import { supabase } from '../lib/supabase';
 import {
   updateRoutineExercise,
@@ -16,13 +15,6 @@ import { ExerciseForm, ExerciseFormValues } from './ExerciseForm';
 import { ExercisePicker } from './ExercisePicker';
 import { RoutineExerciseWithName } from '../lib/routines/types';
 import { formatTargetScheme } from '../lib/sessions/prescribedSets';
-
-// Temporary bridge until the exercise form asks for muscle and equipment directly.
-const LEGACY_GROUP_DEFAULTS: Record<'upper' | 'lower' | 'core', { primaryMuscle: Muscle; equipment: Equipment }> = {
-  upper: { primaryMuscle: 'chest', equipment: 'bodyweight' },
-  lower: { primaryMuscle: 'quadriceps', equipment: 'bodyweight' },
-  core: { primaryMuscle: 'core', equipment: 'bodyweight' },
-};
 
 interface DayExercisesSectionProps {
   dayId: string;
@@ -61,9 +53,11 @@ export function DayExercisesSection({ dayId }: DayExercisesSectionProps) {
 
   async function handleUpdateExercise(routineExerciseId: string, values: ExerciseFormValues) {
     try {
+      if (!session?.user.id) throw new Error('Iniciá sesión para guardar el ejercicio.');
       const exercise = await findOrCreateExercise(supabase, {
-        name: values.exerciseName,
-        ...LEGACY_GROUP_DEFAULTS[values.muscleGroup],
+        name: values.exerciseName.trim(),
+        primaryMuscle: values.primaryMuscle,
+        equipment: values.equipment,
         ownerId: session?.user.id ?? null,
       });
       await updateRoutineExercise(supabase, routineExerciseId, {

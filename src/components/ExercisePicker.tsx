@@ -2,17 +2,21 @@ import { useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet, ScrollView, Alert } from 'react-native';
 import { useExercises } from '../hooks/useExercises';
 import { useAuthSession } from '../hooks/useAuthSession';
-import { Equipment, Muscle } from '../lib/exercises/taxonomy';
+import {
+  EQUIPMENT,
+  EQUIPMENT_LABEL,
+  Equipment,
+  MUSCLES,
+  MUSCLE_LABEL,
+  Muscle,
+  isEquipment,
+  isMuscle,
+} from '../lib/exercises/taxonomy';
+import { filterExercises } from '../lib/exercises/search';
 import { supabase } from '../lib/supabase';
 import { createRoutineExercise, findOrCreateExercise } from '../lib/routines/mutations';
 import { Exercise } from '../lib/routines/types';
-
-// Temporary bridge until the exercise form asks for muscle and equipment directly.
-const LEGACY_GROUP_DEFAULTS: Record<'upper' | 'lower' | 'core', { primaryMuscle: Muscle; equipment: Equipment }> = {
-  upper: { primaryMuscle: 'chest', equipment: 'bodyweight' },
-  lower: { primaryMuscle: 'quadriceps', equipment: 'bodyweight' },
-  core: { primaryMuscle: 'core', equipment: 'bodyweight' },
-};
+import { ExerciseThumbnail } from './ExerciseThumbnail';
 
 interface ExercisePickerProps {
   dayId: string;
@@ -40,33 +44,34 @@ export function ExercisePicker({ dayId, onDone, onCancel }: ExercisePickerProps)
   const { session } = useAuthSession();
   const [extraCatalog, setExtraCatalog] = useState<Exercise[]>([]);
   const [search, setSearch] = useState('');
-  const [browseFilter, setBrowseFilter] = useState<'upper' | 'lower' | 'core' | null>(null);
+  const [muscle, setMuscle] = useState<Muscle | null>(null);
+  const [equipment, setEquipment] = useState<Equipment | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const [newName, setNewName] = useState('');
-  const [newMuscleGroup, setNewMuscleGroup] = useState<'upper' | 'lower' | 'core'>('upper');
+  const [newMuscle, setNewMuscle] = useState<Muscle>('chest');
+  const [newEquipment, setNewEquipment] = useState<Equipment>('dumbbell');
   const [addingCustom, setAddingCustom] = useState(false);
 
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const allExercises = [...extraCatalog, ...catalog.filter((e) => !extraCatalog.some((x) => x.id === e.id))];
-  const query = search.trim().toLowerCase();
-  const visible = allExercises
-    .filter((e) => !browseFilter || e.muscle_group === browseFilter)
-    .filter((e) => !query || e.name.toLowerCase().includes(query));
+  const visible = filterExercises(allExercises, { query: search, muscle, equipment });
 
   function toggle(id: string) {
     setSelectedIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   }
 
   async function handleAddCustom() {
-    if (!newName.trim()) return;
+    const userId = session?.user.id;
+    if (!newName.trim() || !userId) return;
     try {
       const exercise = await findOrCreateExercise(supabase, {
-        name: newName,
-        ...LEGACY_GROUP_DEFAULTS[newMuscleGroup],
-        ownerId: session?.user.id ?? null,
+        name: newName.trim(),
+        primaryMuscle: newMuscle,
+        equipment: newEquipment,
+        ownerId: userId,
       });
       setExtraCatalog((prev) => (prev.some((e) => e.id === exercise.id) ? prev : [...prev, exercise]));
       setSelectedIds((prev) => (prev.includes(exercise.id) ? prev : [...prev, exercise.id]));
@@ -99,22 +104,44 @@ export function ExercisePicker({ dayId, onDone, onCancel }: ExercisePickerProps)
       <Text style={styles.title}>Elegir ejercicios</Text>
       <TextInput
         style={styles.input}
-        placeholder="Buscar por nombre..."
+        placeholder="Buscar por nombre o sinónimo..."
         value={search}
         onChangeText={setSearch}
       />
 
-      <View style={styles.segmented}>
-        {(['upper', 'lower', 'core'] as const).map((option) => (
-          <Pressable
-            key={option}
-            style={[styles.segment, browseFilter === option && styles.segmentSelected]}
-            onPress={() => setBrowseFilter(browseFilter === option ? null : option)}
-          >
-            <Text style={browseFilter === option ? styles.segmentTextSelected : styles.segmentText}>{option}</Text>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <View style={styles.segmented}>
+          <Pressable style={[styles.segment, !muscle && styles.segmentSelected]} onPress={() => setMuscle(null)}>
+            <Text style={!muscle ? styles.segmentTextSelected : styles.segmentText}>Todos los músculos</Text>
           </Pressable>
-        ))}
-      </View>
+          {MUSCLES.map((m) => (
+            <Pressable
+              key={m}
+              style={[styles.segment, muscle === m && styles.segmentSelected]}
+              onPress={() => setMuscle(muscle === m ? null : m)}
+            >
+              <Text style={muscle === m ? styles.segmentTextSelected : styles.segmentText}>{MUSCLE_LABEL[m]}</Text>
+            </Pressable>
+          ))}
+        </View>
+      </ScrollView>
+
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <View style={styles.segmented}>
+          <Pressable style={[styles.segment, !equipment && styles.segmentSelected]} onPress={() => setEquipment(null)}>
+            <Text style={!equipment ? styles.segmentTextSelected : styles.segmentText}>Todo el equipamiento</Text>
+          </Pressable>
+          {EQUIPMENT.map((e) => (
+            <Pressable
+              key={e}
+              style={[styles.segment, equipment === e && styles.segmentSelected]}
+              onPress={() => setEquipment(equipment === e ? null : e)}
+            >
+              <Text style={equipment === e ? styles.segmentTextSelected : styles.segmentText}>{EQUIPMENT_LABEL[e]}</Text>
+            </Pressable>
+          ))}
+        </View>
+      </ScrollView>
 
       <ScrollView style={styles.list}>
         {visible.map((exercise) => {
@@ -124,8 +151,15 @@ export function ExercisePicker({ dayId, onDone, onCancel }: ExercisePickerProps)
               <View style={[styles.checkbox, checked && styles.checkboxChecked]}>
                 {checked && <Text style={styles.checkmark}>✓</Text>}
               </View>
-              <Text style={styles.rowName}>{exercise.name}</Text>
-              <Text style={styles.rowMeta}>{exercise.muscle_group}</Text>
+              <ExerciseThumbnail imagePath={exercise.image_path} muscle={exercise.primary_muscle} />
+              <View style={styles.rowText}>
+                <Text style={styles.rowName}>{exercise.name}</Text>
+                <Text style={styles.rowMeta}>
+                  {isMuscle(exercise.primary_muscle) ? MUSCLE_LABEL[exercise.primary_muscle] : exercise.primary_muscle}
+                  {' · '}
+                  {isEquipment(exercise.equipment) ? EQUIPMENT_LABEL[exercise.equipment] : exercise.equipment}
+                </Text>
+              </View>
             </Pressable>
           );
         })}
@@ -140,19 +174,36 @@ export function ExercisePicker({ dayId, onDone, onCancel }: ExercisePickerProps)
             value={newName}
             onChangeText={setNewName}
           />
-          <View style={styles.segmented}>
-            {(['upper', 'lower', 'core'] as const).map((option) => (
-              <Pressable
-                key={option}
-                style={[styles.segment, newMuscleGroup === option && styles.segmentSelected]}
-                onPress={() => setNewMuscleGroup(option)}
-              >
-                <Text style={newMuscleGroup === option ? styles.segmentTextSelected : styles.segmentText}>
-                  {option}
-                </Text>
-              </Pressable>
-            ))}
-          </View>
+          <Text style={styles.label}>Músculo principal</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <View style={styles.segmented}>
+              {MUSCLES.map((m) => (
+                <Pressable
+                  key={m}
+                  style={[styles.segment, newMuscle === m && styles.segmentSelected]}
+                  onPress={() => setNewMuscle(m)}
+                >
+                  <Text style={newMuscle === m ? styles.segmentTextSelected : styles.segmentText}>{MUSCLE_LABEL[m]}</Text>
+                </Pressable>
+              ))}
+            </View>
+          </ScrollView>
+          <Text style={styles.label}>Equipamiento</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <View style={styles.segmented}>
+              {EQUIPMENT.map((e) => (
+                <Pressable
+                  key={e}
+                  style={[styles.segment, newEquipment === e && styles.segmentSelected]}
+                  onPress={() => setNewEquipment(e)}
+                >
+                  <Text style={newEquipment === e ? styles.segmentTextSelected : styles.segmentText}>
+                    {EQUIPMENT_LABEL[e]}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+          </ScrollView>
           <Pressable style={styles.newButton} onPress={handleAddCustom}>
             <Text style={styles.newButtonText}>+ Agregar a la lista</Text>
           </Pressable>
@@ -208,7 +259,9 @@ const styles = StyleSheet.create({
   },
   checkboxChecked: { backgroundColor: '#111', borderColor: '#111' },
   checkmark: { color: '#fff', fontSize: 14, fontWeight: '700' },
-  rowName: { flex: 1, fontSize: 15 },
+  rowText: { flex: 1 },
+  rowName: { fontSize: 15 },
+  label: { fontWeight: '600' },
   rowMeta: { color: '#666', fontSize: 12 },
   hint: { color: '#666', fontSize: 12, fontStyle: 'italic', padding: 10 },
   customForm: { gap: 8 },
