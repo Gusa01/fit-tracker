@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { Slot, useRouter, useSegments } from 'expo-router';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -8,8 +8,18 @@ import { supabase } from '../src/lib/supabase';
 import { startSyncListener } from '../src/lib/sync/syncService';
 import * as Notifications from 'expo-notifications';
 import { cancelAllReminders, setupNotifications } from '../src/lib/reminders/scheduler';
+import { ThemeProvider, useTheme } from '../src/theme/ThemeProvider';
 
 initDatabase();
+
+function ThemedRoot({ children }: { children: ReactNode }) {
+  const { colors } = useTheme();
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={['bottom']}>
+      {children}
+    </SafeAreaView>
+  );
+}
 
 export default function RootLayout() {
   const { session, isLoading } = useAuthSession();
@@ -52,9 +62,11 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-        <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
-          <Slot />
-        </SafeAreaView>
+        <ThemeProvider>
+          <ThemedRoot>
+            <Slot />
+          </ThemedRoot>
+        </ThemeProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

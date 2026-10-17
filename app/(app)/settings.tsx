@@ -11,13 +11,23 @@ import {
 } from '../../src/lib/reminders/scheduler';
 import { getDatabase } from '../../src/lib/sqlite/db';
 import { getCachedActiveRoutine } from '../../src/lib/sqlite/cache';
+import { Chip } from '../../src/components/ui';
+import { useTheme } from '../../src/theme/ThemeProvider';
+import { ThemePreference } from '../../src/theme/preference';
 
-const HOURS = Array.from({ length: 24 }, (_, i) => i);
+const THEME_OPTIONS: { value: ThemePreference; label: string }[] = [
+  { value: 'system', label: 'Sistema' },
+  { value: 'light', label: 'Claro' },
+  { value: 'dark', label: 'Oscuro' },
+];
+
+const HOURS =Array.from({ length: 24 }, (_, i) => i);
 const MINUTES = Array.from({ length: 12 }, (_, i) => i * 5);
 const pad = (n: number) => String(n).padStart(2, '0');
 
 export default function SettingsScreen() {
   const router = useRouter();
+  const { preference, setPreference } = useTheme();
   const [settings, setSettings] = useState<ReminderSettings>(DEFAULT_REMINDER_SETTINGS);
   const [permissionDenied, setPermissionDenied] = useState(false);
   const [hasRoutine, setHasRoutine] = useState(true);
@@ -68,6 +78,20 @@ export default function SettingsScreen() {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+      <View style={styles.card}>
+        <Text style={styles.title}>Apariencia</Text>
+        <View style={styles.chips}>
+          {THEME_OPTIONS.map((option) => (
+            <Chip
+              key={option.value}
+              label={option.label}
+              selected={preference === option.value}
+              onPress={() => setPreference(option.value)}
+            />
+          ))}
+        </View>
+      </View>
+
       {permissionDenied && (
         <View style={styles.warning}>
           <Text style={styles.warningText}>
@@ -153,6 +177,7 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   content: { padding: 16, gap: 12 },
   card: { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 12, gap: 6 },
+  chips: { flexDirection: 'row', gap: 8 },
   row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   title: { fontSize: 16, fontWeight: '600', flexShrink: 1 },
   muted: { color: '#666' },
