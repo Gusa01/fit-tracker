@@ -187,49 +187,70 @@ on conflict (slug) do update set
   image_credit = excluded.image_credit,
   owner_id = null;
 
--- 2. Map every old shared row (no slug) to the catalog row whose name or alias matches it.
-create temporary table catalog_merge on commit drop as
-select old.id as old_id, cat.id as new_id
-from public.exercises old
-join public.exercises cat
-  on cat.slug is not null
- and (lower(cat.name) = lower(old.name) or lower(old.name) in (select lower(a) from unnest(cat.aliases) a))
-where old.slug is null and old.owner_id is null;
+-- 2. Merge the legacy shared rows (no slug) into the catalog. A function so it can be tested
+-- against seeded data; service role / postgres only. Idempotent: with nothing to merge it does nothing.
+create or replace function public.merge_legacy_exercises() returns void
+language plpgsql security definer set search_path = public as $$
+begin
+  -- Map every old shared row to the catalog row whose name or alias matches it (one target per row).
+  drop table if exists pg_temp.catalog_merge;
+  create temporary table catalog_merge on commit drop as
+  select distinct on (old.id) old.id as old_id, cat.id as new_id
+  from public.exercises old
+  join public.exercises cat
+    on cat.slug is not null
+   and (lower(cat.name) = lower(old.name) or lower(old.name) in (select lower(a) from unnest(cat.aliases) a))
+  where old.slug is null and old.owner_id is null
+  order by old.id, cat.slug;
 
--- 3. Repoint routines and progression state, collapsing duplicate state rows to the latest.
-update public.routine_exercises re set exercise_id = m.new_id
-from catalog_merge m where re.exercise_id = m.old_id;
+  -- Repoint routines and progression state, collapsing duplicate state rows to the latest.
+  update public.routine_exercises re set exercise_id = m.new_id
+  from catalog_merge m where re.exercise_id = m.old_id;
 
-with remapped as (
-  select s.id, s.user_id, coalesce(m.new_id, s.exercise_id) as target, s.updated_at
-  from public.user_exercise_state s left join catalog_merge m on m.old_id = s.exercise_id
-), ranked as (
-  select id, row_number() over (partition by user_id, target order by updated_at desc nulls last, id) as rn
-  from remapped
-)
-delete from public.user_exercise_state s using ranked r where s.id = r.id and r.rn > 1;
+  with remapped as (
+    select s.id, s.user_id, coalesce(m.new_id, s.exercise_id) as target, s.updated_at
+    from public.user_exercise_state s left join catalog_merge m on m.old_id = s.exercise_id
+  ), ranked as (
+    select id, row_number() over (partition by user_id, target order by updated_at desc nulls last, id) as rn
+    from remapped
+  )
+  delete from public.user_exercise_state s using ranked r where s.id = r.id and r.rn > 1;
 
-update public.user_exercise_state s set exercise_id = m.new_id
-from catalog_merge m where s.exercise_id = m.old_id;
+  update public.user_exercise_state s set exercise_id = m.new_id
+  from catalog_merge m where s.exercise_id = m.old_id;
 
-delete from public.exercises e using catalog_merge m where e.id = m.old_id;
+  delete from public.exercises e using catalog_merge m where e.id = m.old_id;
 
--- 4. Leftover shared rows without a catalog match.
-with refs as (
-  select re.exercise_id, count(distinct r.user_id) as users, min(r.user_id::text)::uuid as only_user
-  from public.routine_exercises re
-  join public.routine_days d on d.id = re.routine_day_id
-  join public.routines r on r.id = d.routine_id
-  group by re.exercise_id
-)
-update public.exercises e set owner_id = refs.only_user
-from refs
-where e.id = refs.exercise_id and e.slug is null and e.owner_id is null and refs.users = 1;
+  drop table catalog_merge;
 
-delete from public.exercises e
-where e.slug is null and e.owner_id is null
-  and not exists (select 1 from public.routine_exercises re where re.exercise_id = e.id)
-  and not exists (select 1 from public.user_exercise_state s where s.exercise_id = e.id);
+  -- Leftover shared rows without a catalog match: private to the only user referencing them
+  -- (through a routine or progression state), kept shared if several do, deleted if nobody does.
+  with refs as (
+    select exercise_id, count(distinct user_id) as users, min(user_id::text)::uuid as only_user
+    from (
+      select re.exercise_id, r.user_id
+      from public.routine_exercises re
+      join public.routine_days d on d.id = re.routine_day_id
+      join public.routines r on r.id = d.routine_id
+      union
+      select s.exercise_id, s.user_id from public.user_exercise_state s
+    ) u
+    group by exercise_id
+  )
+  update public.exercises e set owner_id = refs.only_user
+  from refs
+  where e.id = refs.exercise_id and e.slug is null and e.owner_id is null and refs.users = 1;
+
+  delete from public.exercises e
+  where e.slug is null and e.owner_id is null
+    and not exists (select 1 from public.routine_exercises re where re.exercise_id = e.id)
+    and not exists (select 1 from public.user_exercise_state s where s.exercise_id = e.id);
+end;
+$$;
+
+revoke all on function public.merge_legacy_exercises() from public, anon, authenticated;
+
+select public.merge_legacy_exercises();
 
 -- 5. Uniqueness now that duplicates are gone.
 create unique index exercises_catalog_name_key on public.exercises (lower(name)) where owner_id is null;

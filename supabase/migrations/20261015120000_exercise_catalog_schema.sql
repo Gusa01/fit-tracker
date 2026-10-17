@@ -36,6 +36,9 @@ alter table public.exercises add column muscle_group text generated always as (
   end
 ) stored;
 
+-- A user must not be able to claim a catalog slug.
+alter table public.exercises add constraint exercises_slug_only_catalog check (slug is null or owner_id is null);
+
 -- The global unique(name) goes away; the seed migration adds per-owner uniqueness.
 alter table public.exercises drop constraint exercises_name_key;
 

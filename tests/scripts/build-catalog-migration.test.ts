@@ -33,10 +33,20 @@ describe('buildCatalogSeedSql', () => {
     expect(sql).toMatch(/'plank'[\s\S]*?null,\s*null/);
   });
 
-  it('merges old rows, then adds the uniqueness indexes, in that order', () => {
-    const merge = sql.indexOf('update public.routine_exercises');
+  it('defines the merge as a service-only function, calls it, then adds the uniqueness indexes', () => {
+    const define = sql.indexOf('create or replace function public.merge_legacy_exercises()');
+    const revoke = sql.indexOf('revoke all on function public.merge_legacy_exercises() from public, anon, authenticated');
+    const call = sql.indexOf('select public.merge_legacy_exercises();');
     const index = sql.indexOf('create unique index exercises_catalog_name_key');
-    expect(merge).toBeGreaterThan(0);
-    expect(index).toBeGreaterThan(merge);
+    expect(define).toBeGreaterThan(0);
+    expect(revoke).toBeGreaterThan(define);
+    expect(call).toBeGreaterThan(revoke);
+    expect(index).toBeGreaterThan(call);
+    expect(sql).toContain('update public.routine_exercises');
+    expect(sql).toContain('security definer set search_path = public');
+  });
+
+  it('counts routine and progression-state references when privatizing leftovers', () => {
+    expect(sql).toContain('select s.exercise_id, s.user_id from public.user_exercise_state s');
   });
 });
