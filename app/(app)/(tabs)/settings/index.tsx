@@ -1,5 +1,5 @@
-import { useCallback, useRef, useState } from 'react';
-import { View, Text, Switch, Pressable, Modal, FlatList, StyleSheet, Linking, Alert, ScrollView } from 'react-native';
+import { useCallback, useMemo, useRef, useState } from 'react';
+import { View, Text, Switch, Pressable, Modal, FlatList, StyleSheet, Linking, Alert } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { DEFAULT_REMINDER_SETTINGS, loadReminderSettings, saveReminderSettings } from '../../../../src/lib/reminders/storage';
 import { ReminderSettings } from '../../../../src/lib/reminders/types';
@@ -13,9 +13,10 @@ import {
 import { supabase } from '../../../../src/lib/supabase';
 import { getDatabase } from '../../../../src/lib/sqlite/db';
 import { getCachedActiveRoutine } from '../../../../src/lib/sqlite/cache';
-import { Button, Chip } from '../../../../src/components/ui';
+import { AppText, Banner, Button, Card, Chip, Screen } from '../../../../src/components/ui';
 import { useTheme } from '../../../../src/theme/ThemeProvider';
 import { ThemePreference } from '../../../../src/theme/preference';
+import { ColorTokens } from '../../../../src/theme/colors';
 
 const THEME_OPTIONS: { value: ThemePreference; label: string }[] = [
   { value: 'system', label: 'Sistema' },
@@ -29,7 +30,8 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
 export default function SettingsScreen() {
   const router = useRouter();
-  const { preference, setPreference } = useTheme();
+  const { colors, preference, setPreference } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const [settings, setSettings] = useState<ReminderSettings>(DEFAULT_REMINDER_SETTINGS);
   const [permissionDenied, setPermissionDenied] = useState(false);
   const [hasRoutine, setHasRoutine] = useState(true);
@@ -79,9 +81,9 @@ export default function SettingsScreen() {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <View style={styles.card}>
-        <Text style={styles.title}>Apariencia</Text>
+    <Screen scroll>
+      <Card>
+        <AppText variant="heading">Apariencia</AppText>
         <View style={styles.chips}>
           {THEME_OPTIONS.map((option) => (
             <Chip
@@ -92,50 +94,60 @@ export default function SettingsScreen() {
             />
           ))}
         </View>
-      </View>
+      </Card>
 
       {permissionDenied && (
-        <View style={styles.warning}>
-          <Text style={styles.warningText}>
+        <Banner tone="warning">
+          <AppText color="warning">
             Para recibir avisos, activá las notificaciones de Fit Tracker en los ajustes del celular.
-          </Text>
-          <Pressable style={styles.warningButton} onPress={() => Linking.openSettings()}>
-            <Text style={styles.warningButtonText}>Abrir ajustes</Text>
-          </Pressable>
-        </View>
+          </AppText>
+          <View style={styles.warningButton}>
+            <Button title="Abrir ajustes" onPress={() => Linking.openSettings()} />
+          </View>
+        </Banner>
       )}
 
-      {!hasRoutine && <Text style={styles.muted}>Activá una rutina para recibir recordatorios.</Text>}
+      {!hasRoutine && <AppText variant="muted">Activá una rutina para recibir recordatorios.</AppText>}
 
-      <View style={styles.card}>
+      <Card>
         <View style={styles.row}>
-          <Text style={styles.title}>Recordatorio de entrenamiento</Text>
+          <AppText variant="heading" style={styles.title}>
+            Recordatorio de entrenamiento
+          </AppText>
           <Switch disabled={!loaded} value={settings.trainingEnabled} onValueChange={(v) => toggle('trainingEnabled', v)} />
         </View>
-        <Text style={styles.muted}>Te avisa los días que toca entrenar, si todavía no lo hiciste.</Text>
-      </View>
+        <AppText variant="muted">Te avisa los días que toca entrenar, si todavía no lo hiciste.</AppText>
+      </Card>
 
-      <View style={styles.card}>
+      <Card>
         <View style={styles.row}>
-          <Text style={styles.title}>Racha en riesgo</Text>
+          <AppText variant="heading" style={styles.title}>
+            Racha en riesgo
+          </AppText>
           <Switch disabled={!loaded} value={settings.streakEnabled} onValueChange={(v) => toggle('streakEnabled', v)} />
         </View>
-        <Text style={styles.muted}>Te avisa el sábado si todavía no entrenaste en la semana.</Text>
-      </View>
+        <AppText variant="muted">Te avisa el sábado si todavía no entrenaste en la semana.</AppText>
+      </Card>
 
-      <Pressable style={[styles.card, styles.row]} disabled={!loaded} onPress={() => setPickerOpen(true)}>
-        <Text style={styles.title}>Hora</Text>
-        <Text style={styles.time}>
-          {pad(settings.hour)}:{pad(settings.minute)} ▾
-        </Text>
+      <Pressable disabled={!loaded} onPress={() => setPickerOpen(true)}>
+        <Card style={styles.row}>
+          <AppText variant="heading" style={styles.title}>
+            Hora
+          </AppText>
+          <AppText variant="heading">
+            {pad(settings.hour)}:{pad(settings.minute)} ▾
+          </AppText>
+        </Card>
       </Pressable>
 
-      <Pressable style={styles.testButton} disabled={!loaded} onPress={handleTest}>
-        <Text style={styles.testButtonText}>Enviar aviso de prueba</Text>
-      </Pressable>
+      <Button title="Enviar aviso de prueba" variant="secondary" disabled={!loaded} onPress={handleTest} />
 
-      <Pressable style={[styles.card, styles.row]} onPress={() => router.push('/(app)/(tabs)/settings/credits' as any)}>
-        <Text style={styles.title}>Créditos de imágenes ›</Text>
+      <Pressable onPress={() => router.push('/(app)/(tabs)/settings/credits' as any)}>
+        <Card style={styles.row}>
+          <AppText variant="heading" style={styles.title}>
+            Créditos de imágenes ›
+          </AppText>
+        </Card>
       </Pressable>
 
       <Button
@@ -150,7 +162,7 @@ export default function SettingsScreen() {
       <Modal visible={pickerOpen} transparent animationType="slide" onRequestClose={() => setPickerOpen(false)}>
         <Pressable style={styles.backdrop} onPress={() => setPickerOpen(false)} />
         <View style={styles.sheet}>
-          <Text style={styles.sheetTitle}>Elegí la hora</Text>
+          <AppText variant="heading">Elegí la hora</AppText>
           <View style={styles.columns}>
             <FlatList
               style={styles.column}
@@ -175,38 +187,32 @@ export default function SettingsScreen() {
               )}
             />
           </View>
-          <Pressable style={styles.doneButton} onPress={() => setPickerOpen(false)}>
-            <Text style={styles.doneText}>Listo</Text>
-          </Pressable>
+          <Button title="Listo" onPress={() => setPickerOpen(false)} />
         </View>
       </Modal>
-    </ScrollView>
+    </Screen>
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1 },
-  content: { padding: 16, gap: 12 },
-  card: { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 12, gap: 6 },
-  chips: { flexDirection: 'row', gap: 8 },
-  row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  title: { fontSize: 16, fontWeight: '600', flexShrink: 1 },
-  muted: { color: '#666' },
-  time: { fontSize: 16, fontWeight: '700' },
-  warning: { borderWidth: 1, borderColor: '#f59e0b', backgroundColor: '#fffbeb', borderRadius: 8, padding: 12, gap: 8 },
-  warningText: { color: '#92400e' },
-  warningButton: { alignSelf: 'flex-start', backgroundColor: '#111', borderRadius: 8, paddingVertical: 8, paddingHorizontal: 14 },
-  warningButtonText: { color: '#fff', fontWeight: '600' },
-  testButton: { borderWidth: 1, borderColor: '#111', borderRadius: 8, padding: 12, alignItems: 'center' },
-  testButtonText: { color: '#111', fontWeight: '600' },
-  backdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.3)' },
-  sheet: { maxHeight: '60%', backgroundColor: '#fff', borderTopLeftRadius: 12, borderTopRightRadius: 12, padding: 16, gap: 8 },
-  sheetTitle: { fontSize: 16, fontWeight: '700' },
-  columns: { flexDirection: 'row', gap: 16, flexShrink: 1 },
-  column: { flex: 1 },
-  option: { paddingVertical: 10, alignItems: 'center' },
-  optionText: { fontSize: 16, color: '#666' },
-  optionActive: { color: '#111', fontWeight: '700' },
-  doneButton: { backgroundColor: '#111', borderRadius: 8, padding: 12, alignItems: 'center' },
-  doneText: { color: '#fff', fontWeight: '700' },
-});
+function makeStyles(c: ColorTokens) {
+  return StyleSheet.create({
+    chips: { flexDirection: 'row', gap: 8 },
+    row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+    title: { flexShrink: 1 },
+    warningButton: { alignSelf: 'flex-start' },
+    backdrop: { flex: 1, backgroundColor: c.overlay },
+    sheet: {
+      maxHeight: '60%',
+      backgroundColor: c.surface,
+      borderTopLeftRadius: 12,
+      borderTopRightRadius: 12,
+      padding: 16,
+      gap: 8,
+    },
+    columns: { flexDirection: 'row', gap: 16, flexShrink: 1 },
+    column: { flex: 1 },
+    option: { paddingVertical: 10, alignItems: 'center', minHeight: 44, justifyContent: 'center' },
+    optionText: { fontSize: 16, color: c.textMuted },
+    optionActive: { color: c.text, fontWeight: '700' },
+  });
+}

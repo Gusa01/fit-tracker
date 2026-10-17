@@ -1,9 +1,14 @@
-import { useCallback, useEffect, useState } from 'react';
-import { View, Text, FlatList, Pressable, ActivityIndicator, Linking, StyleSheet } from 'react-native';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { View, FlatList, Pressable, ActivityIndicator, Linking, StyleSheet } from 'react-native';
 import { supabase } from '../../../../src/lib/supabase';
 import { CreditedExercise, listCreditedExercises } from '../../../../src/lib/exercises/queries';
+import { AppText, Button, Card } from '../../../../src/components/ui';
+import { ColorTokens } from '../../../../src/theme/colors';
+import { useTheme } from '../../../../src/theme/ThemeProvider';
 
 export default function CreditsScreen() {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const [items, setItems] = useState<CreditedExercise[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -35,10 +40,8 @@ export default function CreditsScreen() {
   if (error) {
     return (
       <View style={styles.center}>
-        <Text style={styles.muted}>No se pudieron cargar los créditos.</Text>
-        <Pressable style={styles.retryButton} onPress={load}>
-          <Text style={styles.retryText}>Reintentar</Text>
-        </Pressable>
+        <AppText variant="muted">No se pudieron cargar los créditos.</AppText>
+        <Button title="Reintentar" onPress={load} />
       </View>
     );
   }
@@ -51,38 +54,44 @@ export default function CreditsScreen() {
       keyExtractor={(item) => item.id}
       ListHeaderComponent={
         <View style={styles.header}>
-          <Text style={styles.title}>Créditos de imágenes</Text>
-          <Text style={styles.muted}>
+          <AppText variant="muted">
             Las ilustraciones de ejercicios provienen de wger.de y se usan bajo licencias Creative Commons. Los datos del
             catálogo provienen de free-exercise-db (dominio público).
-          </Text>
+          </AppText>
         </View>
       }
       renderItem={({ item }) => (
-        <View style={styles.row}>
-          <Text style={styles.name}>{item.name}</Text>
-          <Text style={styles.muted}>
+        <Card style={styles.row}>
+          <AppText style={styles.name}>{item.name}</AppText>
+          <AppText variant="muted">
             {item.image_credit.author} · {item.image_credit.license}
-          </Text>
+          </AppText>
           <Pressable onPress={() => Linking.openURL(item.image_credit.source_url)} hitSlop={8}>
-            <Text style={styles.link}>Ver fuente</Text>
+            <AppText color="accent" style={styles.link}>
+              Ver fuente
+            </AppText>
           </Pressable>
-        </View>
+        </Card>
       )}
     />
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1 },
-  content: { padding: 16, gap: 8 },
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, padding: 16 },
-  header: { gap: 8, marginBottom: 8 },
-  title: { fontSize: 18, fontWeight: '700' },
-  muted: { color: '#666' },
-  row: { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 12, gap: 4 },
-  name: { fontWeight: '700' },
-  link: { color: '#2563eb', fontWeight: '600' },
-  retryButton: { backgroundColor: '#111', borderRadius: 8, paddingVertical: 10, paddingHorizontal: 16 },
-  retryText: { color: '#fff', fontWeight: '600' },
-});
+function makeStyles(c: ColorTokens) {
+  return StyleSheet.create({
+    container: { flex: 1, backgroundColor: c.background },
+    content: { padding: 16, gap: 8 },
+    center: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 12,
+      padding: 16,
+      backgroundColor: c.background,
+    },
+    header: { gap: 8, marginBottom: 8 },
+    row: { gap: 4 },
+    name: { fontWeight: '700' },
+    link: { fontWeight: '600' },
+  });
+}
