@@ -38,7 +38,7 @@ jobs:
       # migration in supabase/migrations from scratch. Services the tests never
       # touch are excluded to keep startup fast.
       - name: Start local Supabase
-        run: npx supabase start -x studio,imgproxy,realtime,storage-api,edge-runtime,logflare,vector,supavisor,postgres-meta
+        run: npx supabase start -x studio,imgproxy,realtime,edge-runtime,logflare,vector,supavisor,postgres-meta
 
       - name: Export local Supabase credentials
         run: |

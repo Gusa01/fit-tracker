@@ -10,6 +10,7 @@
     "web": "expo start --web",
     "test": "jest",
     "import-routine": "tsx scripts/import-routine.ts",
+    "build-catalog-migration": "tsx scripts/build-catalog-migration.ts",
     "test:unit": "jest --selectProjects unit",
     "test:integration": "jest --selectProjects integration --runInBand",
     "typecheck": "tsc --noEmit",
