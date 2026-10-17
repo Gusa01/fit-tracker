@@ -1,10 +1,13 @@
-import { useState } from 'react';
-import { View, Text, TextInput, Pressable, StyleSheet, Switch, Alert } from 'react-native';
+import { useMemo, useState } from 'react';
+import { View, TextInput, Pressable, StyleSheet, Switch, Alert } from 'react-native';
 import { supabase } from '../lib/supabase';
 import { updateDay, setDayWeekdays } from '../lib/routines/mutations';
 import { RoutineDay, Weekday } from '../lib/routines/types';
 import { WeekdayPicker } from './WeekdayPicker';
 import { DayExercisesSection } from './DayExercisesSection';
+import { AppText, Card } from './ui';
+import { useTheme } from '../theme/ThemeProvider';
+import { ColorTokens } from '../theme/colors';
 
 const ALL_WEEKDAYS: Weekday[] = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
@@ -20,6 +23,8 @@ interface DayCardProps {
 }
 
 export function DayCard({ day, routineId, weekdaySchedule, index, totalDays, onChanged, onMove, onDelete }: DayCardProps) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const [name, setName] = useState(day.name);
   const [isRestDay, setIsRestDay] = useState(day.is_rest_day);
   const [weekdays, setWeekdays] = useState<Weekday[]>(
@@ -61,51 +66,72 @@ export function DayCard({ day, routineId, weekdaySchedule, index, totalDays, onC
   }
 
   return (
-    <View style={styles.card}>
+    <Card style={styles.card}>
       <View style={styles.headerRow}>
         <TextInput
           style={styles.dayNameInput}
           placeholder="Ej: Día A, Empuje, Piernas..."
+          placeholderTextColor={colors.textMuted}
           value={name}
           onChangeText={setName}
           onBlur={handleNameBlur}
         />
         <View style={styles.headerActions}>
           <Pressable disabled={index === 0} onPress={() => onMove(day.id, 'up')}>
-            <Text style={styles.moveButton}>↑</Text>
+            <AppText style={styles.moveButton}>↑</AppText>
           </Pressable>
           <Pressable disabled={index === totalDays - 1} onPress={() => onMove(day.id, 'down')}>
-            <Text style={styles.moveButton}>↓</Text>
+            <AppText style={styles.moveButton}>↓</AppText>
           </Pressable>
           <Pressable onPress={handleDeletePress}>
-            <Text style={styles.deleteButton}>Eliminar</Text>
+            <AppText color="danger" style={styles.deleteButton}>
+              Eliminar
+            </AppText>
           </Pressable>
         </View>
       </View>
 
       <View style={styles.switchRow}>
-        <Text>Día de descanso</Text>
-        <Switch value={isRestDay} onValueChange={handleToggleRest} />
+        <AppText>Día de descanso</AppText>
+        <Switch
+          value={isRestDay}
+          onValueChange={handleToggleRest}
+          trackColor={{ false: colors.surfaceMuted, true: colors.accent }}
+          thumbColor={colors.surface}
+        />
       </View>
 
       {!isRestDay && (
         <>
-          <Text style={styles.label}>Días de la semana (opcional)</Text>
+          <AppText variant="label" style={styles.label}>
+            Días de la semana (opcional)
+          </AppText>
           <WeekdayPicker selected={weekdays} onChange={handleWeekdaysChange} />
           <DayExercisesSection dayId={day.id} />
         </>
       )}
-    </View>
+    </Card>
   );
 }
 
-const styles = StyleSheet.create({
-  card: { gap: 10, borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 12 },
-  headerRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  dayNameInput: { flex: 1, borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 10, fontWeight: '600' },
-  headerActions: { flexDirection: 'row', gap: 12, alignItems: 'center' },
-  moveButton: { fontSize: 18, paddingHorizontal: 6 },
-  deleteButton: { color: '#dc2626', fontWeight: '600' },
-  switchRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  label: { fontWeight: '600', marginTop: 4 },
-});
+function makeStyles(c: ColorTokens) {
+  return StyleSheet.create({
+    card: { gap: 10, padding: 12 },
+    headerRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+    dayNameInput: {
+      flex: 1,
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.surface,
+      color: c.text,
+      borderRadius: 8,
+      padding: 10,
+      fontWeight: '600',
+    },
+    headerActions: { flexDirection: 'row', gap: 12, alignItems: 'center' },
+    moveButton: { fontSize: 18, paddingHorizontal: 6 },
+    deleteButton: { fontWeight: '600' },
+    switchRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+    label: { marginTop: 4 },
+  });
+}

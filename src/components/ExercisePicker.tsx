@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { View, Text, TextInput, Pressable, StyleSheet, ScrollView, Alert } from 'react-native';
+import { useMemo, useState } from 'react';
+import { View, TextInput, Pressable, StyleSheet, ScrollView, Alert } from 'react-native';
 import { useExercises } from '../hooks/useExercises';
 import { useAuthSession } from '../hooks/useAuthSession';
 import {
@@ -17,6 +17,9 @@ import { supabase } from '../lib/supabase';
 import { createRoutineExercise, findOrCreateExercise } from '../lib/routines/mutations';
 import { Exercise } from '../lib/routines/types';
 import { ExerciseThumbnail } from './ExerciseThumbnail';
+import { AppText, Button, Chip } from './ui';
+import { useTheme } from '../theme/ThemeProvider';
+import { ColorTokens } from '../theme/colors';
 
 interface ExercisePickerProps {
   dayId: string;
@@ -40,6 +43,8 @@ const DEFAULTS = {
 };
 
 export function ExercisePicker({ dayId, onDone, onCancel }: ExercisePickerProps) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { exercises: catalog, refetch: refetchCatalog } = useExercises();
   const { session } = useAuthSession();
   const [extraCatalog, setExtraCatalog] = useState<Exercise[]>([]);
@@ -105,44 +110,39 @@ export function ExercisePicker({ dayId, onDone, onCancel }: ExercisePickerProps)
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Elegir ejercicios</Text>
+      <AppText variant="heading">Elegir ejercicios</AppText>
       <TextInput
         style={styles.input}
         placeholder="Buscar por nombre o sinónimo..."
+        placeholderTextColor={colors.textMuted}
         value={search}
         onChangeText={setSearch}
       />
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={styles.segmented}>
-          <Pressable style={[styles.segment, !muscle && styles.segmentSelected]} onPress={() => setMuscle(null)}>
-            <Text style={!muscle ? styles.segmentTextSelected : styles.segmentText}>Todos los músculos</Text>
-          </Pressable>
+          <Chip label="Todos los músculos" selected={!muscle} onPress={() => setMuscle(null)} />
           {MUSCLES.map((m) => (
-            <Pressable
+            <Chip
               key={m}
-              style={[styles.segment, muscle === m && styles.segmentSelected]}
+              label={MUSCLE_LABEL[m]}
+              selected={muscle === m}
               onPress={() => setMuscle(muscle === m ? null : m)}
-            >
-              <Text style={muscle === m ? styles.segmentTextSelected : styles.segmentText}>{MUSCLE_LABEL[m]}</Text>
-            </Pressable>
+            />
           ))}
         </View>
       </ScrollView>
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={styles.segmented}>
-          <Pressable style={[styles.segment, !equipment && styles.segmentSelected]} onPress={() => setEquipment(null)}>
-            <Text style={!equipment ? styles.segmentTextSelected : styles.segmentText}>Todo el equipamiento</Text>
-          </Pressable>
+          <Chip label="Todo el equipamiento" selected={!equipment} onPress={() => setEquipment(null)} />
           {EQUIPMENT.map((e) => (
-            <Pressable
+            <Chip
               key={e}
-              style={[styles.segment, equipment === e && styles.segmentSelected]}
+              label={EQUIPMENT_LABEL[e]}
+              selected={equipment === e}
               onPress={() => setEquipment(equipment === e ? null : e)}
-            >
-              <Text style={equipment === e ? styles.segmentTextSelected : styles.segmentText}>{EQUIPMENT_LABEL[e]}</Text>
-            </Pressable>
+            />
           ))}
         </View>
       </ScrollView>
@@ -153,21 +153,21 @@ export function ExercisePicker({ dayId, onDone, onCancel }: ExercisePickerProps)
           return (
             <Pressable key={exercise.id} style={styles.row} onPress={() => toggle(exercise.id)}>
               <View style={[styles.checkbox, checked && styles.checkboxChecked]}>
-                {checked && <Text style={styles.checkmark}>✓</Text>}
+                {checked && <AppText color="onAccent" style={styles.checkmark}>✓</AppText>}
               </View>
               <ExerciseThumbnail imagePath={exercise.image_path} muscle={exercise.primary_muscle} />
               <View style={styles.rowText}>
-                <Text style={styles.rowName}>{exercise.name}</Text>
-                <Text style={styles.rowMeta}>
+                <AppText>{exercise.name}</AppText>
+                <AppText variant="muted" style={styles.rowMeta}>
                   {isMuscle(exercise.primary_muscle) ? MUSCLE_LABEL[exercise.primary_muscle] : exercise.primary_muscle}
                   {' · '}
                   {isEquipment(exercise.equipment) ? EQUIPMENT_LABEL[exercise.equipment] : exercise.equipment}
-                </Text>
+                </AppText>
               </View>
             </Pressable>
           );
         })}
-        {visible.length === 0 && <Text style={styles.hint}>Sin resultados.</Text>}
+        {visible.length === 0 && <AppText variant="muted" style={styles.hint}>Sin resultados.</AppText>}
       </ScrollView>
 
       {addingCustom ? (
@@ -175,106 +175,99 @@ export function ExercisePicker({ dayId, onDone, onCancel }: ExercisePickerProps)
           <TextInput
             style={styles.input}
             placeholder="Nombre del ejercicio nuevo"
+            placeholderTextColor={colors.textMuted}
             value={newName}
             onChangeText={setNewName}
           />
-          <Text style={styles.label}>Músculo principal</Text>
+          <AppText variant="label">Músculo principal</AppText>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View style={styles.segmented}>
               {MUSCLES.map((m) => (
-                <Pressable
-                  key={m}
-                  style={[styles.segment, newMuscle === m && styles.segmentSelected]}
-                  onPress={() => setNewMuscle(m)}
-                >
-                  <Text style={newMuscle === m ? styles.segmentTextSelected : styles.segmentText}>{MUSCLE_LABEL[m]}</Text>
-                </Pressable>
+                <Chip key={m} label={MUSCLE_LABEL[m]} selected={newMuscle === m} onPress={() => setNewMuscle(m)} />
               ))}
             </View>
           </ScrollView>
-          <Text style={styles.label}>Equipamiento</Text>
+          <AppText variant="label">Equipamiento</AppText>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View style={styles.segmented}>
               {EQUIPMENT.map((e) => (
-                <Pressable
+                <Chip
                   key={e}
-                  style={[styles.segment, newEquipment === e && styles.segmentSelected]}
+                  label={EQUIPMENT_LABEL[e]}
+                  selected={newEquipment === e}
                   onPress={() => setNewEquipment(e)}
-                >
-                  <Text style={newEquipment === e ? styles.segmentTextSelected : styles.segmentText}>
-                    {EQUIPMENT_LABEL[e]}
-                  </Text>
-                </Pressable>
+                />
               ))}
             </View>
           </ScrollView>
-          <Pressable style={styles.newButton} onPress={handleAddCustom}>
-            <Text style={styles.newButtonText}>+ Agregar a la lista</Text>
-          </Pressable>
+          <Button title="+ Agregar a la lista" variant="secondary" onPress={handleAddCustom} />
         </View>
       ) : (
-        <Pressable style={styles.newButton} onPress={() => setAddingCustom(true)}>
-          <Text style={styles.newButtonText}>+ No está en la lista, crear nuevo</Text>
-        </Pressable>
+        <Button title="+ No está en la lista, crear nuevo" variant="secondary" onPress={() => setAddingCustom(true)} />
       )}
 
-      {error && <Text style={styles.error}>{error}</Text>}
+      {error && <AppText color="danger">{error}</AppText>}
 
       <View style={styles.actions}>
-        <Pressable style={styles.button} onPress={handleConfirm} disabled={saving || selectedIds.length === 0}>
-          <Text style={styles.buttonText}>
-            {saving ? 'Agregando...' : `Agregar ${selectedIds.length || ''} ejercicio${selectedIds.length === 1 ? '' : 's'}`}
-          </Text>
-        </Pressable>
-        <Pressable style={styles.cancelButton} onPress={onCancel}>
-          <Text style={styles.cancelButtonText}>Cancelar</Text>
-        </Pressable>
+        <View style={styles.action}>
+          <Button
+            title={saving ? 'Agregando...' : `Agregar ${selectedIds.length || ''} ejercicio${selectedIds.length === 1 ? '' : 's'}`}
+            onPress={handleConfirm}
+            disabled={saving || selectedIds.length === 0}
+          />
+        </View>
+        <View style={styles.action}>
+          <Button title="Cancelar" variant="secondary" onPress={onCancel} />
+        </View>
       </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: { gap: 10, borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 12 },
-  title: { fontSize: 16, fontWeight: '700' },
-  input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 10 },
-  segmented: { flexDirection: 'row', gap: 6 },
-  segment: { borderWidth: 1, borderColor: '#ccc', borderRadius: 6, paddingVertical: 6, paddingHorizontal: 10 },
-  segmentSelected: { backgroundColor: '#111', borderColor: '#111' },
-  segmentText: { color: '#111' },
-  segmentTextSelected: { color: '#fff' },
-  list: { maxHeight: 260, borderWidth: 1, borderColor: '#eee', borderRadius: 8 },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  checkbox: {
-    width: 22,
-    height: 22,
-    borderWidth: 1,
-    borderColor: '#999',
-    borderRadius: 4,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  checkboxChecked: { backgroundColor: '#111', borderColor: '#111' },
-  checkmark: { color: '#fff', fontSize: 14, fontWeight: '700' },
-  rowText: { flex: 1 },
-  rowName: { fontSize: 15 },
-  label: { fontWeight: '600' },
-  rowMeta: { color: '#666', fontSize: 12 },
-  hint: { color: '#666', fontSize: 12, fontStyle: 'italic', padding: 10 },
-  customForm: { gap: 8 },
-  newButton: { borderWidth: 1, borderColor: '#111', borderRadius: 8, padding: 12, alignItems: 'center' },
-  newButtonText: { color: '#111', fontWeight: '600' },
-  error: { color: '#dc2626' },
-  actions: { flexDirection: 'row', gap: 8 },
-  button: { flex: 1, backgroundColor: '#111', borderRadius: 8, padding: 12, alignItems: 'center' },
-  buttonText: { color: '#fff', fontWeight: '600' },
-  cancelButton: { flex: 1, borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 12, alignItems: 'center' },
-  cancelButtonText: { color: '#111', fontWeight: '600' },
-});
+function makeStyles(c: ColorTokens) {
+  return StyleSheet.create({
+    container: {
+      gap: 10,
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.surface,
+      borderRadius: 8,
+      padding: 12,
+    },
+    input: {
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.surface,
+      color: c.text,
+      borderRadius: 8,
+      padding: 10,
+    },
+    segmented: { flexDirection: 'row', gap: 6 },
+    list: { maxHeight: 260, borderWidth: 1, borderColor: c.border, borderRadius: 8 },
+    row: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 10,
+      padding: 10,
+      borderBottomWidth: 1,
+      borderBottomColor: c.border,
+    },
+    checkbox: {
+      width: 22,
+      height: 22,
+      borderWidth: 1,
+      borderColor: c.textMuted,
+      borderRadius: 4,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    checkboxChecked: { backgroundColor: c.accent, borderColor: c.accent },
+    checkmark: { fontSize: 14, fontWeight: '700' },
+    rowText: { flex: 1 },
+    rowMeta: { fontSize: 12 },
+    hint: { fontSize: 12, fontStyle: 'italic', padding: 10 },
+    customForm: { gap: 8 },
+    actions: { flexDirection: 'row', gap: 8 },
+    action: { flex: 1 },
+  });
+}

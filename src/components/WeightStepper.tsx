@@ -1,4 +1,8 @@
-import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
+import { useMemo } from 'react';
+import { View, TextInput, Pressable, StyleSheet } from 'react-native';
+import { AppText } from './ui';
+import { useTheme } from '../theme/ThemeProvider';
+import { ColorTokens } from '../theme/colors';
 
 interface WeightStepperProps {
   value: string;
@@ -8,6 +12,9 @@ interface WeightStepperProps {
 const STEPS = [5, 2.5, 1.25];
 
 export function WeightStepper({ value, onChange }: WeightStepperProps) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
+
   function bump(delta: number) {
     const current = value === '' ? 0 : Number(value);
     if (Number.isNaN(current)) return;
@@ -19,35 +26,46 @@ export function WeightStepper({ value, onChange }: WeightStepperProps) {
     <View style={styles.row}>
       {[...STEPS].reverse().map((step) => (
         <Pressable key={`minus-${step}`} style={styles.button} onPress={() => bump(-step)}>
-          <Text style={styles.buttonText}>-{step}</Text>
+          <AppText style={styles.buttonText}>-{step}</AppText>
         </Pressable>
       ))}
-      <TextInput style={styles.input} keyboardType="numeric" value={value} onChangeText={onChange} />
+      <TextInput
+        style={styles.input}
+        keyboardType="numeric"
+        value={value}
+        onChangeText={onChange}
+        placeholderTextColor={colors.textMuted}
+      />
       {STEPS.map((step) => (
         <Pressable key={`plus-${step}`} style={styles.button} onPress={() => bump(step)}>
-          <Text style={styles.buttonText}>+{step}</Text>
+          <AppText style={styles.buttonText}>+{step}</AppText>
         </Pressable>
       ))}
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  row: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  button: {
-    paddingVertical: 6,
-    paddingHorizontal: 8,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 6,
-  },
-  buttonText: { fontSize: 12, fontWeight: '600' },
-  input: {
-    width: 60,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    padding: 8,
-    textAlign: 'center',
-  },
-});
+function makeStyles(c: ColorTokens) {
+  return StyleSheet.create({
+    row: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+    button: {
+      paddingVertical: 6,
+      paddingHorizontal: 8,
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.surfaceMuted,
+      borderRadius: 6,
+    },
+    buttonText: { fontSize: 12, fontWeight: '600' },
+    input: {
+      width: 60,
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.surface,
+      color: c.text,
+      borderRadius: 8,
+      padding: 8,
+      textAlign: 'center',
+    },
+  });
+}

@@ -1,12 +1,17 @@
-import { useState } from 'react';
-import { View, Text, FlatList, Pressable, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { useMemo, useState } from 'react';
+import { View, FlatList, Pressable, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { router } from 'expo-router';
 import { useAuthSession } from '../../../../src/hooks/useAuthSession';
 import { useRoutines } from '../../../../src/hooks/useRoutines';
 import { supabase } from '../../../../src/lib/supabase';
 import { activateRoutine, softDeleteRoutine } from '../../../../src/lib/routines/mutations';
+import { AppText, Button, Card, Screen } from '../../../../src/components/ui';
+import { useTheme } from '../../../../src/theme/ThemeProvider';
+import { ColorTokens } from '../../../../src/theme/colors';
 
 export default function RoutinesList() {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { session } = useAuthSession();
   const userId = session?.user.id;
   const { routines, isLoading, error, refetch } = useRoutines(userId);
@@ -48,73 +53,64 @@ export default function RoutinesList() {
 
   if (error) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.error}>{error}</Text>
-      </View>
+      <Screen>
+        <AppText color="danger">{error}</AppText>
+      </Screen>
     );
   }
 
   if (isLoading) {
     return (
-      <View style={styles.container}>
-        <ActivityIndicator />
-      </View>
+      <Screen>
+        <ActivityIndicator color={colors.accent} />
+      </Screen>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <Screen>
       <FlatList
         data={routines}
         keyExtractor={(item) => item.id}
-        ListEmptyComponent={<Text style={styles.empty}>Todavía no tenés rutinas.</Text>}
+        ListEmptyComponent={
+          <AppText variant="muted" style={styles.empty}>
+            Todavía no tenés rutinas.
+          </AppText>
+        }
         renderItem={({ item }) => (
-          <Pressable style={styles.row} onPress={() => router.push(`/(app)/(tabs)/routines/${item.id}` as any)}>
-            <View style={styles.rowText}>
-              <Text style={styles.rowTitle}>
+          <Pressable onPress={() => router.push(`/(app)/(tabs)/routines/${item.id}` as any)}>
+            <Card style={styles.row}>
+              <AppText variant="heading">
                 {item.name}
                 {item.is_active ? ' ⭐' : ''}
-              </Text>
-            </View>
-            <View style={styles.rowActions}>
-              {!item.is_active && (
-                <Pressable
+              </AppText>
+              <View style={styles.rowActions}>
+                {!item.is_active && (
+                  <Button title="Activar" disabled={busyId === item.id} onPress={() => handleActivate(item.id)} />
+                )}
+                <Button
+                  title="Eliminar"
+                  variant="danger"
                   disabled={busyId === item.id}
-                  onPress={() => handleActivate(item.id)}
-                  style={styles.actionButton}
-                >
-                  <Text style={styles.actionButtonText}>Activar</Text>
-                </Pressable>
-              )}
-              <Pressable
-                disabled={busyId === item.id}
-                onPress={() => handleDelete(item.id, item.name)}
-                style={[styles.actionButton, styles.deleteButton]}
-              >
-                <Text style={styles.actionButtonText}>Eliminar</Text>
-              </Pressable>
-            </View>
+                  onPress={() => handleDelete(item.id, item.name)}
+                />
+              </View>
+            </Card>
           </Pressable>
         )}
       />
-      <Pressable style={styles.newButton} onPress={() => router.push('/(app)/(tabs)/routines/new' as any)}>
-        <Text style={styles.newButtonText}>+ Nueva rutina</Text>
-      </Pressable>
-    </View>
+      <View style={styles.newButton}>
+        <Button title="+ Nueva rutina" onPress={() => router.push('/(app)/(tabs)/routines/new' as any)} />
+      </View>
+    </Screen>
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16 },
-  empty: { textAlign: 'center', marginTop: 32, color: '#666' },
-  error: { color: '#dc2626' },
-  row: { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 12, marginBottom: 8 },
-  rowText: { marginBottom: 8 },
-  rowTitle: { fontSize: 16, fontWeight: '600' },
-  rowActions: { flexDirection: 'row', gap: 8 },
-  actionButton: { backgroundColor: '#111', borderRadius: 6, paddingVertical: 6, paddingHorizontal: 12 },
-  deleteButton: { backgroundColor: '#dc2626' },
-  actionButtonText: { color: '#fff', fontSize: 12, fontWeight: '600' },
-  newButton: { backgroundColor: '#111', borderRadius: 8, padding: 14, alignItems: 'center', marginTop: 12 },
-  newButtonText: { color: '#fff', fontWeight: '600' },
-});
+function makeStyles(_c: ColorTokens) {
+  return StyleSheet.create({
+    empty: { textAlign: 'center', marginTop: 32 },
+    row: { marginBottom: 8 },
+    rowActions: { flexDirection: 'row', gap: 8 },
+    newButton: { marginTop: 12 },
+  });
+}

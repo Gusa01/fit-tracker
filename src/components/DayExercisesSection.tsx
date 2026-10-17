@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { View, Text, Pressable, StyleSheet, Alert, Modal, ActivityIndicator } from 'react-native';
+import { useMemo, useState } from 'react';
+import { View, Pressable, StyleSheet, Alert, Modal, ActivityIndicator } from 'react-native';
 import { NestableDraggableFlatList, RenderItemParams } from 'react-native-draggable-flatlist';
 import { useDayExercises } from '../hooks/useDayExercises';
 import { useExercises } from '../hooks/useExercises';
@@ -15,6 +15,9 @@ import { ExerciseForm, ExerciseFormValues } from './ExerciseForm';
 import { ExercisePicker } from './ExercisePicker';
 import { RoutineExerciseWithName } from '../lib/routines/types';
 import { formatTargetScheme } from '../lib/sessions/prescribedSets';
+import { AppText, Button } from './ui';
+import { useTheme } from '../theme/ThemeProvider';
+import { ColorTokens } from '../theme/colors';
 
 interface DayExercisesSectionProps {
   dayId: string;
@@ -39,6 +42,8 @@ function toMutationInput(values: ExerciseFormValues) {
 }
 
 export function DayExercisesSection({ dayId }: DayExercisesSectionProps) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { exercises, isLoading, error, refetch } = useDayExercises(dayId);
   const { exercises: catalog } = useExercises();
   const { session } = useAuthSession();
@@ -104,8 +109,10 @@ export function DayExercisesSection({ dayId }: DayExercisesSectionProps) {
   if (error) {
     return (
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Ejercicios</Text>
-        <Text style={styles.error}>{error}</Text>
+        <AppText variant="title" style={styles.sectionTitle}>
+          Ejercicios
+        </AppText>
+        <AppText color="danger">{error}</AppText>
       </View>
     );
   }
@@ -113,15 +120,19 @@ export function DayExercisesSection({ dayId }: DayExercisesSectionProps) {
   if (isLoading) {
     return (
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Ejercicios</Text>
-        <ActivityIndicator />
+        <AppText variant="title" style={styles.sectionTitle}>
+          Ejercicios
+        </AppText>
+        <ActivityIndicator color={colors.accent} />
       </View>
     );
   }
 
   return (
     <View style={styles.section}>
-      <Text style={styles.sectionTitle}>Ejercicios</Text>
+      <AppText variant="title" style={styles.sectionTitle}>
+        Ejercicios
+      </AppText>
       <NestableDraggableFlatList
         data={exercises}
         keyExtractor={(exercise: RoutineExerciseWithName) => exercise.id}
@@ -137,15 +148,19 @@ export function DayExercisesSection({ dayId }: DayExercisesSectionProps) {
           ) : (
             <View style={[styles.exerciseRow, isActive && styles.exerciseRowActive]}>
               <Pressable style={styles.exerciseRowMain} onPress={() => setEditingExerciseId(exercise.id)}>
-                <Text style={styles.exerciseName}>{exercise.exercise_name}</Text>
-                <Text style={styles.exerciseMeta}>{formatTargetScheme(exercise)}</Text>
+                <AppText variant="heading">{exercise.exercise_name}</AppText>
+                <AppText variant="muted">{formatTargetScheme(exercise)}</AppText>
               </Pressable>
               <View style={styles.exerciseActions}>
                 <Pressable onLongPress={drag} disabled={isActive}>
-                  <Text style={styles.dragHandle}>☰</Text>
+                  <AppText color="textMuted" style={styles.dragHandle}>
+                    ☰
+                  </AppText>
                 </Pressable>
                 <Pressable onPress={() => handleDeleteExercise(exercise.id, exercise.exercise_name)}>
-                  <Text style={styles.deleteButton}>Eliminar</Text>
+                  <AppText color="danger" style={styles.deleteButton}>
+                    Eliminar
+                  </AppText>
                 </Pressable>
               </View>
             </View>
@@ -153,9 +168,7 @@ export function DayExercisesSection({ dayId }: DayExercisesSectionProps) {
         }
       />
 
-      <Pressable style={styles.newButton} onPress={() => setAddingExercise(true)}>
-        <Text style={styles.newButtonText}>+ Agregar ejercicios</Text>
-      </Pressable>
+      <Button title="+ Agregar ejercicios" variant="secondary" onPress={() => setAddingExercise(true)} />
 
       <Modal visible={addingExercise} transparent animationType="slide" onRequestClose={() => setAddingExercise(false)}>
         <View style={styles.modalRoot}>
@@ -169,35 +182,33 @@ export function DayExercisesSection({ dayId }: DayExercisesSectionProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  section: { gap: 12 },
-  error: { color: '#dc2626' },
-  sectionTitle: { fontSize: 18, fontWeight: '700', marginTop: 12 },
-  exerciseRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 8,
-  },
-  exerciseRowActive: { borderColor: '#111', backgroundColor: '#f5f5f5' },
-  exerciseRowMain: { flex: 1 },
-  exerciseName: { fontSize: 16, fontWeight: '600' },
-  exerciseMeta: { color: '#666', fontSize: 12 },
-  exerciseActions: { flexDirection: 'row', gap: 12, alignItems: 'center' },
-  dragHandle: { fontSize: 20, paddingHorizontal: 6, color: '#666' },
-  deleteButton: { color: '#dc2626', fontWeight: '600' },
-  newButton: { borderWidth: 1, borderColor: '#111', borderRadius: 8, padding: 14, alignItems: 'center' },
-  newButtonText: { color: '#111', fontWeight: '600' },
-  modalRoot: { flex: 1, justifyContent: 'flex-end' },
-  modalBackdrop: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.4)' },
-  modalSheet: {
-    backgroundColor: '#fff',
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    padding: 16,
-    maxHeight: '85%',
-  },
-});
+function makeStyles(c: ColorTokens) {
+  return StyleSheet.create({
+    section: { gap: 12 },
+    sectionTitle: { marginTop: 12 },
+    exerciseRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.surface,
+      borderRadius: 8,
+      padding: 12,
+      marginBottom: 8,
+    },
+    exerciseRowActive: { borderColor: c.accent, backgroundColor: c.surfaceMuted },
+    exerciseRowMain: { flex: 1 },
+    exerciseActions: { flexDirection: 'row', gap: 12, alignItems: 'center' },
+    dragHandle: { fontSize: 20, paddingHorizontal: 6 },
+    deleteButton: { fontWeight: '600' },
+    modalRoot: { flex: 1, justifyContent: 'flex-end' },
+    modalBackdrop: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: c.overlay },
+    modalSheet: {
+      backgroundColor: c.surface,
+      borderTopLeftRadius: 16,
+      borderTopRightRadius: 16,
+      padding: 16,
+      maxHeight: '85%',
+    },
+  });
+}

@@ -1,5 +1,6 @@
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Weekday } from '../lib/routines/types';
+import { Chip } from './ui';
 
 interface WeekdayPickerProps {
   selected: Weekday[];
@@ -23,30 +24,13 @@ export function WeekdayPicker({ selected, onChange }: WeekdayPickerProps) {
 
   return (
     <View style={styles.row}>
-      {WEEKDAYS.map(({ key, label }) => {
-        const isSelected = selected.includes(key);
-        return (
-          <Pressable key={key} style={[styles.chip, isSelected && styles.chipSelected]} onPress={() => toggle(key)}>
-            <Text style={isSelected ? styles.chipTextSelected : styles.chipText}>{label}</Text>
-          </Pressable>
-        );
-      })}
+      {WEEKDAYS.map(({ key, label }) => (
+        <Chip key={key} label={label} selected={selected.includes(key)} onPress={() => toggle(key)} />
+      ))}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', gap: 6 },
-  chip: {
-    width: 36,
-    height: 36,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  chipSelected: { backgroundColor: '#111', borderColor: '#111' },
-  chipText: { color: '#111', fontWeight: '600' },
-  chipTextSelected: { color: '#fff', fontWeight: '600' },
 });
