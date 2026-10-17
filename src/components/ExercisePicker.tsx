@@ -65,7 +65,11 @@ export function ExercisePicker({ dayId, onDone, onCancel }: ExercisePickerProps)
 
   async function handleAddCustom() {
     const userId = session?.user.id;
-    if (!newName.trim() || !userId) return;
+    if (!newName.trim()) return;
+    if (!userId) {
+      Alert.alert('Error', 'Iniciá sesión para crear un ejercicio.');
+      return;
+    }
     try {
       const exercise = await findOrCreateExercise(supabase, {
         name: newName.trim(),
