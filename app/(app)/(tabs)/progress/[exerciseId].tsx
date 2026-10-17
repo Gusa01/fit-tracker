@@ -1,17 +1,10 @@
 import { useMemo, useState } from 'react';
-import {
-  View,
-  Text,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  ActivityIndicator,
-  useWindowDimensions,
-} from 'react-native';
+import { View, Pressable, StyleSheet, ActivityIndicator, useWindowDimensions } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useAuthSession } from '../../../../src/hooks/useAuthSession';
 import { useExerciseProgress } from '../../../../src/hooks/useExerciseProgress';
 import { ProgressChart } from '../../../../src/components/ProgressChart';
+import { AppText, Button, Card, Chip, Screen } from '../../../../src/components/ui';
 import { bestSetPerSession, metricKind, primaryMetric } from '../../../../src/lib/progress/metrics';
 import { computeRecords } from '../../../../src/lib/progress/records';
 import {
@@ -22,8 +15,12 @@ import {
   formatSourceSet,
 } from '../../../../src/lib/progress/format';
 import { Metric, RecordEntry } from '../../../../src/lib/progress/types';
+import { useTheme } from '../../../../src/theme/ThemeProvider';
+import { ColorTokens } from '../../../../src/theme/colors';
 
 export default function ExerciseProgressDetail() {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { exerciseId } = useLocalSearchParams<{ exerciseId: string }>();
   const { session } = useAuthSession();
   const { rows, isLoading, error, refetch } = useExerciseProgress(session?.user.id, exerciseId);
@@ -38,20 +35,26 @@ export default function ExerciseProgressDetail() {
 
   if (isLoading && rows.length === 0) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator />
-      </View>
+      <Screen>
+        <View style={styles.centered}>
+          <ActivityIndicator color={colors.accent} />
+        </View>
+      </Screen>
     );
   }
 
   if (error) {
     return (
-      <View style={styles.centered}>
-        <Text style={styles.message}>{error}</Text>
-        <Pressable style={styles.retryButton} onPress={refetch}>
-          <Text style={styles.retryText}>Reintentar</Text>
-        </Pressable>
-      </View>
+      <Screen>
+        <View style={styles.centered}>
+          <AppText variant="muted" style={styles.message}>
+            {error}
+          </AppText>
+          <View style={styles.retry}>
+            <Button title="Reintentar" onPress={refetch} />
+          </View>
+        </View>
+      </Screen>
     );
   }
 
@@ -70,78 +73,73 @@ export default function ExerciseProgressDetail() {
     : [];
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Pressable onPress={() => router.back()} style={styles.backRow}>
-        <Text style={styles.back}>←</Text>
-        <Text style={styles.title}>{exerciseName}</Text>
+    <Screen scroll>
+      <Pressable onPress={() => router.back()} hitSlop={12} style={styles.backRow}>
+        <AppText style={styles.back}>←</AppText>
+        <AppText variant="title" style={styles.title}>
+          {exerciseName}
+        </AppText>
       </Pressable>
 
       {kind === 'weighted' && (
         <View style={styles.toggle}>
           {(['e1rm', 'weight'] as const).map((option) => (
-            <Pressable
+            <Chip
               key={option}
-              style={[styles.toggleOption, toggle === option && styles.toggleOptionActive]}
+              label={TOGGLE_LABEL[option]}
+              selected={toggle === option}
               onPress={() => setToggle(option)}
-            >
-              <Text style={[styles.toggleText, toggle === option && styles.toggleTextActive]}>
-                {TOGGLE_LABEL[option]}
-              </Text>
-            </Pressable>
+            />
           ))}
         </View>
       )}
 
       {metric && points.length > 0 && (
-        <View style={styles.card}>
+        <Card style={styles.chartCard}>
           <ProgressChart key={metric} points={points} metric={metric} width={chartWidth} />
-        </View>
+        </Card>
       )}
 
       {recordRows.length > 0 && (
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>🏆 Récords</Text>
+        <Card style={styles.recordsCard}>
+          <AppText variant="heading" style={styles.cardTitle}>
+            🏆 Récords
+          </AppText>
           {recordRows.map(({ metric: recordMetric, entry }) =>
             entry ? (
               <View key={recordMetric} style={styles.recordRow}>
                 <View style={styles.recordHeader}>
-                  <Text style={styles.recordLabel}>{RECORD_LABEL[recordMetric]}</Text>
-                  <Text style={styles.recordValue}>{formatMetricValue(entry.value, recordMetric)}</Text>
+                  <AppText variant="label">{RECORD_LABEL[recordMetric]}</AppText>
+                  <AppText variant="heading">{formatMetricValue(entry.value, recordMetric)}</AppText>
                 </View>
-                <Text style={styles.recordDetail}>
+                <AppText variant="muted" style={styles.recordDetail}>
                   {recordMetric === 'seconds' || recordMetric === 'reps'
                     ? formatShortDate(entry.date)
                     : `${formatSourceSet(entry, recordMetric)} · ${formatShortDate(entry.date)}`}
-                </Text>
+                </AppText>
               </View>
             ) : null
           )}
-        </View>
+        </Card>
       )}
-    </ScrollView>
+    </Screen>
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1 },
-  content: { padding: 16, gap: 12 },
-  centered: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
-  message: { textAlign: 'center', color: '#666' },
-  retryButton: { backgroundColor: '#111', borderRadius: 8, paddingVertical: 10, paddingHorizontal: 20, marginTop: 16 },
-  retryText: { color: '#fff', fontWeight: '600' },
-  backRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  back: { fontSize: 22 },
-  title: { fontSize: 22, fontWeight: '700', flexShrink: 1 },
-  toggle: { flexDirection: 'row', backgroundColor: '#eee', borderRadius: 8, padding: 4, alignSelf: 'flex-start' },
-  toggleOption: { paddingVertical: 6, paddingHorizontal: 14, borderRadius: 6 },
-  toggleOptionActive: { backgroundColor: '#111' },
-  toggleText: { fontWeight: '600', color: '#111' },
-  toggleTextActive: { color: '#fff' },
-  card: { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 12, overflow: 'hidden' },
-  cardTitle: { fontSize: 16, fontWeight: '700', marginBottom: 8 },
-  recordRow: { paddingVertical: 6 },
-  recordHeader: { flexDirection: 'row', justifyContent: 'space-between' },
-  recordLabel: { fontWeight: '600' },
-  recordValue: { fontWeight: '700' },
-  recordDetail: { color: '#666', marginTop: 2 },
-});
+function makeStyles(_c: ColorTokens) {
+  return StyleSheet.create({
+    centered: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
+    message: { textAlign: 'center' },
+    retry: { marginTop: 16, alignSelf: 'stretch' },
+    backRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+    back: { fontSize: 22 },
+    title: { fontSize: 22, flexShrink: 1 },
+    toggle: { flexDirection: 'row', gap: 8, alignSelf: 'flex-start' },
+    chartCard: { padding: 12, overflow: 'hidden' },
+    recordsCard: { padding: 12, gap: 0 },
+    cardTitle: { marginBottom: 8 },
+    recordRow: { paddingVertical: 6 },
+    recordHeader: { flexDirection: 'row', justifyContent: 'space-between' },
+    recordDetail: { marginTop: 2 },
+  });
+}
