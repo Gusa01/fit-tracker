@@ -15,6 +15,8 @@ export interface ColorTokens {
   warning: string;
   warningMuted: string;
   overlay: string;
+  scrim: string;
+  onDark: string;
 }
 
 export const lightColors: ColorTokens = {
@@ -27,13 +29,15 @@ export const lightColors: ColorTokens = {
   accent: '#2563EB',
   onAccent: '#FFFFFF',
   accentMuted: '#DBEAFE',
-  success: '#12883E',
+  success: '#107A38',
   successMuted: '#F0FDF4',
-  danger: '#DC2626',
+  danger: '#C52222',
   dangerMuted: '#FEF2F2',
   warning: '#AF6005',
   warningMuted: '#FFFBEB',
   overlay: 'rgba(0,0,0,0.3)',
+  scrim: 'rgba(0,0,0,0.85)',
+  onDark: '#FFFFFF',
 };
 
 export const darkColors: ColorTokens = {
@@ -43,8 +47,8 @@ export const darkColors: ColorTokens = {
   border: '#2A323D',
   text: '#F3F4F6',
   textMuted: '#9CA3AF',
-  accent: '#3473DA',
-  onAccent: '#FFFFFF',
+  accent: '#3B82F6',
+  onAccent: '#0B0F14',
   accentMuted: '#1E3A5F',
   success: '#22C55E',
   successMuted: '#052E1A',
@@ -53,4 +57,6 @@ export const darkColors: ColorTokens = {
   warning: '#F59E0B',
   warningMuted: '#2D2006',
   overlay: 'rgba(0,0,0,0.6)',
+  scrim: 'rgba(0,0,0,0.85)',
+  onDark: '#FFFFFF',
 };

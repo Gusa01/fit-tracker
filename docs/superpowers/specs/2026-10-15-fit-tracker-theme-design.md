@@ -31,15 +31,19 @@ This spec adds a light and a dark theme built from shared color tokens, a blue a
 | `text` | `#111827` | `#F3F4F6` | primary text |
 | `textMuted` | `#6B7280` | `#9CA3AF` | secondary text |
 | `accent` | `#2563EB` | `#3B82F6` | primary buttons, active chips/toggles, links, chart line |
-| `onAccent` | `#FFFFFF` | `#FFFFFF` | text on accent |
+| `onAccent` | `#FFFFFF` | `#0B0F14` | text on accent |
 | `accentMuted` | `#DBEAFE` | `#1E3A5F` | selected-row backgrounds, highlights |
-| `success` | `#16A34A` | `#22C55E` | trend up, "completado" |
+| `success` | `#107A38` | `#22C55E` | trend up, "completado" |
 | `successMuted` | `#F0FDF4` | `#052E1A` | success banners (logged sets, corrections) |
-| `danger` | `#DC2626` | `#F87171` | trend down, delete, errors |
+| `danger` | `#C52222` | `#F87171` | trend down, delete, errors |
 | `dangerMuted` | `#FEF2F2` | `#3B1414` | error banners |
-| `warning` | `#D97706` | `#F59E0B` | streak, deload/switch banners |
+| `warning` | `#AF6005` | `#F59E0B` | streak, deload/switch banners |
 | `warningMuted` | `#FFFBEB` | `#2D2006` | streak card, warning banners |
 | `overlay` | `rgba(0,0,0,0.3)` | `rgba(0,0,0,0.6)` | modal backdrops |
+| `scrim` | `rgba(0,0,0,0.85)` | `rgba(0,0,0,0.85)` | full-screen image viewer backdrop |
+| `onDark` | `#FFFFFF` | `#FFFFFF` | text on the scrim, switch knobs |
+
+Values adjusted during implementation so every pair meets AA: light `success`, `danger` and `warning` were darkened, and dark `onAccent` became near-black so the brighter dark-mode blue stays readable both as a fill and as link text.
 
 Every text/background pair used must meet WCAG AA (4.5:1 for body text); a unit test checks the pairs `text`/`background`, `text`/`surface`, `textMuted`/`surface`, `onAccent`/`accent`, `danger`/`surface`, `success`/`surface`, `warning`/`warningMuted` in both palettes, and the palettes are adjusted until it passes.
 

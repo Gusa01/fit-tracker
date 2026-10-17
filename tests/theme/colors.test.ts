@@ -25,6 +25,11 @@ describe('palettes', () => {
     ['warning', 'warningMuted'],
     ['text', 'surfaceMuted'],
     ['text', 'accentMuted'],
+    ['success', 'successMuted'],
+    ['danger', 'dangerMuted'],
+    ['accent', 'surface'],
+    ['accent', 'background'],
+    ['onAccent', 'danger'],
   ];
 
   for (const [name, palette] of [['light', lightColors], ['dark', darkColors]] as const) {

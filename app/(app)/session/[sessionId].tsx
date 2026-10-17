@@ -6,7 +6,7 @@ import { resolveToday } from '../../../src/lib/sqlite/cache';
 import { useSessionSets } from '../../../src/hooks/useSessionSets';
 import { SessionExerciseCard } from '../../../src/components/SessionExerciseCard';
 import { PrBanner } from '../../../src/components/PrBanner';
-import { AppText, Screen } from '../../../src/components/ui';
+import { AppText, Button, Screen } from '../../../src/components/ui';
 import { useTheme } from '../../../src/theme/ThemeProvider';
 import { ColorTokens } from '../../../src/theme/colors';
 
@@ -69,18 +69,15 @@ export default function SessionScreen() {
           />
         ))}
 
-        <Pressable
-          accessibilityRole="button"
-          style={styles.finishButton}
+        <Button
+          title="Terminar entrenamiento"
           onPress={() =>
             Alert.alert('Terminar entrenamiento', '¿Marcar esta sesión como completada?', [
               { text: 'Cancelar', style: 'cancel' },
               { text: 'Terminar', onPress: handleFinish },
             ])
           }
-        >
-          <Text style={styles.finishButtonText}>Terminar entrenamiento</Text>
-        </Pressable>
+        />
       </ScrollView>
       <PrBanner banner={prBanner} onDismiss={dismissPrBanner} />
     </Screen>
@@ -92,14 +89,5 @@ function makeStyles(c: ColorTokens) {
     scroll: { flex: 1 },
     content: { padding: 16, gap: 12 },
     title: { fontSize: 22, marginBottom: 8 },
-    finishButton: {
-      backgroundColor: c.success,
-      borderRadius: 8,
-      minHeight: 48,
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 8,
-    },
-    finishButtonText: { color: c.onAccent, fontWeight: '700' },
   });
 }

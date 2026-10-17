@@ -265,7 +265,7 @@ export function ExerciseForm({ exercises, initial, onSubmit, onCancel }: Exercis
           value={values.schemeType === 'top_set_backoff'}
           onValueChange={(value) => update('schemeType', value ? 'top_set_backoff' : 'normal')}
           trackColor={{ false: colors.surfaceMuted, true: colors.accent }}
-          thumbColor={colors.surface}
+          thumbColor={colors.onDark}
         />
       </View>
 
@@ -275,7 +275,7 @@ export function ExerciseForm({ exercises, initial, onSubmit, onCancel }: Exercis
           value={values.repUnit === 'seconds'}
           onValueChange={(value) => update('repUnit', value ? 'seconds' : 'reps')}
           trackColor={{ false: colors.surfaceMuted, true: colors.accent }}
-          thumbColor={colors.surface}
+          thumbColor={colors.onDark}
         />
       </View>
 

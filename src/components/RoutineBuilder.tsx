@@ -154,7 +154,7 @@ export function RoutineBuilder({ initialRoutineId }: RoutineBuilderProps) {
           value={usesTopSetBackoff}
           onValueChange={handleToggleTopSet}
           trackColor={{ false: colors.surfaceMuted, true: colors.accent }}
-          thumbColor={colors.surface}
+          thumbColor={colors.onDark}
         />
       </View>
 

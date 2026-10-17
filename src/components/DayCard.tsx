@@ -97,7 +97,7 @@ export function DayCard({ day, routineId, weekdaySchedule, index, totalDays, onC
           value={isRestDay}
           onValueChange={handleToggleRest}
           trackColor={{ false: colors.surfaceMuted, true: colors.accent }}
-          thumbColor={colors.surface}
+          thumbColor={colors.onDark}
         />
       </View>
 
