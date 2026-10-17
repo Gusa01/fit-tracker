@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
 import { View, Text, Switch, Pressable, Modal, FlatList, StyleSheet, Linking, Alert, ScrollView } from 'react-native';
-import { useFocusEffect } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { DEFAULT_REMINDER_SETTINGS, loadReminderSettings, saveReminderSettings } from '../../src/lib/reminders/storage';
 import { ReminderSettings } from '../../src/lib/reminders/types';
 import {
@@ -17,6 +17,7 @@ const MINUTES = Array.from({ length: 12 }, (_, i) => i * 5);
 const pad = (n: number) => String(n).padStart(2, '0');
 
 export default function SettingsScreen() {
+  const router = useRouter();
   const [settings, setSettings] = useState<ReminderSettings>(DEFAULT_REMINDER_SETTINGS);
   const [permissionDenied, setPermissionDenied] = useState(false);
   const [hasRoutine, setHasRoutine] = useState(true);
@@ -105,6 +106,10 @@ export default function SettingsScreen() {
 
       <Pressable style={styles.testButton} disabled={!loaded} onPress={handleTest}>
         <Text style={styles.testButtonText}>Enviar aviso de prueba</Text>
+      </Pressable>
+
+      <Pressable style={[styles.card, styles.row]} onPress={() => router.push('/(app)/credits' as any)}>
+        <Text style={styles.title}>Créditos de imágenes ›</Text>
       </Pressable>
 
       <Modal visible={pickerOpen} transparent animationType="slide" onRequestClose={() => setPickerOpen(false)}>

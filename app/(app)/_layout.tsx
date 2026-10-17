@@ -10,6 +10,10 @@ export default function AppLayout() {
       <Drawer.Screen name="history" options={{ title: 'Historial', swipeEnabled: false }} />
       <Drawer.Screen name="settings" options={{ title: 'Ajustes' }} />
       <Drawer.Screen
+        name="credits"
+        options={{ title: 'Créditos de imágenes', drawerItemStyle: { display: 'none' } }}
+      />
+      <Drawer.Screen
         name="session"
         options={{ headerShown: false, drawerItemStyle: { display: 'none' }, swipeEnabled: false }}
       />
