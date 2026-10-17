@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Text, Pressable, StyleSheet, ScrollView, Alert, ActivityIndicator } from 'react-native';
+import { StyleSheet, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { getDatabase } from '../../../src/lib/sqlite/db';
 import { resolveToday } from '../../../src/lib/sqlite/cache';
