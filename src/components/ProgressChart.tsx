@@ -1,8 +1,11 @@
-import { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { useMemo, useState } from 'react';
+import { View, StyleSheet } from 'react-native';
 import { LineChart } from 'react-native-gifted-charts';
 import { ChartPoint, Metric } from '../lib/progress/types';
 import { formatMetricValue, formatShortDate, formatSourceSet } from '../lib/progress/format';
+import { AppText } from './ui';
+import { useTheme } from '../theme/ThemeProvider';
+import { ColorTokens } from '../theme/colors';
 
 const MAX_X_LABELS = 6;
 const Y_AXIS_LABEL_WIDTH = 36;
@@ -23,6 +26,8 @@ export function ProgressChart({
   width: number;
   height?: number;
 }) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   if (points.length === 0) return null;
 
@@ -40,9 +45,13 @@ export function ProgressChart({
         width={plotWidth}
         yAxisLabelWidth={Y_AXIS_LABEL_WIDTH}
         height={height}
-        color="#111"
+        color={colors.accent}
         thickness={2}
-        dataPointsColor="#111"
+        dataPointsColor={colors.accent}
+        rulesColor={colors.border}
+        xAxisColor={colors.border}
+        yAxisColor={colors.border}
+        stripColor={colors.textMuted}
         noOfSections={4}
         yAxisOffset={Math.max(0, Math.floor(minValue * 0.9))}
         initialSpacing={12}
@@ -54,18 +63,24 @@ export function ProgressChart({
         yAxisTextStyle={styles.axisText}
       />
       {selected && (
-        <Text style={styles.selected}>
+        <AppText variant="label" style={styles.selected}>
           {formatShortDate(selected.date)} · {formatSourceSet(selected, metric)}
           {metric === 'e1rm' ? ` · ${formatMetricValue(selected.value, metric)}` : ''}
-        </Text>
+        </AppText>
       )}
-      {points.length === 1 && <Text style={styles.hint}>Seguí entrenando para ver la evolución</Text>}
+      {points.length === 1 && (
+        <AppText variant="muted" style={styles.hint}>
+          Seguí entrenando para ver la evolución
+        </AppText>
+      )}
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  axisText: { color: '#666', fontSize: 10 },
-  selected: { marginTop: 8, color: '#111', fontWeight: '600' },
-  hint: { marginTop: 4, color: '#666' },
-});
+function makeStyles(c: ColorTokens) {
+  return StyleSheet.create({
+    axisText: { color: c.textMuted, fontSize: 10 },
+    selected: { marginTop: 8 },
+    hint: { marginTop: 4 },
+  });
+}

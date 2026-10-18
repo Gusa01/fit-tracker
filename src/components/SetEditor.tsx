@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { View, Text, Pressable, Modal, StyleSheet, Alert } from 'react-native';
+import { useEffect, useMemo, useState } from 'react';
+import { View, Pressable, Modal, StyleSheet, Alert } from 'react-native';
 import { RoutineExerciseRepUnit } from '../lib/routines/types';
 import { LoggedSet } from '../lib/sessions/types';
 import { SetCorrection, SetEditValues } from '../lib/history/types';
@@ -7,6 +7,9 @@ import { editFromValues, validateSetEdit } from '../lib/history/logic';
 import { formatSetLabel } from '../lib/history/format';
 import { WeightStepper } from './WeightStepper';
 import { StepperInput } from './StepperInput';
+import { AppText, Button, Chip } from './ui';
+import { useTheme } from '../theme/ThemeProvider';
+import { ColorTokens } from '../theme/colors';
 
 const RIR_OPTIONS = [0, 1, 2, 3, 4];
 
@@ -23,6 +26,8 @@ function valuesFrom(set: LoggedSet): SetEditValues {
 }
 
 export function SetEditor({ set, exercise, onSave, onDelete, onClose }: SetEditorProps) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const [values, setValues] = useState<SetEditValues>({ weight: '', reps: '', rir: null });
   const [saving, setSaving] = useState(false);
 
@@ -72,17 +77,23 @@ export function SetEditor({ set, exercise, onSave, onDelete, onClose }: SetEdito
     <Modal visible transparent animationType="slide" onRequestClose={onClose}>
       <Pressable style={styles.backdrop} onPress={onClose} />
       <View style={styles.sheet}>
-        <Text style={styles.title}>{exercise.exercise_name}</Text>
-        <Text style={styles.subtitle}>{formatSetLabel(set)}</Text>
+        <AppText variant="heading" style={styles.title}>
+          {exercise.exercise_name}
+        </AppText>
+        <AppText variant="muted">{formatSetLabel(set)}</AppText>
 
         {!timeBased && (
           <>
-            <Text style={styles.label}>Peso (kg)</Text>
+            <AppText variant="label" style={styles.label}>
+              Peso (kg)
+            </AppText>
             <WeightStepper value={values.weight} onChange={(weight) => setValues((v) => ({ ...v, weight }))} />
           </>
         )}
 
-        <Text style={styles.label}>{timeBased ? 'Segundos' : 'Reps'}</Text>
+        <AppText variant="label" style={styles.label}>
+          {timeBased ? 'Segundos' : 'Reps'}
+        </AppText>
         <StepperInput
           value={values.reps}
           onChange={(reps) => setValues((v) => ({ ...v, reps }))}
@@ -93,61 +104,59 @@ export function SetEditor({ set, exercise, onSave, onDelete, onClose }: SetEdito
 
         {showRir && (
           <>
-            <Text style={styles.label}>RIR</Text>
+            <AppText variant="label" style={styles.label}>
+              RIR
+            </AppText>
             <View style={styles.rirRow}>
               {RIR_OPTIONS.map((option) => (
-                <Pressable
+                <Chip
                   key={option}
-                  style={[styles.rirOption, values.rir === option && styles.rirOptionSelected]}
+                  label={String(option)}
+                  selected={values.rir === option}
                   onPress={() => setValues((v) => ({ ...v, rir: option }))}
-                >
-                  <Text style={values.rir === option ? styles.rirTextSelected : styles.rirText}>{option}</Text>
-                </Pressable>
+                />
               ))}
             </View>
           </>
         )}
 
-        {problem && <Text style={styles.problem}>{problem}</Text>}
+        {problem && <AppText color="danger">{problem}</AppText>}
 
-        <Pressable
-          style={[styles.saveButton, (problem !== null || saving) && styles.disabled]}
-          disabled={problem !== null || saving}
-          onPress={handleSave}
-        >
-          <Text style={styles.saveText}>{saving ? 'Guardando...' : 'Guardar'}</Text>
-        </Pressable>
+        <View style={styles.saveWrap}>
+          <Button
+            title={saving ? 'Guardando...' : 'Guardar'}
+            disabled={problem !== null || saving}
+            onPress={handleSave}
+          />
+        </View>
         <View style={styles.secondaryRow}>
-          <Pressable style={[styles.deleteButton, saving && styles.disabled]} disabled={saving} onPress={handleDelete}>
-            <Text style={styles.deleteText}>Borrar serie</Text>
-          </Pressable>
-          <Pressable style={styles.cancelButton} disabled={saving} onPress={onClose}>
-            <Text style={styles.cancelText}>Cancelar</Text>
-          </Pressable>
+          <View style={styles.secondaryCell}>
+            <Button title="Borrar serie" variant="danger" disabled={saving} onPress={handleDelete} />
+          </View>
+          <View style={styles.secondaryCell}>
+            <Button title="Cancelar" variant="secondary" disabled={saving} onPress={onClose} />
+          </View>
         </View>
       </View>
     </Modal>
   );
 }
 
-const styles = StyleSheet.create({
-  backdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.3)' },
-  sheet: { backgroundColor: '#fff', borderTopLeftRadius: 12, borderTopRightRadius: 12, padding: 16, gap: 8 },
-  title: { fontSize: 17, fontWeight: '700' },
-  subtitle: { color: '#666' },
-  label: { fontWeight: '600', marginTop: 4 },
-  rirRow: { flexDirection: 'row', gap: 6 },
-  rirOption: { borderWidth: 1, borderColor: '#ccc', borderRadius: 6, paddingVertical: 6, paddingHorizontal: 12 },
-  rirOptionSelected: { backgroundColor: '#111', borderColor: '#111' },
-  rirText: { color: '#111' },
-  rirTextSelected: { color: '#fff' },
-  problem: { color: '#dc2626' },
-  saveButton: { backgroundColor: '#111', borderRadius: 8, padding: 14, alignItems: 'center', marginTop: 8 },
-  saveText: { color: '#fff', fontWeight: '700' },
-  disabled: { opacity: 0.5 },
-  secondaryRow: { flexDirection: 'row', gap: 8 },
-  deleteButton: { flex: 1, borderWidth: 1, borderColor: '#dc2626', borderRadius: 8, padding: 12, alignItems: 'center' },
-  deleteText: { color: '#dc2626', fontWeight: '600' },
-  cancelButton: { flex: 1, borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 12, alignItems: 'center' },
-  cancelText: { color: '#111', fontWeight: '600' },
-});
+function makeStyles(c: ColorTokens) {
+  return StyleSheet.create({
+    backdrop: { flex: 1, backgroundColor: c.overlay },
+    sheet: {
+      backgroundColor: c.surface,
+      borderTopLeftRadius: 12,
+      borderTopRightRadius: 12,
+      padding: 16,
+      gap: 8,
+    },
+    title: { fontSize: 17 },
+    label: { marginTop: 4 },
+    rirRow: { flexDirection: 'row', gap: 6 },
+    saveWrap: { marginTop: 8 },
+    secondaryRow: { flexDirection: 'row', gap: 8 },
+    secondaryCell: { flex: 1 },
+  });
+}

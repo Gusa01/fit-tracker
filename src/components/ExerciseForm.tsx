@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useAuthSession } from '../hooks/useAuthSession';
-import { View, Text, TextInput, Pressable, StyleSheet, Switch, ScrollView } from 'react-native';
+import { View, TextInput, Pressable, StyleSheet, Switch, ScrollView } from 'react-native';
 import {
   Exercise,
   RoutineExerciseRole,
@@ -10,6 +10,9 @@ import {
 } from '../lib/routines/types';
 import { StepperInput } from './StepperInput';
 import { ExerciseThumbnail } from './ExerciseThumbnail';
+import { AppText, Button, Chip } from './ui';
+import { useTheme } from '../theme/ThemeProvider';
+import { ColorTokens } from '../theme/colors';
 import { filterExercises, findMatchingExercise } from '../lib/exercises/search';
 import {
   EQUIPMENT,
@@ -87,6 +90,8 @@ function initialValues(initial?: RoutineExerciseWithName, current?: Exercise): E
 }
 
 export function ExerciseForm({ exercises, initial, onSubmit, onCancel }: ExerciseFormProps) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { session } = useAuthSession();
   const currentExercise = initial ? exercises.find((e) => e.id === initial.exercise_id) : undefined;
   const [values, setValues] = useState<ExerciseFormValues>(initialValues(initial, currentExercise));
@@ -173,27 +178,25 @@ export function ExerciseForm({ exercises, initial, onSubmit, onCancel }: Exercis
 
   return (
     <View style={styles.form}>
-      <Text style={styles.label}>Nombre del ejercicio</Text>
+      <AppText variant="label" style={styles.label}>Nombre del ejercicio</AppText>
       <TextInput
         style={styles.input}
         placeholder="Ej: Press banca, Sentadilla, Remo..."
+        placeholderTextColor={colors.textMuted}
         value={values.exerciseName}
         onChangeText={(text) => update('exerciseName', text)}
       />
 
-      <Text style={styles.label}>Explorar ejercicios comunes</Text>
+      <AppText variant="label" style={styles.label}>Explorar ejercicios comunes</AppText>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={styles.segmented}>
           {MUSCLES.map((m) => (
-            <Pressable
+            <Chip
               key={m}
-              style={[styles.segment, browseMuscle === m && styles.segmentSelected]}
+              label={MUSCLE_LABEL[m]}
+              selected={browseMuscle === m}
               onPress={() => setBrowseMuscle(browseMuscle === m ? null : m)}
-            >
-              <Text style={browseMuscle === m ? styles.segmentTextSelected : styles.segmentText}>
-                {MUSCLE_LABEL[m]}
-              </Text>
-            </Pressable>
+            />
           ))}
         </View>
       </ScrollView>
@@ -203,108 +206,102 @@ export function ExerciseForm({ exercises, initial, onSubmit, onCancel }: Exercis
           {suggestions.map((s) => (
             <Pressable key={s.id} onPress={() => selectSuggestion(s)} style={styles.suggestionRow}>
               <ExerciseThumbnail imagePath={s.image_path} muscle={s.primary_muscle} size={32} />
-              <Text style={styles.suggestionName}>{s.name}</Text>
-              <Text style={styles.suggestionMeta}>
+              <AppText style={styles.suggestionName}>{s.name}</AppText>
+              <AppText variant="muted" style={styles.suggestionMeta}>
                 {isMuscle(s.primary_muscle) ? MUSCLE_LABEL[s.primary_muscle] : s.primary_muscle}
-              </Text>
+              </AppText>
             </Pressable>
           ))}
         </View>
       )}
       {browseMuscle && suggestions.length === 0 && (
-        <Text style={styles.hint}>No hay ejercicios cargados todavía en "{MUSCLE_LABEL[browseMuscle]}".</Text>
+        <AppText variant="muted" style={styles.hint}>
+          No hay ejercicios cargados todavía en "{MUSCLE_LABEL[browseMuscle]}".
+        </AppText>
       )}
 
       {!matchesExisting && (
         <>
-          <Text style={styles.label}>Músculo principal</Text>
+          <AppText variant="label" style={styles.label}>Músculo principal</AppText>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View style={styles.segmented}>
               {MUSCLES.map((m) => (
-                <Pressable
+                <Chip
                   key={m}
-                  style={[styles.segment, values.primaryMuscle === m && styles.segmentSelected]}
+                  label={MUSCLE_LABEL[m]}
+                  selected={values.primaryMuscle === m}
                   onPress={() => update('primaryMuscle', m)}
-                >
-                  <Text style={values.primaryMuscle === m ? styles.segmentTextSelected : styles.segmentText}>
-                    {MUSCLE_LABEL[m]}
-                  </Text>
-                </Pressable>
+                />
               ))}
             </View>
           </ScrollView>
 
-          <Text style={styles.label}>Equipamiento</Text>
+          <AppText variant="label" style={styles.label}>Equipamiento</AppText>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View style={styles.segmented}>
               {EQUIPMENT.map((e) => (
-                <Pressable
+                <Chip
                   key={e}
-                  style={[styles.segment, values.equipment === e && styles.segmentSelected]}
+                  label={EQUIPMENT_LABEL[e]}
+                  selected={values.equipment === e}
                   onPress={() => update('equipment', e)}
-                >
-                  <Text style={values.equipment === e ? styles.segmentTextSelected : styles.segmentText}>
-                    {EQUIPMENT_LABEL[e]}
-                  </Text>
-                </Pressable>
+                />
               ))}
             </View>
           </ScrollView>
         </>
       )}
 
-      <Text style={styles.label}>Rol</Text>
+      <AppText variant="label" style={styles.label}>Rol</AppText>
       <View style={styles.segmented}>
         {(['main', 'accessory', 'core'] as const).map((option) => (
-          <Pressable
-            key={option}
-            style={[styles.segment, values.role === option && styles.segmentSelected]}
-            onPress={() => update('role', option)}
-          >
-            <Text style={values.role === option ? styles.segmentTextSelected : styles.segmentText}>{option}</Text>
-          </Pressable>
+          <Chip key={option} label={option} selected={values.role === option} onPress={() => update('role', option)} />
         ))}
       </View>
 
       <View style={styles.switchRow}>
-        <Text>Top set / back-off</Text>
+        <AppText>Top set / back-off</AppText>
         <Switch
           value={values.schemeType === 'top_set_backoff'}
           onValueChange={(value) => update('schemeType', value ? 'top_set_backoff' : 'normal')}
+          trackColor={{ false: colors.surfaceMuted, true: colors.accent }}
+          thumbColor={colors.onDark}
         />
       </View>
 
       <View style={styles.switchRow}>
-        <Text>Medido en segundos</Text>
+        <AppText>Medido en segundos</AppText>
         <Switch
           value={values.repUnit === 'seconds'}
           onValueChange={(value) => update('repUnit', value ? 'seconds' : 'reps')}
+          trackColor={{ false: colors.surfaceMuted, true: colors.accent }}
+          thumbColor={colors.onDark}
         />
       </View>
 
       {values.schemeType === 'normal' ? (
         <>
-          <Text style={styles.label}>Series</Text>
+          <AppText variant="label" style={styles.label}>Series</AppText>
           <StepperInput value={values.sets} onChange={(text) => update('sets', text)} min={1} max={10} />
-          <Text style={styles.label}>{unitLabel} mínimas</Text>
+          <AppText variant="label" style={styles.label}>{unitLabel} mínimas</AppText>
           <StepperInput value={values.repMin} onChange={(text) => update('repMin', text)} min={1} max={50} />
-          <Text style={styles.label}>{unitLabel} máximas</Text>
+          <AppText variant="label" style={styles.label}>{unitLabel} máximas</AppText>
           <StepperInput value={values.repMax} onChange={(text) => update('repMax', text)} min={1} max={50} />
         </>
       ) : (
         <>
-          <Text style={styles.label}>{unitLabel} del top set</Text>
+          <AppText variant="label" style={styles.label}>{unitLabel} del top set</AppText>
           <StepperInput value={values.topSetReps} onChange={(text) => update('topSetReps', text)} min={1} max={20} />
-          <Text style={styles.label}>Series de back-off</Text>
+          <AppText variant="label" style={styles.label}>Series de back-off</AppText>
           <StepperInput value={values.backoffSets} onChange={(text) => update('backoffSets', text)} min={1} max={10} />
-          <Text style={styles.label}>{unitLabel} mínimas de back-off</Text>
+          <AppText variant="label" style={styles.label}>{unitLabel} mínimas de back-off</AppText>
           <StepperInput
             value={values.backoffRepMin}
             onChange={(text) => update('backoffRepMin', text)}
             min={1}
             max={50}
           />
-          <Text style={styles.label}>{unitLabel} máximas de back-off</Text>
+          <AppText variant="label" style={styles.label}>{unitLabel} máximas de back-off</AppText>
           <StepperInput
             value={values.backoffRepMax}
             onChange={(text) => update('backoffRepMax', text)}
@@ -314,80 +311,63 @@ export function ExerciseForm({ exercises, initial, onSubmit, onCancel }: Exercis
         </>
       )}
 
-      <Text style={styles.label}>RIR mínimo (opcional)</Text>
+      <AppText variant="label" style={styles.label}>RIR mínimo (opcional)</AppText>
       <StepperInput value={values.rirMin} onChange={(text) => update('rirMin', text)} min={0} max={10} />
-      <Text style={styles.label}>RIR máximo (opcional)</Text>
+      <AppText variant="label" style={styles.label}>RIR máximo (opcional)</AppText>
       <StepperInput value={values.rirMax} onChange={(text) => update('rirMax', text)} min={0} max={10} />
 
-      {error && <Text style={styles.error}>{error}</Text>}
+      {error && <AppText color="danger">{error}</AppText>}
 
       <View style={styles.actions}>
-        <Pressable style={styles.button} onPress={handleSubmit} disabled={saving}>
-          <Text style={styles.buttonText}>{saving ? 'Guardando...' : 'Guardar'}</Text>
-        </Pressable>
-        <Pressable style={styles.cancelButton} onPress={onCancel}>
-          <Text style={styles.cancelButtonText}>Cancelar</Text>
-        </Pressable>
+        <View style={styles.action}>
+          <Button title={saving ? 'Guardando...' : 'Guardar'} onPress={handleSubmit} disabled={saving} />
+        </View>
+        <View style={styles.action}>
+          <Button title="Cancelar" variant="secondary" onPress={onCancel} />
+        </View>
       </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  form: {
-    gap: 10,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 12,
-  },
-  input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 10 },
-  suggestions: { borderWidth: 1, borderColor: '#eee', borderRadius: 8 },
-  suggestionRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    padding: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  suggestionName: { flex: 1 },
-  suggestionMeta: { color: '#666', fontSize: 12 },
-  hint: { color: '#666', fontSize: 12, fontStyle: 'italic' },
-  label: { fontWeight: '600', marginTop: 4 },
-  segmented: { flexDirection: 'row', gap: 6 },
-  segment: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 6,
-    paddingVertical: 6,
-    paddingHorizontal: 10,
-  },
-  segmentSelected: { backgroundColor: '#111', borderColor: '#111' },
-  segmentText: { color: '#111' },
-  segmentTextSelected: { color: '#fff' },
-  switchRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  error: { color: '#dc2626' },
-  actions: { flexDirection: 'row', gap: 8 },
-  button: {
-    flex: 1,
-    backgroundColor: '#111',
-    borderRadius: 8,
-    padding: 12,
-    alignItems: 'center',
-  },
-  buttonText: { color: '#fff', fontWeight: '600' },
-  cancelButton: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    padding: 12,
-    alignItems: 'center',
-  },
-  cancelButtonText: { color: '#111', fontWeight: '600' },
-});
+function makeStyles(c: ColorTokens) {
+  return StyleSheet.create({
+    form: {
+      gap: 10,
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.surface,
+      borderRadius: 8,
+      padding: 12,
+    },
+    input: {
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.surface,
+      color: c.text,
+      borderRadius: 8,
+      padding: 10,
+    },
+    suggestions: { borderWidth: 1, borderColor: c.border, borderRadius: 8 },
+    suggestionRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+      padding: 8,
+      borderBottomWidth: 1,
+      borderBottomColor: c.border,
+    },
+    suggestionName: { flex: 1 },
+    suggestionMeta: { fontSize: 12 },
+    hint: { fontSize: 12, fontStyle: 'italic' },
+    label: { marginTop: 4 },
+    segmented: { flexDirection: 'row', gap: 6 },
+    switchRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    actions: { flexDirection: 'row', gap: 8 },
+    action: { flex: 1 },
+  });
+}

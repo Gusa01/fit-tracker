@@ -19,12 +19,17 @@ import { loadSpotlightExerciseId, saveSpotlightExerciseId } from '../lib/progres
 import { formatMetricValue } from '../lib/progress/format';
 import { Trend } from '../lib/progress/types';
 import { ProgressChart } from './ProgressChart';
+import { AppText, Card } from './ui';
+import { ColorTokens } from '../theme/colors';
+import { useTheme } from '../theme/ThemeProvider';
 
 const TREND_ARROW: Record<Trend, string> = { up: '↑', flat: '→', down: '↓' };
-const TREND_COLOR: Record<Trend, string> = { up: '#16a34a', flat: '#666', down: '#dc2626' };
+const TREND_COLOR: Record<Trend, keyof ColorTokens> = { up: 'success', flat: 'textMuted', down: 'danger' };
 
 /** Home's "Progreso" section: one exercise's chart with a picker, linking to the full list. */
 export function HomeProgressCard() {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { session } = useAuthSession();
   const { rows, summaries, isLoading, error } = useProgressSummary(session?.user.id);
   const { width: screenWidth } = useWindowDimensions();
@@ -52,19 +57,23 @@ export function HomeProgressCard() {
 
   if (isLoading && summaries.length === 0) {
     return (
-      <View style={styles.card}>
-        <Text style={styles.title}>Progreso</Text>
-        <ActivityIndicator />
-      </View>
+      <Card>
+        <AppText variant="heading" style={styles.title}>
+          Progreso
+        </AppText>
+        <ActivityIndicator color={colors.accent} />
+      </Card>
     );
   }
 
   if (error) {
     return (
-      <View style={styles.card}>
-        <Text style={styles.title}>Progreso</Text>
-        <Text style={styles.muted}>{error}</Text>
-      </View>
+      <Card>
+        <AppText variant="heading" style={styles.title}>
+          Progreso
+        </AppText>
+        <AppText variant="muted">{error}</AppText>
+      </Card>
     );
   }
 
@@ -74,8 +83,10 @@ export function HomeProgressCard() {
   const chartWidth = screenWidth - 32 - 34;
 
   return (
-    <View style={styles.card}>
-      <Text style={styles.title}>Progreso</Text>
+    <Card>
+      <AppText variant="heading" style={styles.title}>
+        Progreso
+      </AppText>
 
       <Pressable style={styles.selector} onPress={() => setPickerOpen(true)}>
         <Text style={styles.selectorText} numberOfLines={1}>
@@ -85,13 +96,13 @@ export function HomeProgressCard() {
           <Text style={styles.value}>{formatMetricValue(summary.latestValue, summary.metric)}</Text>
         )}
         {summary.trend && (
-          <Text style={[styles.arrow, { color: TREND_COLOR[summary.trend] }]}>{TREND_ARROW[summary.trend]}</Text>
+          <Text style={[styles.arrow, { color: colors[TREND_COLOR[summary.trend]] }]}>{TREND_ARROW[summary.trend]}</Text>
         )}
       </Pressable>
 
       <ProgressChart key={summary.exerciseId} points={points} metric={summary.metric} width={chartWidth} height={160} />
 
-      <Pressable onPress={() => router.push('/(app)/progress' as any)}>
+      <Pressable onPress={() => router.push('/(app)/(tabs)/progress' as any)}>
         <Text style={styles.link}>Ver todo →</Text>
       </Pressable>
 
@@ -108,36 +119,36 @@ export function HomeProgressCard() {
                   {item.exerciseName}
                 </Text>
                 {item.trend && (
-                  <Text style={[styles.arrow, { color: TREND_COLOR[item.trend] }]}>{TREND_ARROW[item.trend]}</Text>
+                  <Text style={[styles.arrow, { color: colors[TREND_COLOR[item.trend]] }]}>{TREND_ARROW[item.trend]}</Text>
                 )}
               </Pressable>
             )}
           />
         </View>
       </Modal>
-    </View>
+    </Card>
   );
 }
 
-const styles = StyleSheet.create({
-  card: { width: '100%', gap: 8, borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 16 },
-  title: { fontWeight: '700', fontSize: 15 },
-  muted: { color: '#666' },
-  selector: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  selectorText: { flex: 1, fontSize: 16, fontWeight: '600' },
-  value: { fontSize: 16, fontWeight: '600' },
-  arrow: { fontSize: 18, width: 18, textAlign: 'center' },
-  link: { color: '#111', fontWeight: '600', textAlign: 'right' },
-  backdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.3)' },
-  sheet: {
-    maxHeight: '60%',
-    backgroundColor: '#fff',
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-    paddingVertical: 12,
-  },
-  sheetTitle: { fontWeight: '700', fontSize: 16, paddingHorizontal: 16, paddingBottom: 8 },
-  option: { flexDirection: 'row', alignItems: 'center', paddingVertical: 12, paddingHorizontal: 16 },
-  optionText: { flex: 1, fontSize: 15 },
-  optionActive: { fontWeight: '700' },
-});
+function makeStyles(c: ColorTokens) {
+  return StyleSheet.create({
+    title: { fontSize: 15 },
+    selector: { flexDirection: 'row', alignItems: 'center', gap: 8, minHeight: 44 },
+    selectorText: { flex: 1, fontSize: 16, fontWeight: '600', color: c.text },
+    value: { fontSize: 16, fontWeight: '600', color: c.text },
+    arrow: { fontSize: 18, width: 18, textAlign: 'center' },
+    link: { color: c.accent, fontWeight: '600', textAlign: 'right' },
+    backdrop: { flex: 1, backgroundColor: c.overlay },
+    sheet: {
+      maxHeight: '60%',
+      backgroundColor: c.surface,
+      borderTopLeftRadius: 12,
+      borderTopRightRadius: 12,
+      paddingVertical: 12,
+    },
+    sheetTitle: { fontWeight: '700', fontSize: 16, paddingHorizontal: 16, paddingBottom: 8, color: c.text },
+    option: { flexDirection: 'row', alignItems: 'center', paddingVertical: 12, paddingHorizontal: 16 },
+    optionText: { flex: 1, fontSize: 15, color: c.text },
+    optionActive: { fontWeight: '700' },
+  });
+}

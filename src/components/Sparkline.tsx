@@ -1,11 +1,13 @@
 import { View } from 'react-native';
 import { LineChart } from 'react-native-gifted-charts';
+import { useTheme } from '../theme/ThemeProvider';
 
 const WIDTH = 64;
 const HEIGHT = 24;
 
 /** Tiny axis-less trend line for list rows. Renders an empty slot with fewer than 2 values. */
-export function Sparkline({ values, color = '#111' }: { values: number[]; color?: string }) {
+export function Sparkline({ values, color }: { values: number[]; color?: string }) {
+  const { colors } = useTheme();
   if (values.length < 2) return <View style={{ width: WIDTH, height: HEIGHT }} />;
   const min = Math.min(...values);
   const max = Math.max(...values);
@@ -27,7 +29,7 @@ export function Sparkline({ values, color = '#111' }: { values: number[]; color?
         hideYAxisText
         hideDataPoints
         disableScroll
-        color={color}
+        color={color ?? colors.text}
         thickness={2}
       />
     </View>

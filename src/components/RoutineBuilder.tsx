@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { View, Text, TextInput, Pressable, StyleSheet, Switch, ActivityIndicator } from 'react-native';
+import { useEffect, useMemo, useState } from 'react';
+import { View, TextInput, Pressable, StyleSheet, Switch, ActivityIndicator } from 'react-native';
 import { NestableScrollContainer } from 'react-native-draggable-flatlist';
 import { router } from 'expo-router';
 import { useAuthSession } from '../hooks/useAuthSession';
@@ -10,12 +10,17 @@ import { supabase } from '../lib/supabase';
 import { createRoutine, updateRoutine, createDay, moveDay, softDeleteDay } from '../lib/routines/mutations';
 import { Routine } from '../lib/routines/types';
 import { DayCard } from './DayCard';
+import { AppText, Button, Screen } from './ui';
+import { useTheme } from '../theme/ThemeProvider';
+import { ColorTokens } from '../theme/colors';
 
 interface RoutineBuilderProps {
   initialRoutineId?: string;
 }
 
 export function RoutineBuilder({ initialRoutineId }: RoutineBuilderProps) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { session } = useAuthSession();
   const userId = session?.user.id;
 
@@ -119,9 +124,9 @@ export function RoutineBuilder({ initialRoutineId }: RoutineBuilderProps) {
 
   if (initialRoutineId && (routineLoading || !routine)) {
     return (
-      <View style={styles.container}>
-        <ActivityIndicator />
-      </View>
+      <Screen>
+        <ActivityIndicator color={colors.accent} />
+      </Screen>
     );
   }
 
@@ -130,25 +135,36 @@ export function RoutineBuilder({ initialRoutineId }: RoutineBuilderProps) {
 
   return (
     <NestableScrollContainer style={styles.container} contentContainerStyle={styles.content}>
-      <Text style={styles.label}>Nombre</Text>
+      <AppText variant="label" style={styles.label}>
+        Nombre
+      </AppText>
       <TextInput
         style={styles.input}
         placeholder="Ej: Fuerza 5x5, Push/Pull/Legs..."
+        placeholderTextColor={colors.textMuted}
         value={name}
         onChangeText={setName}
         onBlur={handleNameBlur}
       />
-      {nameError && <Text style={styles.error}>{nameError}</Text>}
+      {nameError && <AppText color="danger">{nameError}</AppText>}
 
       <View style={styles.switchRow}>
-        <Text>Usa top set / back-off</Text>
-        <Switch value={usesTopSetBackoff} onValueChange={handleToggleTopSet} />
+        <AppText>Usa top set / back-off</AppText>
+        <Switch
+          value={usesTopSetBackoff}
+          onValueChange={handleToggleTopSet}
+          trackColor={{ false: colors.surfaceMuted, true: colors.accent }}
+          thumbColor={colors.onDark}
+        />
       </View>
 
-      <Text style={styles.label}>Duración sugerida (semanas, opcional)</Text>
+      <AppText variant="label" style={styles.label}>
+        Duración sugerida (semanas, opcional)
+      </AppText>
       <TextInput
         style={styles.input}
         placeholder="Ej: 8"
+        placeholderTextColor={colors.textMuted}
         keyboardType="number-pad"
         value={suggestedDurationWeeks}
         onChangeText={setSuggestedDurationWeeks}
@@ -157,20 +173,22 @@ export function RoutineBuilder({ initialRoutineId }: RoutineBuilderProps) {
 
       {pickableRoutines.length > 0 && (
         <View style={styles.pickerSection}>
-          <Text style={styles.pickerLabel}>Rutina siguiente (opcional)</Text>
+          <AppText variant="label">Rutina siguiente (opcional)</AppText>
           {pickableRoutines.map((r: Routine) => (
             <Pressable
               key={r.id}
               style={[styles.pickerRow, nextRoutineId === r.id && styles.pickerRowSelected]}
               onPress={() => handleSelectNextRoutine(r.id)}
             >
-              <Text>{r.name}</Text>
+              <AppText>{r.name}</AppText>
             </Pressable>
           ))}
         </View>
       )}
 
-      <Text style={styles.sectionTitle}>Días</Text>
+      <AppText variant="title" style={styles.sectionTitle}>
+        Días
+      </AppText>
       {days.map((day, index) => (
         <DayCard
           key={day.id}
@@ -185,31 +203,33 @@ export function RoutineBuilder({ initialRoutineId }: RoutineBuilderProps) {
         />
       ))}
 
-      <Pressable style={styles.newButton} onPress={handleAddDay}>
-        <Text style={styles.newButtonText}>+ Nuevo día</Text>
-      </Pressable>
+      <Button title="+ Nuevo día" variant="secondary" onPress={handleAddDay} />
 
-      <Pressable style={styles.doneButton} onPress={handleDone}>
-        <Text style={styles.doneButtonText}>Listo</Text>
-      </Pressable>
+      <View style={styles.doneButton}>
+        <Button title="Listo" onPress={handleDone} />
+      </View>
     </NestableScrollContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1 },
-  content: { padding: 16, gap: 12 },
-  input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 12 },
-  label: { fontWeight: '600', marginTop: 4 },
-  switchRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  pickerSection: { gap: 6 },
-  pickerLabel: { fontWeight: '600' },
-  pickerRow: { borderWidth: 1, borderColor: '#ddd', borderRadius: 6, padding: 10 },
-  pickerRowSelected: { borderColor: '#111', backgroundColor: '#f0f0f0' },
-  error: { color: '#dc2626' },
-  sectionTitle: { fontSize: 18, fontWeight: '700', marginTop: 12 },
-  newButton: { borderWidth: 1, borderColor: '#111', borderRadius: 8, padding: 14, alignItems: 'center' },
-  newButtonText: { color: '#111', fontWeight: '600' },
-  doneButton: { backgroundColor: '#16a34a', borderRadius: 8, padding: 14, alignItems: 'center', marginTop: 8 },
-  doneButtonText: { color: '#fff', fontWeight: '700' },
-});
+function makeStyles(c: ColorTokens) {
+  return StyleSheet.create({
+    container: { flex: 1, backgroundColor: c.background },
+    content: { padding: 16, gap: 12 },
+    input: {
+      borderWidth: 1,
+      borderColor: c.border,
+      backgroundColor: c.surface,
+      color: c.text,
+      borderRadius: 8,
+      padding: 12,
+    },
+    label: { marginTop: 4 },
+    switchRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+    pickerSection: { gap: 6 },
+    pickerRow: { borderWidth: 1, borderColor: c.border, borderRadius: 6, padding: 10 },
+    pickerRowSelected: { borderColor: c.accent, backgroundColor: c.surfaceMuted },
+    sectionTitle: { marginTop: 12 },
+    doneButton: { marginTop: 8 },
+  });
+}

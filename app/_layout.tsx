@@ -1,6 +1,7 @@
-import { useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
+import { View } from 'react-native';
 import { Slot, useRouter, useSegments } from 'expo-router';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useAuthSession } from '../src/hooks/useAuthSession';
 import { initDatabase, getDatabase } from '../src/lib/sqlite/db';
@@ -8,8 +9,16 @@ import { supabase } from '../src/lib/supabase';
 import { startSyncListener } from '../src/lib/sync/syncService';
 import * as Notifications from 'expo-notifications';
 import { cancelAllReminders, setupNotifications } from '../src/lib/reminders/scheduler';
+import { ThemeProvider, useTheme } from '../src/theme/ThemeProvider';
 
 initDatabase();
+
+function ThemedRoot({ children }: { children: ReactNode }) {
+  const { colors } = useTheme();
+  return (
+    <View style={{ flex: 1, backgroundColor: colors.background }}>{children}</View>
+  );
+}
 
 export default function RootLayout() {
   const { session, isLoading } = useAuthSession();
@@ -23,11 +32,11 @@ export default function RootLayout() {
     if (!session && !inAuthGroup) {
       router.replace('/(auth)/sign-in');
     } else if (session && inAuthGroup) {
-      router.replace('/(app)');
+      router.replace('/(app)/(tabs)' as any);
     }
   }, [session, isLoading, segments]);
 
-  // Covers token expiry and remote sign-out, not just the drawer button.
+  // Covers token expiry and remote sign-out, not just the sign-out button.
   useEffect(() => {
     if (!isLoading && !session) cancelAllReminders();
   }, [isLoading, session]);
@@ -42,7 +51,7 @@ export default function RootLayout() {
   useEffect(() => {
     setupNotifications().catch((err) => console.warn('Could not set up notifications', err));
     const subscription = Notifications.addNotificationResponseReceivedListener(() => {
-      router.navigate('/(app)' as any);
+      router.dismissTo('/(app)/(tabs)' as any);
     });
     return () => subscription.remove();
   }, []);
@@ -52,9 +61,11 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-        <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
-          <Slot />
-        </SafeAreaView>
+        <ThemeProvider>
+          <ThemedRoot>
+            <Slot />
+          </ThemedRoot>
+        </ThemeProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
