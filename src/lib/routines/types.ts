@@ -25,7 +25,15 @@ export interface RoutineDay {
 
 export interface Exercise {
   id: string;
+  slug: string | null;
   name: string;
+  aliases: string[];
+  primary_muscle: string;
+  secondary_muscles: string[];
+  equipment: string;
+  image_path: string | null;
+  image_credit: { author: string; license: string; source_url: string } | null;
+  owner_id: string | null;
   muscle_group: string;
 }
 
@@ -56,4 +64,6 @@ export interface RoutineExercise {
 export interface RoutineExerciseWithName extends RoutineExercise {
   exercise_name: string;
   muscle_group?: string | null;
+  primary_muscle: string | null;
+  image_path: string | null;
 }

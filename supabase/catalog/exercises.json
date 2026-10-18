@@ -1,0 +1,3326 @@
+[
+  {
+    "slug": "dumbbell-flyes",
+    "name": "Aperturas con mancuernas",
+    "aliases": [
+      "Aperturas planas",
+      "Aperturas en banco plano",
+      "Dumbbell Flyes"
+    ],
+    "primary_muscle": "chest",
+    "secondary_muscles": [],
+    "equipment": "dumbbell",
+    "source_id": "Dumbbell_Flyes",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/238/2fc242d3-5bdd-4f97-99bd-678adb8c96fc.png",
+      "author": "cshep442",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/238/view/"
+    }
+  },
+  {
+    "slug": "flat-bench-cable-flyes",
+    "name": "Aperturas en polea en banco plano",
+    "aliases": [
+      "Aperturas con poleas acostado",
+      "Flat Bench Cable Flyes"
+    ],
+    "primary_muscle": "chest",
+    "secondary_muscles": [],
+    "equipment": "cable",
+    "source_id": "Flat_Bench_Cable_Flyes",
+    "image": null
+  },
+  {
+    "slug": "incline-dumbbell-flyes",
+    "name": "Aperturas inclinadas con mancuernas",
+    "aliases": [
+      "Aperturas en banco inclinado",
+      "Incline Dumbbell Flyes"
+    ],
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "equipment": "dumbbell",
+    "source_id": "Incline_Dumbbell_Flyes",
+    "image": null
+  },
+  {
+    "slug": "cable-crossover",
+    "name": "Cruces en polea",
+    "aliases": [
+      "Cruce de poleas",
+      "Crossover",
+      "Cruces en polea alta",
+      "Cable Crossover",
+      "Aperturas o Cruces en polea"
+    ],
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "equipment": "cable",
+    "source_id": "Cable_Crossover",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/71/Cable-crossover-2.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/323/view/"
+    }
+  },
+  {
+    "slug": "low-cable-crossover",
+    "name": "Cruces en polea baja",
+    "aliases": [
+      "Cruces de poleas de abajo hacia arriba",
+      "Crossover bajo",
+      "Low Cable Crossover"
+    ],
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "equipment": "cable",
+    "source_id": "Low_Cable_Crossover",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1296/c42782fe-337a-44f4-9079-7f6dedab4885.png",
+      "author": "JackSparrow",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1296/view/"
+    }
+  },
+  {
+    "slug": "push-up",
+    "name": "Flexiones de brazos",
+    "aliases": [
+      "Flexiones",
+      "Lagartijas",
+      "Push-ups",
+      "Pushups"
+    ],
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "equipment": "bodyweight",
+    "source_id": "Pushups",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1551/a6a9e561-3965-45c6-9f2b-ee671e1a3a45.png",
+      "author": "Settebello",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1551/view/"
+    }
+  },
+  {
+    "slug": "push-ups-with-feet-elevated",
+    "name": "Flexiones declinadas",
+    "aliases": [
+      "Flexiones con pies elevados",
+      "Push-Ups With Feet Elevated"
+    ],
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "equipment": "bodyweight",
+    "source_id": "Push-Ups_With_Feet_Elevated",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1112/81f40bee-4adf-4317-8476-1a87706e3031.png",
+      "author": "anon1337",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1112/view/"
+    }
+  },
+  {
+    "slug": "incline-push-up",
+    "name": "Flexiones inclinadas",
+    "aliases": [
+      "Flexiones con manos elevadas",
+      "Flexiones en banco",
+      "Incline Push-Up"
+    ],
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "equipment": "bodyweight",
+    "source_id": "Incline_Push-Up",
+    "image": null
+  },
+  {
+    "slug": "dips-chest-version",
+    "name": "Fondos en paralelas",
+    "aliases": [
+      "Fondos",
+      "Fondos de pecho",
+      "Paralelas",
+      "Dips",
+      "Dips - Chest Version"
+    ],
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "equipment": "bodyweight",
+    "source_id": "Dips_-_Chest_Version",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/194/34600351-8b0b-4cb0-8daa-583537be15b0.png",
+      "author": "cshep442",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/194/view/"
+    }
+  },
+  {
+    "slug": "butterfly",
+    "name": "Pec deck",
+    "aliases": [
+      "Peck deck",
+      "Mariposa",
+      "Aperturas en máquina",
+      "Máquina de aperturas",
+      "Contractora de pecho",
+      "Butterfly",
+      "Peck deck (aperturas en máquina)"
+    ],
+    "primary_muscle": "chest",
+    "secondary_muscles": [],
+    "equipment": "machine",
+    "source_id": "Butterfly",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/98/Butterfly-machine-2.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/135/view/"
+    }
+  },
+  {
+    "slug": "barbell-bench-press",
+    "name": "Press banca con barra",
+    "aliases": [
+      "Press de banca",
+      "Press plano con barra",
+      "Press banca plano",
+      "Barbell Bench Press - Medium Grip",
+      "Press banca"
+    ],
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "equipment": "barbell",
+    "source_id": "Barbell_Bench_Press_-_Medium_Grip",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/192/Bench-press-1.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/73/view/"
+    }
+  },
+  {
+    "slug": "dumbbell-bench-press",
+    "name": "Press banca con mancuernas",
+    "aliases": [
+      "Press plano con mancuernas",
+      "Press de banca con mancuernas",
+      "Dumbbell Bench Press"
+    ],
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "equipment": "dumbbell",
+    "source_id": "Dumbbell_Bench_Press",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/97/Dumbbell-bench-press-1.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/75/view/"
+    }
+  },
+  {
+    "slug": "smith-machine-bench-press",
+    "name": "Press banca en máquina Smith",
+    "aliases": [
+      "Press banca en Smith",
+      "Press plano en Smith",
+      "Press banca en multipower",
+      "Smith Machine Bench Press"
+    ],
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "equipment": "smith",
+    "source_id": "Smith_Machine_Bench_Press",
+    "image": null
+  },
+  {
+    "slug": "machine-bench-press",
+    "name": "Press de pecho en máquina",
+    "aliases": [
+      "Chest press",
+      "Press banca en máquina",
+      "Press plano en máquina",
+      "Machine Bench Press"
+    ],
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "equipment": "machine",
+    "source_id": "Machine_Bench_Press",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/129/b263c968-e067-4750-916a-d8758a7df23e.webp",
+      "author": "roneydya",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/129/view/"
+    }
+  },
+  {
+    "slug": "decline-barbell-bench-press",
+    "name": "Press declinado con barra",
+    "aliases": [
+      "Press banca declinado",
+      "Press de banca declinado",
+      "Decline Barbell Bench Press"
+    ],
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "equipment": "barbell",
+    "source_id": "Decline_Barbell_Bench_Press",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/100/Decline-bench-press-1.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/185/view/"
+    }
+  },
+  {
+    "slug": "decline-dumbbell-bench-press",
+    "name": "Press declinado con mancuernas",
+    "aliases": [
+      "Press banca declinado con mancuernas",
+      "Decline Dumbbell Bench Press"
+    ],
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "equipment": "dumbbell",
+    "source_id": "Decline_Dumbbell_Bench_Press",
+    "image": null
+  },
+  {
+    "slug": "barbell-incline-bench-press",
+    "name": "Press inclinado con barra",
+    "aliases": [
+      "Press banca inclinado con barra",
+      "Press de banca inclinado",
+      "Barbell Incline Bench Press - Medium Grip",
+      "Press banca inclinado"
+    ],
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "equipment": "barbell",
+    "source_id": "Barbell_Incline_Bench_Press_-_Medium_Grip",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/41/Incline-bench-press-1.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/538/view/"
+    }
+  },
+  {
+    "slug": "incline-dumbbell-press",
+    "name": "Press inclinado con mancuernas",
+    "aliases": [
+      "Press banca inclinado con mancuernas",
+      "Incline Dumbbell Press",
+      "Press inclinado mancuernas"
+    ],
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "equipment": "dumbbell",
+    "source_id": "Incline_Dumbbell_Press",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/16/Incline-press-1.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/537/view/"
+    }
+  },
+  {
+    "slug": "leverage-incline-chest-press",
+    "name": "Press inclinado en máquina",
+    "aliases": [
+      "Press inclinado en máquina hammer",
+      "Chest press inclinado",
+      "Leverage Incline Chest Press"
+    ],
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "equipment": "machine",
+    "source_id": "Leverage_Incline_Chest_Press",
+    "image": null
+  },
+  {
+    "slug": "smith-machine-incline-bench-press",
+    "name": "Press inclinado en máquina Smith",
+    "aliases": [
+      "Press inclinado en Smith",
+      "Press inclinado en multipower",
+      "Smith Machine Incline Bench Press"
+    ],
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "shoulders",
+      "triceps"
+    ],
+    "equipment": "smith",
+    "source_id": "Smith_Machine_Incline_Bench_Press",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/925/67dbb1c9-b378-46f9-adb6-1f55b3d3007a.png",
+      "author": "wger.de",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/925/view/"
+    }
+  },
+  {
+    "slug": "straight-arm-dumbbell-pullover",
+    "name": "Pullover con mancuerna",
+    "aliases": [
+      "Pullover",
+      "Pull over con mancuerna",
+      "Straight-Arm Dumbbell Pullover"
+    ],
+    "primary_muscle": "chest",
+    "secondary_muscles": [
+      "back",
+      "shoulders",
+      "triceps"
+    ],
+    "equipment": "dumbbell",
+    "source_id": "Straight-Arm_Dumbbell_Pullover",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/161/b9b1803e-2817-40bf-8ac7-e398ca86d8b4.png",
+      "author": "wger.de",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/161/view/"
+    }
+  },
+  {
+    "slug": "pull-up",
+    "name": "Dominadas",
+    "aliases": [
+      "Dominadas pronas",
+      "Dominadas agarre prono",
+      "Pull-ups",
+      "Pullups",
+      "Dominadas o Jalón"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [
+      "biceps"
+    ],
+    "equipment": "bodyweight",
+    "source_id": "Pullups",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/475/b0554016-16fd-4dbe-be47-a2a17d16ae0e.jpg",
+      "author": "Imobard",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/475/view/"
+    }
+  },
+  {
+    "slug": "chin-up",
+    "name": "Dominadas supinas",
+    "aliases": [
+      "Dominadas agarre supino",
+      "Chin-ups",
+      "Chin-Up"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [
+      "biceps",
+      "forearms"
+    ],
+    "equipment": "bodyweight",
+    "source_id": "Chin-Up",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/152/6c1a7459-266d-491a-bd50-7cbaea2bc771.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/152/view/"
+    }
+  },
+  {
+    "slug": "barbell-shrug",
+    "name": "Encogimientos de hombros con barra",
+    "aliases": [
+      "Encogimientos con barra",
+      "Shrugs con barra",
+      "Barbell Shrug"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [],
+    "equipment": "barbell",
+    "source_id": "Barbell_Shrug",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/150/Barbell-shrugs-1.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/571/view/"
+    }
+  },
+  {
+    "slug": "dumbbell-shrug",
+    "name": "Encogimientos de hombros con mancuernas",
+    "aliases": [
+      "Encogimientos con mancuernas",
+      "Shrugs con mancuernas",
+      "Trapecios con mancuernas",
+      "Dumbbell Shrug",
+      "Encogimientos de hombros"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [],
+    "equipment": "dumbbell",
+    "source_id": "Dumbbell_Shrug",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/151/Dumbbell-shrugs-2.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/572/view/"
+    }
+  },
+  {
+    "slug": "back-extension",
+    "name": "Hiperextensiones",
+    "aliases": [
+      "Extensión lumbar",
+      "Hiperextensiones lumbares",
+      "Banco romano",
+      "Back extension",
+      "Hyperextensions (Back Extensions)",
+      "Hiperextensiones (extensión lumbar)"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [
+      "glutes",
+      "hamstrings"
+    ],
+    "equipment": "bodyweight",
+    "source_id": "Hyperextensions_Back_Extensions",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/301/2d5c2f99-b8ff-4095-b515-4c2a85afde70.png",
+      "author": "wger.de",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/301/view/"
+    }
+  },
+  {
+    "slug": "wide-grip-lat-pulldown",
+    "name": "Jalón al pecho",
+    "aliases": [
+      "Polea al pecho",
+      "Jalón al pecho agarre ancho",
+      "Polea alta al pecho",
+      "Lat pulldown",
+      "Wide-Grip Lat Pulldown",
+      "Jalón al pecho o Dominada asistida"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [
+      "biceps",
+      "shoulders"
+    ],
+    "equipment": "cable",
+    "source_id": "Wide-Grip_Lat_Pulldown",
+    "image": null
+  },
+  {
+    "slug": "close-grip-lat-pulldown",
+    "name": "Jalón al pecho agarre cerrado",
+    "aliases": [
+      "Polea al pecho agarre cerrado",
+      "Jalón con agarre estrecho",
+      "Close-Grip Front Lat Pulldown"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [
+      "biceps",
+      "shoulders"
+    ],
+    "equipment": "cable",
+    "source_id": "Close-Grip_Front_Lat_Pulldown",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/158/0d51a0f2-622f-434b-beb8-1a003c54712a.png",
+      "author": "Franpol",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/158/view/"
+    }
+  },
+  {
+    "slug": "v-bar-pulldown",
+    "name": "Jalón al pecho con triángulo",
+    "aliases": [
+      "Polea al pecho con triángulo",
+      "Jalón agarre neutro",
+      "V-Bar Pulldown"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [
+      "biceps",
+      "shoulders"
+    ],
+    "equipment": "cable",
+    "source_id": "V-Bar_Pulldown",
+    "image": null
+  },
+  {
+    "slug": "underhand-cable-pulldown",
+    "name": "Jalón al pecho supino",
+    "aliases": [
+      "Jalón agarre supino",
+      "Polea al pecho supina",
+      "Underhand Cable Pulldowns"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [
+      "biceps",
+      "shoulders"
+    ],
+    "equipment": "cable",
+    "source_id": "Underhand_Cable_Pulldowns",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1127/4942b7c0-6bda-4983-88e5-86547c3d445e.png",
+      "author": "Franpol",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1127/view/"
+    }
+  },
+  {
+    "slug": "pulldown-behind-the-neck",
+    "name": "Jalón tras nuca",
+    "aliases": [
+      "Polea tras nuca",
+      "Jalón por detrás de la nuca",
+      "Wide-Grip Pulldown Behind The Neck"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [
+      "biceps",
+      "shoulders"
+    ],
+    "equipment": "cable",
+    "source_id": "Wide-Grip_Pulldown_Behind_The_Neck",
+    "image": null
+  },
+  {
+    "slug": "straight-arm-pulldown",
+    "name": "Pullover en polea alta",
+    "aliases": [
+      "Pullover en polea",
+      "Jalón con brazos rectos",
+      "Straight-arm pulldown"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [],
+    "equipment": "cable",
+    "source_id": "Straight-Arm_Pulldown",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1726/2e7e541b-5f55-405a-ae78-3e71b3f42db4.png",
+      "author": "barry",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1726/view/"
+    }
+  },
+  {
+    "slug": "rack-pull",
+    "name": "Rack pull",
+    "aliases": [
+      "Peso muerto desde rack",
+      "Peso muerto parcial",
+      "Rack Pulls"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [
+      "forearms",
+      "glutes",
+      "hamstrings"
+    ],
+    "equipment": "barbell",
+    "source_id": "Rack_Pulls",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/161/Dead-lifts-2.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/484/view/"
+    }
+  },
+  {
+    "slug": "leverage-high-row",
+    "name": "Remo alto en máquina",
+    "aliases": [
+      "Remo alto",
+      "High row",
+      "Leverage High Row"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [],
+    "equipment": "machine",
+    "source_id": "Leverage_High_Row",
+    "image": null
+  },
+  {
+    "slug": "bent-over-barbell-row",
+    "name": "Remo con barra",
+    "aliases": [
+      "Remo inclinado con barra",
+      "Remo con barra agarre prono",
+      "Bent Over Barbell Row",
+      "Remo con barra o mancuerna"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [
+      "biceps",
+      "shoulders"
+    ],
+    "equipment": "barbell",
+    "source_id": "Bent_Over_Barbell_Row",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/109/Barbell-rear-delt-row-1.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/83/view/"
+    }
+  },
+  {
+    "slug": "reverse-grip-bent-over-row",
+    "name": "Remo con barra supino",
+    "aliases": [
+      "Remo con barra agarre supino",
+      "Remo Yates",
+      "Reverse Grip Bent-Over Rows"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [
+      "biceps",
+      "shoulders"
+    ],
+    "equipment": "barbell",
+    "source_id": "Reverse_Grip_Bent-Over_Rows",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/110/Reverse-grip-bent-over-rows-1.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/84/view/"
+    }
+  },
+  {
+    "slug": "one-arm-kettlebell-row",
+    "name": "Remo con kettlebell",
+    "aliases": [
+      "Remo a una mano con kettlebell",
+      "One-Arm Kettlebell Row"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [
+      "biceps"
+    ],
+    "equipment": "kettlebell",
+    "source_id": "One-Arm_Kettlebell_Row",
+    "image": null
+  },
+  {
+    "slug": "one-arm-dumbbell-row",
+    "name": "Remo con mancuerna",
+    "aliases": [
+      "Serrucho",
+      "Remo serrucho",
+      "Remo a una mano con mancuerna",
+      "One-Arm Dumbbell Row"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [
+      "biceps",
+      "shoulders"
+    ],
+    "equipment": "dumbbell",
+    "source_id": "One-Arm_Dumbbell_Row",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/81/a751a438-ae2d-4751-8d61-cef0e9292174.png",
+      "author": "Franpol",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/81/view/"
+    }
+  },
+  {
+    "slug": "dumbbell-incline-row",
+    "name": "Remo con mancuernas en banco inclinado",
+    "aliases": [
+      "Remo con apoyo de pecho",
+      "Remo pecho apoyado",
+      "Dumbbell Incline Row"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [
+      "biceps",
+      "forearms",
+      "shoulders"
+    ],
+    "equipment": "dumbbell",
+    "source_id": "Dumbbell_Incline_Row",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1283/e7262f70-7512-408a-8d00-4c499ef632fc.jpg",
+      "author": "carlos3c",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1283/view/"
+    }
+  },
+  {
+    "slug": "leverage-iso-row",
+    "name": "Remo en máquina",
+    "aliases": [
+      "Remo sentado en máquina",
+      "Remo hammer",
+      "Leverage Iso Row",
+      "Remo en máquina o mancuerna"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [
+      "biceps"
+    ],
+    "equipment": "machine",
+    "source_id": "Leverage_Iso_Row",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1725/f0ebd44e-b8e1-400c-b598-ca371f3a07af.png",
+      "author": "barry",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1725/view/"
+    }
+  },
+  {
+    "slug": "smith-machine-bent-over-row",
+    "name": "Remo en máquina Smith",
+    "aliases": [
+      "Remo en Smith",
+      "Remo en multipower",
+      "Smith Machine Bent Over Row"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [
+      "biceps",
+      "shoulders"
+    ],
+    "equipment": "smith",
+    "source_id": "Smith_Machine_Bent_Over_Row",
+    "image": null
+  },
+  {
+    "slug": "one-arm-seated-cable-row",
+    "name": "Remo en polea a una mano",
+    "aliases": [
+      "Remo unilateral en polea",
+      "Seated One-arm Cable Pulley Rows"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [
+      "biceps"
+    ],
+    "equipment": "cable",
+    "source_id": "Seated_One-arm_Cable_Pulley_Rows",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1621/ca1bc68d-9c36-4dd3-8ec4-496c57b5c564.jpg",
+      "author": "technofer",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1621/view/"
+    }
+  },
+  {
+    "slug": "seated-cable-row",
+    "name": "Remo en polea baja",
+    "aliases": [
+      "Remo sentado en polea",
+      "Remo bajo",
+      "Remo en polea con triángulo",
+      "Seated Cable Rows"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [
+      "biceps",
+      "shoulders"
+    ],
+    "equipment": "cable",
+    "source_id": "Seated_Cable_Rows",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1117/2555c4c3-a84d-47db-b83b-cbf721f12e45.png",
+      "author": "Franpol",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1117/view/"
+    }
+  },
+  {
+    "slug": "t-bar-row",
+    "name": "Remo en T",
+    "aliases": [
+      "Remo en barra T",
+      "Remo con barra T",
+      "T-bar row",
+      "Remo landmine",
+      "T-Bar Row with Handle"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [
+      "biceps"
+    ],
+    "equipment": "barbell",
+    "source_id": "T-Bar_Row_with_Handle",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/106/T-bar-row-1.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/513/view/"
+    }
+  },
+  {
+    "slug": "lying-t-bar-row",
+    "name": "Remo en T con apoyo de pecho",
+    "aliases": [
+      "Remo en T en máquina",
+      "Remo en T acostado",
+      "Lying T-Bar Row"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [
+      "biceps"
+    ],
+    "equipment": "machine",
+    "source_id": "Lying_T-Bar_Row",
+    "image": null
+  },
+  {
+    "slug": "bent-over-two-dumbbell-row",
+    "name": "Remo inclinado con mancuernas",
+    "aliases": [
+      "Remo con dos mancuernas",
+      "Bent Over Two-Dumbbell Row"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [
+      "biceps",
+      "shoulders"
+    ],
+    "equipment": "dumbbell",
+    "source_id": "Bent_Over_Two-Dumbbell_Row",
+    "image": null
+  },
+  {
+    "slug": "inverted-row",
+    "name": "Remo invertido",
+    "aliases": [
+      "Remo australiano",
+      "Dominadas australianas",
+      "Inverted Row"
+    ],
+    "primary_muscle": "back",
+    "secondary_muscles": [
+      "biceps"
+    ],
+    "equipment": "bodyweight",
+    "source_id": "Inverted_Row",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1198/864906ac-4ac7-4e52-a886-c6bb97950a9f.jpg",
+      "author": "Gavru",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1198/view/"
+    }
+  },
+  {
+    "slug": "band-pull-apart",
+    "name": "Aperturas con banda",
+    "aliases": [
+      "Band pull apart",
+      "Separación de banda elástica"
+    ],
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [
+      "back"
+    ],
+    "equipment": "band",
+    "source_id": "Band_Pull_Apart",
+    "image": null
+  },
+  {
+    "slug": "front-dumbbell-raise",
+    "name": "Elevaciones frontales con mancuernas",
+    "aliases": [
+      "Vuelos frontales",
+      "Frontales con mancuernas",
+      "Front Dumbbell Raise",
+      "Elevaciones frontales"
+    ],
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [],
+    "equipment": "dumbbell",
+    "source_id": "Front_Dumbbell_Raise",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/256/b7def5bc-2352-499b-b9e5-fff741003831.png",
+      "author": "philip",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/256/view/"
+    }
+  },
+  {
+    "slug": "front-cable-raise",
+    "name": "Elevaciones frontales en polea",
+    "aliases": [
+      "Vuelos frontales en polea",
+      "Front Cable Raise"
+    ],
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [],
+    "equipment": "cable",
+    "source_id": "Front_Cable_Raise",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1745/9c92843a-6b90-428b-a868-9af4b11bad38.jpg",
+      "author": "wger.de",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1745/view/"
+    }
+  },
+  {
+    "slug": "side-lateral-raise",
+    "name": "Elevaciones laterales con mancuernas",
+    "aliases": [
+      "Vuelos laterales",
+      "Laterales con mancuernas",
+      "Elevaciones laterales de pie",
+      "Side Lateral Raise",
+      "Elevaciones laterales"
+    ],
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [],
+    "equipment": "dumbbell",
+    "source_id": "Side_Lateral_Raise",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/148/lateral-dumbbell-raises-large-2.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/348/view/"
+    }
+  },
+  {
+    "slug": "machine-lateral-raise",
+    "name": "Elevaciones laterales en máquina",
+    "aliases": [
+      "Vuelos laterales en máquina",
+      "Machine Lateral Raise"
+    ],
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [],
+    "equipment": "machine",
+    "source_id": null,
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1744/cb9263c4-39fc-4261-8d30-a5d6d57841c1.jpg",
+      "author": "wger.de",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1744/view/"
+    }
+  },
+  {
+    "slug": "cable-lateral-raise",
+    "name": "Elevaciones laterales en polea",
+    "aliases": [
+      "Vuelos laterales en polea",
+      "Lateral en polea a una mano",
+      "Standing Low-Pulley Deltoid Raise"
+    ],
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "equipment": "cable",
+    "source_id": "Standing_Low-Pulley_Deltoid_Raise",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1378/7c1fcf34-fb7e-45e7-a0c1-51f296235315.jpg",
+      "author": "carlos3c",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1378/view/"
+    }
+  },
+  {
+    "slug": "face-pull",
+    "name": "Face pull",
+    "aliases": [
+      "Jalón a la cara",
+      "Face pull en polea",
+      "Face pulls"
+    ],
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [
+      "back"
+    ],
+    "equipment": "cable",
+    "source_id": "Face_Pull",
+    "image": null
+  },
+  {
+    "slug": "handstand-push-up",
+    "name": "Flexiones en vertical",
+    "aliases": [
+      "Flexiones de pino",
+      "Handstand push-ups"
+    ],
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [
+      "triceps"
+    ],
+    "equipment": "bodyweight",
+    "source_id": "Handstand_Push-Ups",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/282/f6121ac9-330e-4ed7-8219-91ce246bf871.png",
+      "author": "wger.de",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/282/view/"
+    }
+  },
+  {
+    "slug": "kettlebell-turkish-get-up",
+    "name": "Levantamiento turco",
+    "aliases": [
+      "Turkish get-up",
+      "Levantada turca con kettlebell",
+      "Kettlebell Turkish Get-Up (Squat style)"
+    ],
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [
+      "core",
+      "calves",
+      "hamstrings",
+      "quadriceps",
+      "triceps"
+    ],
+    "equipment": "kettlebell",
+    "source_id": "Kettlebell_Turkish_Get-Up_Squat_style",
+    "image": null
+  },
+  {
+    "slug": "seated-bent-over-rear-delt-raise",
+    "name": "Pájaros",
+    "aliases": [
+      "Pájaros con mancuernas",
+      "Vuelos posteriores con mancuernas",
+      "Elevaciones posteriores",
+      "Seated Bent-Over Rear Delt Raise",
+      "Pájaros (deltoide posterior)"
+    ],
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [],
+    "equipment": "dumbbell",
+    "source_id": "Seated_Bent-Over_Rear_Delt_Raise",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1098/fa5328a2-64cb-4afb-a283-b3d948ddaf3f.jpg",
+      "author": "philip",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1098/view/"
+    }
+  },
+  {
+    "slug": "arnold-dumbbell-press",
+    "name": "Press Arnold",
+    "aliases": [
+      "Arnold press",
+      "Arnold Dumbbell Press"
+    ],
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [
+      "triceps"
+    ],
+    "equipment": "dumbbell",
+    "source_id": "Arnold_Dumbbell_Press",
+    "image": null
+  },
+  {
+    "slug": "machine-shoulder-press",
+    "name": "Press de hombros en máquina",
+    "aliases": [
+      "Press militar en máquina",
+      "Shoulder press en máquina",
+      "Machine Shoulder (Military) Press"
+    ],
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [
+      "triceps"
+    ],
+    "equipment": "machine",
+    "source_id": "Machine_Shoulder_Military_Press",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/53/Shoulder-press-machine-2.png",
+      "author": "wger.de",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/543/view/"
+    }
+  },
+  {
+    "slug": "standing-military-press",
+    "name": "Press militar con barra",
+    "aliases": [
+      "Press militar de pie",
+      "Press de hombros con barra",
+      "Overhead press",
+      "Standing Military Press",
+      "Press militar"
+    ],
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [
+      "triceps"
+    ],
+    "equipment": "barbell",
+    "source_id": "Standing_Military_Press",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1893/7dbad19e-0616-41fd-9d7d-3e21649c0eea.png",
+      "author": "nishant0712",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1893/view/"
+    }
+  },
+  {
+    "slug": "dumbbell-shoulder-press",
+    "name": "Press militar con mancuernas",
+    "aliases": [
+      "Press de hombros con mancuernas",
+      "Press sentado con mancuernas",
+      "Dumbbell Shoulder Press",
+      "Press militar mancuernas"
+    ],
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [
+      "triceps"
+    ],
+    "equipment": "dumbbell",
+    "source_id": "Dumbbell_Shoulder_Press",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/123/dumbbell-shoulder-press-large-1.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/567/view/"
+    }
+  },
+  {
+    "slug": "smith-machine-overhead-shoulder-press",
+    "name": "Press militar en máquina Smith",
+    "aliases": [
+      "Press de hombros en Smith",
+      "Press militar en multipower",
+      "Smith Machine Overhead Shoulder Press"
+    ],
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [
+      "triceps"
+    ],
+    "equipment": "smith",
+    "source_id": "Smith_Machine_Overhead_Shoulder_Press",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/916/9bf7555a-fec6-43a9-b343-aae496744e5e.png",
+      "author": "wger.de",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/916/view/"
+    }
+  },
+  {
+    "slug": "seated-barbell-military-press",
+    "name": "Press militar sentado con barra",
+    "aliases": [
+      "Press de hombros sentado con barra",
+      "Seated Barbell Military Press"
+    ],
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [
+      "triceps"
+    ],
+    "equipment": "barbell",
+    "source_id": "Seated_Barbell_Military_Press",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/119/seated-barbell-shoulder-press-large-1.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/566/view/"
+    }
+  },
+  {
+    "slug": "barbell-press-behind-neck",
+    "name": "Press tras nuca",
+    "aliases": [
+      "Press militar tras nuca",
+      "Press tras nuca con barra",
+      "Standing Barbell Press Behind Neck"
+    ],
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [
+      "triceps"
+    ],
+    "equipment": "barbell",
+    "source_id": "Standing_Barbell_Press_Behind_Neck",
+    "image": null
+  },
+  {
+    "slug": "upright-barbell-row",
+    "name": "Remo al mentón con barra",
+    "aliases": [
+      "Remo al cuello con barra",
+      "Remo vertical con barra",
+      "Remo parado con barra",
+      "Upright Barbell Row"
+    ],
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [
+      "back"
+    ],
+    "equipment": "barbell",
+    "source_id": "Upright_Barbell_Row",
+    "image": null
+  },
+  {
+    "slug": "standing-dumbbell-upright-row",
+    "name": "Remo al mentón con mancuernas",
+    "aliases": [
+      "Remo al cuello con mancuernas",
+      "Remo vertical con mancuernas",
+      "Standing Dumbbell Upright Row"
+    ],
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [
+      "back",
+      "biceps"
+    ],
+    "equipment": "dumbbell",
+    "source_id": "Standing_Dumbbell_Upright_Row",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/694/119e6823-6960-4341-a9e1-aaf78d7fb57c.png",
+      "author": "cshep442",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/694/view/"
+    }
+  },
+  {
+    "slug": "external-rotation-with-cable",
+    "name": "Rotación externa en polea",
+    "aliases": [
+      "Rotadores en polea",
+      "Rotación externa de hombro",
+      "External Rotation with Cable"
+    ],
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [],
+    "equipment": "cable",
+    "source_id": "External_Rotation_with_Cable",
+    "image": null
+  },
+  {
+    "slug": "reverse-machine-flyes",
+    "name": "Vuelos posteriores en máquina",
+    "aliases": [
+      "Pec deck invertido",
+      "Peck deck invertido",
+      "Aperturas invertidas en máquina",
+      "Reverse Machine Flyes"
+    ],
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [],
+    "equipment": "machine",
+    "source_id": "Reverse_Machine_Flyes",
+    "image": null
+  },
+  {
+    "slug": "cable-rear-delt-fly",
+    "name": "Vuelos posteriores en polea",
+    "aliases": [
+      "Cruces invertidos en polea",
+      "Pájaros en polea",
+      "Cable Rear Delt Fly"
+    ],
+    "primary_muscle": "shoulders",
+    "secondary_muscles": [],
+    "equipment": "cable",
+    "source_id": "Cable_Rear_Delt_Fly",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/822/74affc0d-03b6-4f33-b5f4-a822a2615f68.png",
+      "author": "cshep442",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/822/view/"
+    }
+  },
+  {
+    "slug": "dumbbell-alternate-bicep-curl",
+    "name": "Curl alternado con mancuernas",
+    "aliases": [
+      "Curl de bíceps alternado",
+      "Curl alternado",
+      "Dumbbell Alternate Bicep Curl"
+    ],
+    "primary_muscle": "biceps",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "equipment": "dumbbell",
+    "source_id": "Dumbbell_Alternate_Bicep_Curl",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1012/8270fdb8-28f1-4eff-b410-af8642085b3f.png",
+      "author": "Franpol",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1012/view/"
+    }
+  },
+  {
+    "slug": "concentration-curl",
+    "name": "Curl concentrado",
+    "aliases": [
+      "Curl de concentración",
+      "Curl concentrado con mancuerna",
+      "Concentration Curls"
+    ],
+    "primary_muscle": "biceps",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "equipment": "dumbbell",
+    "source_id": "Concentration_Curls",
+    "image": null
+  },
+  {
+    "slug": "barbell-curl",
+    "name": "Curl de bíceps con barra",
+    "aliases": [
+      "Curl con barra",
+      "Curl de bíceps parado con barra",
+      "Barbell Curl",
+      "Curl bíceps"
+    ],
+    "primary_muscle": "biceps",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "equipment": "barbell",
+    "source_id": "Barbell_Curl",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/74/Bicep-curls-1.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/91/view/"
+    }
+  },
+  {
+    "slug": "ez-bar-curl",
+    "name": "Curl de bíceps con barra EZ",
+    "aliases": [
+      "Curl con barra EZ",
+      "Curl con barra W",
+      "Curl con barra Z",
+      "EZ-Bar Curl"
+    ],
+    "primary_muscle": "biceps",
+    "secondary_muscles": [],
+    "equipment": "ez_bar",
+    "source_id": "EZ-Bar_Curl",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/94/6dee2f60-aea2-4f2d-9bf6-aef50c4f9483.png",
+      "author": "Franpol",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/94/view/"
+    }
+  },
+  {
+    "slug": "dumbbell-bicep-curl",
+    "name": "Curl de bíceps con mancuernas",
+    "aliases": [
+      "Curl con mancuernas",
+      "Curl simultáneo con mancuernas",
+      "Dumbbell Bicep Curl"
+    ],
+    "primary_muscle": "biceps",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "equipment": "dumbbell",
+    "source_id": "Dumbbell_Bicep_Curl",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/81/Biceps-curl-1.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/92/view/"
+    }
+  },
+  {
+    "slug": "machine-preacher-curl",
+    "name": "Curl de bíceps en máquina",
+    "aliases": [
+      "Curl Scott en máquina",
+      "Curl en máquina",
+      "Machine Preacher Curls"
+    ],
+    "primary_muscle": "biceps",
+    "secondary_muscles": [],
+    "equipment": "machine",
+    "source_id": "Machine_Preacher_Curls",
+    "image": null
+  },
+  {
+    "slug": "standing-biceps-cable-curl",
+    "name": "Curl de bíceps en polea",
+    "aliases": [
+      "Curl en polea baja",
+      "Curl con barra en polea",
+      "Standing Biceps Cable Curl"
+    ],
+    "primary_muscle": "biceps",
+    "secondary_muscles": [],
+    "equipment": "cable",
+    "source_id": "Standing_Biceps_Cable_Curl",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/129/Standing-biceps-curl-1.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/95/view/"
+    }
+  },
+  {
+    "slug": "preacher-curl",
+    "name": "Curl en banco Scott",
+    "aliases": [
+      "Curl Scott",
+      "Curl predicador",
+      "Curl en banco Scott con barra",
+      "Preacher Curl"
+    ],
+    "primary_muscle": "biceps",
+    "secondary_muscles": [],
+    "equipment": "barbell",
+    "source_id": "Preacher_Curl",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/193/Preacher-curl-3-1.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/465/view/"
+    }
+  },
+  {
+    "slug": "one-arm-dumbbell-preacher-curl",
+    "name": "Curl en banco Scott con mancuerna",
+    "aliases": [
+      "Curl Scott con mancuerna",
+      "Curl predicador con mancuerna",
+      "One Arm Dumbbell Preacher Curl"
+    ],
+    "primary_muscle": "biceps",
+    "secondary_muscles": [],
+    "equipment": "dumbbell",
+    "source_id": "One_Arm_Dumbbell_Preacher_Curl",
+    "image": null
+  },
+  {
+    "slug": "overhead-cable-curl",
+    "name": "Curl en polea alta",
+    "aliases": [
+      "Curl de bíceps en polea alta",
+      "Curl doble en polea alta",
+      "Overhead Cable Curl"
+    ],
+    "primary_muscle": "biceps",
+    "secondary_muscles": [],
+    "equipment": "cable",
+    "source_id": "Overhead_Cable_Curl",
+    "image": null
+  },
+  {
+    "slug": "incline-dumbbell-curl",
+    "name": "Curl inclinado con mancuernas",
+    "aliases": [
+      "Curl en banco inclinado",
+      "Incline Dumbbell Curl"
+    ],
+    "primary_muscle": "biceps",
+    "secondary_muscles": [],
+    "equipment": "dumbbell",
+    "source_id": "Incline_Dumbbell_Curl",
+    "image": null
+  },
+  {
+    "slug": "hammer-curl",
+    "name": "Curl martillo",
+    "aliases": [
+      "Curl martillo con mancuernas",
+      "Curl de bíceps martillo",
+      "Hammer Curls"
+    ],
+    "primary_muscle": "biceps",
+    "secondary_muscles": [],
+    "equipment": "dumbbell",
+    "source_id": "Hammer_Curls",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/86/Bicep-hammer-curl-1.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/272/view/"
+    }
+  },
+  {
+    "slug": "cable-hammer-curl",
+    "name": "Curl martillo en polea",
+    "aliases": [
+      "Curl martillo con soga",
+      "Curl martillo con cuerda",
+      "Cable Hammer Curls - Rope Attachment"
+    ],
+    "primary_muscle": "biceps",
+    "secondary_muscles": [],
+    "equipment": "cable",
+    "source_id": "Cable_Hammer_Curls_-_Rope_Attachment",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/138/Hammer-curls-with-rope-1.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/275/view/"
+    }
+  },
+  {
+    "slug": "zottman-curl",
+    "name": "Curl Zottman",
+    "aliases": [
+      "Zottman curl"
+    ],
+    "primary_muscle": "biceps",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "equipment": "dumbbell",
+    "source_id": "Zottman_Curl",
+    "image": null
+  },
+  {
+    "slug": "spider-curl",
+    "name": "Spider curl",
+    "aliases": [
+      "Curl araña"
+    ],
+    "primary_muscle": "biceps",
+    "secondary_muscles": [],
+    "equipment": "ez_bar",
+    "source_id": "Spider_Curl",
+    "image": null
+  },
+  {
+    "slug": "machine-triceps-extension",
+    "name": "Extensión de tríceps en máquina",
+    "aliases": [
+      "Tríceps en máquina",
+      "Machine Triceps Extension"
+    ],
+    "primary_muscle": "triceps",
+    "secondary_muscles": [],
+    "equipment": "machine",
+    "source_id": "Machine_Triceps_Extension",
+    "image": null
+  },
+  {
+    "slug": "triceps-pushdown",
+    "name": "Extensión de tríceps en polea",
+    "aliases": [
+      "Tríceps en polea",
+      "Pushdown",
+      "Extensión de tríceps con barra en polea",
+      "Jalón de tríceps",
+      "Triceps Pushdown",
+      "Extensión tríceps"
+    ],
+    "primary_muscle": "triceps",
+    "secondary_muscles": [],
+    "equipment": "cable",
+    "source_id": "Triceps_Pushdown",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1185/c5ca283d-8958-4fd8-9d59-a3f52a3ac66b.jpg",
+      "author": "anto.kreegyr",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1185/view/"
+    }
+  },
+  {
+    "slug": "cable-one-arm-tricep-extension",
+    "name": "Extensión de tríceps en polea a una mano",
+    "aliases": [
+      "Tríceps en polea unilateral",
+      "Cable One Arm Tricep Extension"
+    ],
+    "primary_muscle": "triceps",
+    "secondary_muscles": [],
+    "equipment": "cable",
+    "source_id": "Cable_One_Arm_Tricep_Extension",
+    "image": null
+  },
+  {
+    "slug": "reverse-grip-triceps-pushdown",
+    "name": "Extensión de tríceps en polea agarre supino",
+    "aliases": [
+      "Tríceps en polea supino",
+      "Tríceps en polea agarre invertido",
+      "Reverse Grip Triceps Pushdown"
+    ],
+    "primary_muscle": "triceps",
+    "secondary_muscles": [],
+    "equipment": "cable",
+    "source_id": "Reverse_Grip_Triceps_Pushdown",
+    "image": null
+  },
+  {
+    "slug": "triceps-pushdown-rope-attachment",
+    "name": "Extensión de tríceps en polea con soga",
+    "aliases": [
+      "Tríceps con soga",
+      "Tríceps con cuerda",
+      "Extensión de tríceps con cuerda",
+      "Triceps Pushdown - Rope Attachment"
+    ],
+    "primary_muscle": "triceps",
+    "secondary_muscles": [],
+    "equipment": "cable",
+    "source_id": "Triceps_Pushdown_-_Rope_Attachment",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1900/a8243245-8f8f-4e2b-93ca-694d416cb11d.png",
+      "author": "nishant0712",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1900/view/"
+    }
+  },
+  {
+    "slug": "standing-dumbbell-triceps-extension",
+    "name": "Extensión de tríceps sobre la cabeza con mancuerna",
+    "aliases": [
+      "Tríceps tras nuca con mancuerna",
+      "Extensión de tríceps tras nuca",
+      "Press francés de pie con mancuerna",
+      "Standing Dumbbell Triceps Extension",
+      "Extensión de tríceps sobre la cabeza"
+    ],
+    "primary_muscle": "triceps",
+    "secondary_muscles": [],
+    "equipment": "dumbbell",
+    "source_id": "Standing_Dumbbell_Triceps_Extension",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1336/ebf88217-df26-4ef7-94cb-f0c2220c6abe.webp",
+      "author": "wger.de",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1336/view/"
+    }
+  },
+  {
+    "slug": "triceps-overhead-extension-with-rope",
+    "name": "Extensión de tríceps sobre la cabeza en polea",
+    "aliases": [
+      "Tríceps tras nuca en polea",
+      "Extensión de tríceps tras nuca en polea",
+      "Tríceps francés en polea",
+      "Triceps Overhead Extension with Rope"
+    ],
+    "primary_muscle": "triceps",
+    "secondary_muscles": [],
+    "equipment": "cable",
+    "source_id": "Triceps_Overhead_Extension_with_Rope",
+    "image": null
+  },
+  {
+    "slug": "close-grip-push-up",
+    "name": "Flexiones cerradas",
+    "aliases": [
+      "Flexiones de tríceps",
+      "Flexiones diamante",
+      "Flexiones con agarre cerrado",
+      "Push-Ups - Close Triceps Position"
+    ],
+    "primary_muscle": "triceps",
+    "secondary_muscles": [
+      "chest",
+      "shoulders"
+    ],
+    "equipment": "bodyweight",
+    "source_id": "Push-Ups_-_Close_Triceps_Position",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1086/b2ee8d9b-0480-4992-8494-c223b37c2696.jpg",
+      "author": "philip",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1086/view/"
+    }
+  },
+  {
+    "slug": "bench-dips",
+    "name": "Fondos en banco",
+    "aliases": [
+      "Fondos de tríceps en banco",
+      "Fondos entre bancos",
+      "Bench Dips",
+      "Fondos de tríceps"
+    ],
+    "primary_muscle": "triceps",
+    "secondary_muscles": [
+      "chest",
+      "shoulders"
+    ],
+    "equipment": "bodyweight",
+    "source_id": "Bench_Dips",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/83/Bench-dips-1.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/197/view/"
+    }
+  },
+  {
+    "slug": "dip-machine",
+    "name": "Fondos en máquina",
+    "aliases": [
+      "Máquina de fondos",
+      "Dip Machine"
+    ],
+    "primary_muscle": "triceps",
+    "secondary_muscles": [
+      "chest",
+      "shoulders"
+    ],
+    "equipment": "machine",
+    "source_id": "Dip_Machine",
+    "image": null
+  },
+  {
+    "slug": "tricep-dumbbell-kickback",
+    "name": "Patada de tríceps",
+    "aliases": [
+      "Patada de tríceps con mancuerna",
+      "Kickback de tríceps",
+      "Tricep Dumbbell Kickback"
+    ],
+    "primary_muscle": "triceps",
+    "secondary_muscles": [],
+    "equipment": "dumbbell",
+    "source_id": "Tricep_Dumbbell_Kickback",
+    "image": null
+  },
+  {
+    "slug": "close-grip-barbell-bench-press",
+    "name": "Press banca agarre cerrado",
+    "aliases": [
+      "Press cerrado",
+      "Press banca cerrado",
+      "Press de banca agarre estrecho",
+      "Close-Grip Barbell Bench Press"
+    ],
+    "primary_muscle": "triceps",
+    "secondary_muscles": [
+      "chest",
+      "shoulders"
+    ],
+    "equipment": "barbell",
+    "source_id": "Close-Grip_Barbell_Bench_Press",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/88/Narrow-grip-bench-press-1.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/76/view/"
+    }
+  },
+  {
+    "slug": "ez-bar-skullcrusher",
+    "name": "Press francés",
+    "aliases": [
+      "Press francés con barra EZ",
+      "Press francés con barra W",
+      "Rompecráneos",
+      "Skull crusher",
+      "EZ-Bar Skullcrusher"
+    ],
+    "primary_muscle": "triceps",
+    "secondary_muscles": [
+      "forearms"
+    ],
+    "equipment": "ez_bar",
+    "source_id": "EZ-Bar_Skullcrusher",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/84/Lying-close-grip-triceps-press-to-chin-1.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/246/view/"
+    }
+  },
+  {
+    "slug": "lying-dumbbell-tricep-extension",
+    "name": "Press francés con mancuernas",
+    "aliases": [
+      "Extensión de tríceps acostado con mancuernas",
+      "Lying Dumbbell Tricep Extension"
+    ],
+    "primary_muscle": "triceps",
+    "secondary_muscles": [
+      "chest",
+      "shoulders"
+    ],
+    "equipment": "dumbbell",
+    "source_id": "Lying_Dumbbell_Tricep_Extension",
+    "image": null
+  },
+  {
+    "slug": "barbell-wrist-curl",
+    "name": "Curl de muñeca con barra",
+    "aliases": [
+      "Flexión de muñeca con barra",
+      "Curl de antebrazo con barra",
+      "Palms-Up Barbell Wrist Curl Over A Bench"
+    ],
+    "primary_muscle": "forearms",
+    "secondary_muscles": [],
+    "equipment": "barbell",
+    "source_id": "Palms-Up_Barbell_Wrist_Curl_Over_A_Bench",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/51/f1730f56-7aca-4566-8338-3e42b1bee6e1.webp",
+      "author": "wger.de",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/51/view/"
+    }
+  },
+  {
+    "slug": "dumbbell-wrist-curl",
+    "name": "Curl de muñeca con mancuernas",
+    "aliases": [
+      "Flexión de muñeca con mancuernas",
+      "Seated Dumbbell Palms-Up Wrist Curl"
+    ],
+    "primary_muscle": "forearms",
+    "secondary_muscles": [],
+    "equipment": "dumbbell",
+    "source_id": "Seated_Dumbbell_Palms-Up_Wrist_Curl",
+    "image": null
+  },
+  {
+    "slug": "cable-wrist-curl",
+    "name": "Curl de muñeca en polea",
+    "aliases": [
+      "Flexión de muñeca en polea",
+      "Cable Wrist Curl"
+    ],
+    "primary_muscle": "forearms",
+    "secondary_muscles": [],
+    "equipment": "cable",
+    "source_id": "Cable_Wrist_Curl",
+    "image": null
+  },
+  {
+    "slug": "reverse-barbell-wrist-curl",
+    "name": "Curl de muñeca invertido con barra",
+    "aliases": [
+      "Extensión de muñeca con barra",
+      "Curl de muñeca agarre prono",
+      "Palms-Down Wrist Curl Over A Bench"
+    ],
+    "primary_muscle": "forearms",
+    "secondary_muscles": [],
+    "equipment": "barbell",
+    "source_id": "Palms-Down_Wrist_Curl_Over_A_Bench",
+    "image": null
+  },
+  {
+    "slug": "reverse-barbell-curl",
+    "name": "Curl invertido con barra",
+    "aliases": [
+      "Curl inverso",
+      "Curl con agarre prono",
+      "Curl invertido",
+      "Reverse Barbell Curl"
+    ],
+    "primary_muscle": "forearms",
+    "secondary_muscles": [
+      "biceps"
+    ],
+    "equipment": "barbell",
+    "source_id": "Reverse_Barbell_Curl",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1290/c05818bf-1c81-46df-9f24-42e354265388.png",
+      "author": "Franpol",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1290/view/"
+    }
+  },
+  {
+    "slug": "standing-dumbbell-reverse-curl",
+    "name": "Curl invertido con mancuernas",
+    "aliases": [
+      "Curl inverso con mancuernas",
+      "Standing Dumbbell Reverse Curl"
+    ],
+    "primary_muscle": "forearms",
+    "secondary_muscles": [
+      "biceps"
+    ],
+    "equipment": "dumbbell",
+    "source_id": "Standing_Dumbbell_Reverse_Curl",
+    "image": null
+  },
+  {
+    "slug": "single-leg-leg-extension",
+    "name": "Extensión de cuádriceps a una pierna",
+    "aliases": [
+      "Sillón de cuádriceps unilateral",
+      "Single-Leg Leg Extension"
+    ],
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [],
+    "equipment": "machine",
+    "source_id": "Single-Leg_Leg_Extension",
+    "image": null
+  },
+  {
+    "slug": "leg-extensions",
+    "name": "Extensión de cuádriceps en máquina",
+    "aliases": [
+      "Sillón de cuádriceps",
+      "Sillón cuádriceps",
+      "Extensión de piernas",
+      "Camilla de cuádriceps",
+      "Leg Extensions"
+    ],
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [],
+    "equipment": "machine",
+    "source_id": "Leg_Extensions",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/369/78c915d1-e46d-4d30-8124-65d68664c3ef.png",
+      "author": "Franpol",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/369/view/"
+    }
+  },
+  {
+    "slug": "leg-press",
+    "name": "Prensa de piernas",
+    "aliases": [
+      "Prensa 45",
+      "Prensa inclinada",
+      "Leg press",
+      "Prensa o Sentadilla",
+      "Prensa"
+    ],
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "calves",
+      "glutes",
+      "hamstrings"
+    ],
+    "equipment": "machine",
+    "source_id": "Leg_Press",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/371/d2136f96-3a43-4d4c-9944-1919c4ca1ce1.webp",
+      "author": "wger.de",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/371/view/"
+    }
+  },
+  {
+    "slug": "box-squat",
+    "name": "Sentadilla al cajón",
+    "aliases": [
+      "Box squat",
+      "Sentadilla al banco"
+    ],
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "adductors_abductors",
+      "calves",
+      "glutes",
+      "hamstrings",
+      "back"
+    ],
+    "equipment": "barbell",
+    "source_id": "Box_Squat",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/977/3124c091-6395-4377-96c5-56048b627ceb.png",
+      "author": "wger.de",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/977/view/"
+    }
+  },
+  {
+    "slug": "split-squat-with-dumbbells",
+    "name": "Sentadilla búlgara",
+    "aliases": [
+      "Búlgara",
+      "Sentadilla búlgara con mancuernas",
+      "Bulgarian split squat",
+      "Split Squat with Dumbbells"
+    ],
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "glutes",
+      "hamstrings"
+    ],
+    "equipment": "dumbbell",
+    "source_id": "Split_Squat_with_Dumbbells",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1706/0c5243cc-2539-4005-aee0-d3a8c5d3a32c.jfif",
+      "author": "AlucardEvil40",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1706/view/"
+    }
+  },
+  {
+    "slug": "smith-single-leg-split-squat",
+    "name": "Sentadilla búlgara en máquina Smith",
+    "aliases": [
+      "Búlgara en Smith",
+      "Sentadilla búlgara en multipower",
+      "Smith Single-Leg Split Squat"
+    ],
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "calves",
+      "glutes",
+      "hamstrings"
+    ],
+    "equipment": "smith",
+    "source_id": "Smith_Single-Leg_Split_Squat",
+    "image": null
+  },
+  {
+    "slug": "barbell-squat",
+    "name": "Sentadilla con barra",
+    "aliases": [
+      "Sentadilla trasera",
+      "Sentadilla con barra trasera",
+      "Back squat",
+      "Barbell Squat",
+      "Sentadilla (o Prensa)",
+      "Sentadilla"
+    ],
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "calves",
+      "glutes",
+      "hamstrings",
+      "back"
+    ],
+    "equipment": "barbell",
+    "source_id": "Barbell_Squat",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1801/60043328-1cfb-4289-9865-aaf64d5aaa28.jpg",
+      "author": "Workout Guru",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1801/view/"
+    }
+  },
+  {
+    "slug": "dumbbell-squat",
+    "name": "Sentadilla con mancuernas",
+    "aliases": [
+      "Dumbbell Squat"
+    ],
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "calves",
+      "glutes",
+      "hamstrings",
+      "back"
+    ],
+    "equipment": "dumbbell",
+    "source_id": "Dumbbell_Squat",
+    "image": null
+  },
+  {
+    "slug": "smith-machine-squat",
+    "name": "Sentadilla en máquina Smith",
+    "aliases": [
+      "Sentadilla en Smith",
+      "Sentadilla en multipower",
+      "Smith Machine Squat"
+    ],
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "calves",
+      "glutes",
+      "hamstrings",
+      "back"
+    ],
+    "equipment": "smith",
+    "source_id": "Smith_Machine_Squat",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1747/af9647dd-04ec-4adf-9c07-4e33edb77277.jpg",
+      "author": "wger.de",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1747/view/"
+    }
+  },
+  {
+    "slug": "front-barbell-squat",
+    "name": "Sentadilla frontal",
+    "aliases": [
+      "Sentadilla frontal con barra",
+      "Front squat",
+      "Front Barbell Squat"
+    ],
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "calves",
+      "glutes",
+      "hamstrings"
+    ],
+    "equipment": "barbell",
+    "source_id": "Front_Barbell_Squat",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/191/Front-squat-1-857x1024.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/257/view/"
+    }
+  },
+  {
+    "slug": "goblet-squat",
+    "name": "Sentadilla goblet",
+    "aliases": [
+      "Sentadilla copa",
+      "Sentadilla goblet con mancuerna",
+      "Sentadilla goblet con kettlebell",
+      "Goblet Squat"
+    ],
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "calves",
+      "glutes",
+      "hamstrings",
+      "shoulders"
+    ],
+    "equipment": "kettlebell",
+    "source_id": "Goblet_Squat",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/203/1c052351-2af0-4227-aeb0-244008e4b0a8.jpeg",
+      "author": "philip",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/203/view/"
+    }
+  },
+  {
+    "slug": "hack-squat",
+    "name": "Sentadilla hack",
+    "aliases": [
+      "Hack squat",
+      "Sentadilla en máquina hack",
+      "Hack"
+    ],
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "calves",
+      "glutes",
+      "hamstrings"
+    ],
+    "equipment": "machine",
+    "source_id": "Hack_Squat",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/130/Narrow-stance-hack-squats-1-1024x721.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/375/view/"
+    }
+  },
+  {
+    "slug": "bodyweight-squat",
+    "name": "Sentadilla sin peso",
+    "aliases": [
+      "Sentadilla con peso corporal",
+      "Air squat",
+      "Bodyweight Squat"
+    ],
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "glutes",
+      "hamstrings"
+    ],
+    "equipment": "bodyweight",
+    "source_id": "Bodyweight_Squat",
+    "image": null
+  },
+  {
+    "slug": "dumbbell-step-ups",
+    "name": "Subidas al cajón con mancuernas",
+    "aliases": [
+      "Step-ups con mancuernas",
+      "Subidas al banco",
+      "Step-up",
+      "Dumbbell Step Ups"
+    ],
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "calves",
+      "glutes",
+      "hamstrings"
+    ],
+    "equipment": "dumbbell",
+    "source_id": "Dumbbell_Step_Ups",
+    "image": null
+  },
+  {
+    "slug": "bodyweight-walking-lunge",
+    "name": "Zancadas caminando",
+    "aliases": [
+      "Estocadas caminando",
+      "Zancadas caminando sin peso",
+      "Bodyweight Walking Lunge"
+    ],
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "calves",
+      "glutes",
+      "hamstrings"
+    ],
+    "equipment": "bodyweight",
+    "source_id": "Bodyweight_Walking_Lunge",
+    "image": null
+  },
+  {
+    "slug": "barbell-walking-lunge",
+    "name": "Zancadas caminando con barra",
+    "aliases": [
+      "Estocadas caminando con barra",
+      "Barbell Walking Lunge"
+    ],
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "calves",
+      "glutes",
+      "hamstrings"
+    ],
+    "equipment": "barbell",
+    "source_id": "Barbell_Walking_Lunge",
+    "image": null
+  },
+  {
+    "slug": "barbell-lunge",
+    "name": "Zancadas con barra",
+    "aliases": [
+      "Estocadas con barra",
+      "Barbell Lunge"
+    ],
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "calves",
+      "glutes",
+      "hamstrings"
+    ],
+    "equipment": "barbell",
+    "source_id": "Barbell_Lunge",
+    "image": null
+  },
+  {
+    "slug": "dumbbell-lunges",
+    "name": "Zancadas con mancuernas",
+    "aliases": [
+      "Estocadas",
+      "Estocadas con mancuernas",
+      "Zancadas hacia adelante",
+      "Dumbbell Lunges",
+      "Zancadas"
+    ],
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "calves",
+      "glutes",
+      "hamstrings"
+    ],
+    "equipment": "dumbbell",
+    "source_id": "Dumbbell_Lunges",
+    "image": null
+  },
+  {
+    "slug": "dumbbell-rear-lunge",
+    "name": "Zancadas hacia atrás con mancuernas",
+    "aliases": [
+      "Estocadas hacia atrás",
+      "Zancada inversa",
+      "Dumbbell Rear Lunge"
+    ],
+    "primary_muscle": "quadriceps",
+    "secondary_muscles": [
+      "calves",
+      "glutes",
+      "hamstrings"
+    ],
+    "equipment": "dumbbell",
+    "source_id": "Dumbbell_Rear_Lunge",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1651/04ab2679-a04d-4d05-9c85-0d36e898328c.webp",
+      "author": "AlucardEvil40",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1651/view/"
+    }
+  },
+  {
+    "slug": "good-morning",
+    "name": "Buenos días",
+    "aliases": [
+      "Good morning",
+      "Buenos días con barra"
+    ],
+    "primary_muscle": "hamstrings",
+    "secondary_muscles": [
+      "core",
+      "glutes",
+      "back"
+    ],
+    "equipment": "barbell",
+    "source_id": "Good_Morning",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1392/a02c9c7d-f42d-43e0-9946-1b99b014daee.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/1392/view/"
+    }
+  },
+  {
+    "slug": "standing-leg-curl",
+    "name": "Curl femoral de pie",
+    "aliases": [
+      "Curl femoral unilateral de pie",
+      "Femoral de pie",
+      "Standing Leg Curl"
+    ],
+    "primary_muscle": "hamstrings",
+    "secondary_muscles": [],
+    "equipment": "machine",
+    "source_id": "Standing_Leg_Curl",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/118/standing-leg-curls-large-1.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/367/view/"
+    }
+  },
+  {
+    "slug": "lying-leg-curls",
+    "name": "Curl femoral en máquina",
+    "aliases": [
+      "Curl femoral acostado",
+      "Camilla de isquiotibiales",
+      "Camilla femoral",
+      "Femorales acostado",
+      "Lying Leg Curls",
+      "Curl femoral o gemelos",
+      "Curl femoral"
+    ],
+    "primary_muscle": "hamstrings",
+    "secondary_muscles": [],
+    "equipment": "machine",
+    "source_id": "Lying_Leg_Curls",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/154/lying-leg-curl-machine-large-1.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/365/view/"
+    }
+  },
+  {
+    "slug": "seated-leg-curl",
+    "name": "Curl femoral sentado",
+    "aliases": [
+      "Femoral sentado",
+      "Sillón de isquiotibiales",
+      "Seated Leg Curl"
+    ],
+    "primary_muscle": "hamstrings",
+    "secondary_muscles": [],
+    "equipment": "machine",
+    "source_id": "Seated_Leg_Curl",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/117/seated-leg-curl-large-1.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/366/view/"
+    }
+  },
+  {
+    "slug": "natural-glute-ham-raise",
+    "name": "Curl nórdico",
+    "aliases": [
+      "Nordic curl",
+      "Curl femoral nórdico",
+      "Nórdicos",
+      "Natural Glute Ham Raise"
+    ],
+    "primary_muscle": "hamstrings",
+    "secondary_muscles": [
+      "calves",
+      "glutes",
+      "back"
+    ],
+    "equipment": "bodyweight",
+    "source_id": "Natural_Glute_Ham_Raise",
+    "image": null
+  },
+  {
+    "slug": "barbell-deadlift",
+    "name": "Peso muerto",
+    "aliases": [
+      "Peso muerto convencional",
+      "Peso muerto con barra",
+      "Deadlift",
+      "Barbell Deadlift"
+    ],
+    "primary_muscle": "hamstrings",
+    "secondary_muscles": [
+      "back",
+      "calves",
+      "forearms",
+      "glutes",
+      "quadriceps"
+    ],
+    "equipment": "barbell",
+    "source_id": "Barbell_Deadlift",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/184/1709c405-620a-4d07-9658-fade2b66a2df.jpeg",
+      "author": "philip",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/184/view/"
+    }
+  },
+  {
+    "slug": "kettlebell-one-legged-deadlift",
+    "name": "Peso muerto a una pierna con kettlebell",
+    "aliases": [
+      "Peso muerto unilateral",
+      "Peso muerto a una pierna",
+      "Kettlebell One-Legged Deadlift"
+    ],
+    "primary_muscle": "hamstrings",
+    "secondary_muscles": [
+      "glutes",
+      "back"
+    ],
+    "equipment": "kettlebell",
+    "source_id": "Kettlebell_One-Legged_Deadlift",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1641/68d9488d-2596-420f-be0f-52aa70732c83.webp",
+      "author": "AlucardEvil40",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1641/view/"
+    }
+  },
+  {
+    "slug": "stiff-legged-barbell-deadlift",
+    "name": "Peso muerto con piernas rígidas",
+    "aliases": [
+      "Peso muerto piernas rectas",
+      "Peso muerto stiff",
+      "Stiff",
+      "Stiff-Legged Barbell Deadlift"
+    ],
+    "primary_muscle": "hamstrings",
+    "secondary_muscles": [
+      "glutes",
+      "back"
+    ],
+    "equipment": "barbell",
+    "source_id": "Stiff-Legged_Barbell_Deadlift",
+    "image": null
+  },
+  {
+    "slug": "romanian-deadlift",
+    "name": "Peso muerto rumano",
+    "aliases": [
+      "Peso muerto rumano con barra",
+      "RDL",
+      "Romanian Deadlift"
+    ],
+    "primary_muscle": "hamstrings",
+    "secondary_muscles": [
+      "calves",
+      "glutes",
+      "back"
+    ],
+    "equipment": "barbell",
+    "source_id": "Romanian_Deadlift",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/507/13d526ab-12fc-461e-828a-051dd7c13fb1.png",
+      "author": "wger.de",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/507/view/"
+    }
+  },
+  {
+    "slug": "stiff-legged-dumbbell-deadlift",
+    "name": "Peso muerto rumano con mancuernas",
+    "aliases": [
+      "Peso muerto con mancuernas",
+      "Peso muerto piernas rígidas con mancuernas",
+      "Stiff-Legged Dumbbell Deadlift"
+    ],
+    "primary_muscle": "hamstrings",
+    "secondary_muscles": [
+      "glutes",
+      "back"
+    ],
+    "equipment": "dumbbell",
+    "source_id": "Stiff-Legged_Dumbbell_Deadlift",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1652/0306c8c0-70cc-45d4-92de-6fa72ceaa834.webp",
+      "author": "AlucardEvil40",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1652/view/"
+    }
+  },
+  {
+    "slug": "kettlebell-swing",
+    "name": "Swing con kettlebell",
+    "aliases": [
+      "Swing ruso",
+      "Balanceo con kettlebell",
+      "Kettlebell Swing"
+    ],
+    "primary_muscle": "hamstrings",
+    "secondary_muscles": [
+      "glutes",
+      "back",
+      "shoulders",
+      "core"
+    ],
+    "equipment": "kettlebell",
+    "source_id": null,
+    "image": {
+      "url": "https://wger.de/media/exercise-images/960/da4d0560-da89-4bb5-b91f-746458fb04ad.png",
+      "author": "wger.de",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/960/view/"
+    }
+  },
+  {
+    "slug": "barbell-hip-thrust",
+    "name": "Hip thrust",
+    "aliases": [
+      "Hip thrust con barra",
+      "Empuje de cadera",
+      "Elevación de cadera con barra",
+      "Barbell Hip Thrust"
+    ],
+    "primary_muscle": "glutes",
+    "secondary_muscles": [
+      "calves",
+      "hamstrings"
+    ],
+    "equipment": "barbell",
+    "source_id": "Barbell_Hip_Thrust",
+    "image": null
+  },
+  {
+    "slug": "glute-kickback",
+    "name": "Patada de glúteos en cuadrupedia",
+    "aliases": [
+      "Patada de burro",
+      "Donkey kick",
+      "Patada de glúteo en el piso",
+      "Glute Kickback"
+    ],
+    "primary_muscle": "glutes",
+    "secondary_muscles": [
+      "hamstrings"
+    ],
+    "equipment": "bodyweight",
+    "source_id": "Glute_Kickback",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/990/de20457c-914a-45c9-8cf9-0ad9739759a1.png",
+      "author": "wger.de",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/990/view/"
+    }
+  },
+  {
+    "slug": "one-legged-cable-kickback",
+    "name": "Patada de glúteos en polea",
+    "aliases": [
+      "Patada de glúteo en polea",
+      "Patada trasera en polea",
+      "Kickback en polea",
+      "One-Legged Cable Kickback"
+    ],
+    "primary_muscle": "glutes",
+    "secondary_muscles": [
+      "hamstrings"
+    ],
+    "equipment": "cable",
+    "source_id": "One-Legged_Cable_Kickback",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1131/3bcf3024-2dcc-4995-9694-55aa2c2e4a9a.png",
+      "author": "Franpol",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1131/view/"
+    }
+  },
+  {
+    "slug": "sumo-deadlift",
+    "name": "Peso muerto sumo",
+    "aliases": [
+      "Sumo deadlift",
+      "Peso muerto sumo con barra"
+    ],
+    "primary_muscle": "glutes",
+    "secondary_muscles": [
+      "hamstrings",
+      "adductors_abductors",
+      "forearms",
+      "back",
+      "quadriceps"
+    ],
+    "equipment": "barbell",
+    "source_id": "Sumo_Deadlift",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/630/b0f0c7d8-5878-4d9e-b820-21acc013741d.webp",
+      "author": "wger.de",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/630/view/"
+    }
+  },
+  {
+    "slug": "butt-lift-bridge",
+    "name": "Puente de glúteos",
+    "aliases": [
+      "Puente de cadera",
+      "Elevación de cadera",
+      "Glute bridge",
+      "Butt Lift (Bridge)"
+    ],
+    "primary_muscle": "glutes",
+    "secondary_muscles": [
+      "hamstrings"
+    ],
+    "equipment": "bodyweight",
+    "source_id": "Butt_Lift_Bridge",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/265/7528acb4-b2cc-4b75-b6ae-d514cbd4f78b.png",
+      "author": "wger.de",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/265/view/"
+    }
+  },
+  {
+    "slug": "single-leg-glute-bridge",
+    "name": "Puente de glúteos a una pierna",
+    "aliases": [
+      "Puente de glúteos unilateral",
+      "Single Leg Glute Bridge"
+    ],
+    "primary_muscle": "glutes",
+    "secondary_muscles": [
+      "hamstrings"
+    ],
+    "equipment": "bodyweight",
+    "source_id": "Single_Leg_Glute_Bridge",
+    "image": null
+  },
+  {
+    "slug": "barbell-glute-bridge",
+    "name": "Puente de glúteos con barra",
+    "aliases": [
+      "Glute bridge con barra",
+      "Barbell Glute Bridge"
+    ],
+    "primary_muscle": "glutes",
+    "secondary_muscles": [
+      "calves",
+      "hamstrings"
+    ],
+    "equipment": "barbell",
+    "source_id": "Barbell_Glute_Bridge",
+    "image": null
+  },
+  {
+    "slug": "pull-through",
+    "name": "Pull through en polea",
+    "aliases": [
+      "Pull through",
+      "Tirón entre las piernas en polea"
+    ],
+    "primary_muscle": "glutes",
+    "secondary_muscles": [
+      "hamstrings",
+      "back"
+    ],
+    "equipment": "cable",
+    "source_id": "Pull_Through",
+    "image": null
+  },
+  {
+    "slug": "thigh-abductor",
+    "name": "Abducción de cadera en máquina",
+    "aliases": [
+      "Abductores en máquina",
+      "Máquina de abductores",
+      "Sillón abductor",
+      "Thigh Abductor"
+    ],
+    "primary_muscle": "adductors_abductors",
+    "secondary_muscles": [
+      "glutes"
+    ],
+    "equipment": "machine",
+    "source_id": "Thigh_Abductor",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1748/923a3ff7-c269-49bd-9f03-697151a40f06.jpg",
+      "author": "wger.de",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1748/view/"
+    }
+  },
+  {
+    "slug": "band-hip-adductions",
+    "name": "Aducción de cadera con banda",
+    "aliases": [
+      "Aductores con banda",
+      "Band Hip Adductions"
+    ],
+    "primary_muscle": "adductors_abductors",
+    "secondary_muscles": [],
+    "equipment": "band",
+    "source_id": "Band_Hip_Adductions",
+    "image": null
+  },
+  {
+    "slug": "thigh-adductor",
+    "name": "Aducción de cadera en máquina",
+    "aliases": [
+      "Aductores en máquina",
+      "Máquina de aductores",
+      "Sillón aductor",
+      "Thigh Adductor"
+    ],
+    "primary_muscle": "adductors_abductors",
+    "secondary_muscles": [
+      "glutes",
+      "hamstrings"
+    ],
+    "equipment": "machine",
+    "source_id": "Thigh_Adductor",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/12/4a42cc6f-648d-40cc-a72a-c49dd47e1667.webp",
+      "author": "wger.de",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/12/view/"
+    }
+  },
+  {
+    "slug": "cable-hip-adduction",
+    "name": "Aducción de cadera en polea",
+    "aliases": [
+      "Aductores en polea",
+      "Cable Hip Adduction"
+    ],
+    "primary_muscle": "adductors_abductors",
+    "secondary_muscles": [],
+    "equipment": "cable",
+    "source_id": "Cable_Hip_Adduction",
+    "image": null
+  },
+  {
+    "slug": "monster-walk",
+    "name": "Caminata lateral con banda",
+    "aliases": [
+      "Monster walk",
+      "Pasos laterales con banda",
+      "Caminata de monstruo"
+    ],
+    "primary_muscle": "adductors_abductors",
+    "secondary_muscles": [],
+    "equipment": "band",
+    "source_id": "Monster_Walk",
+    "image": null
+  },
+  {
+    "slug": "plie-dumbbell-squat",
+    "name": "Sentadilla sumo con mancuerna",
+    "aliases": [
+      "Sentadilla plié",
+      "Sentadilla sumo",
+      "Plie Dumbbell Squat"
+    ],
+    "primary_muscle": "adductors_abductors",
+    "secondary_muscles": [
+      "glutes",
+      "quadriceps",
+      "hamstrings"
+    ],
+    "equipment": "dumbbell",
+    "source_id": "Plie_Dumbbell_Squat",
+    "image": null
+  },
+  {
+    "slug": "standing-barbell-calf-raise",
+    "name": "Elevación de talones con barra",
+    "aliases": [
+      "Gemelos con barra",
+      "Standing Barbell Calf Raise"
+    ],
+    "primary_muscle": "calves",
+    "secondary_muscles": [],
+    "equipment": "barbell",
+    "source_id": "Standing_Barbell_Calf_Raise",
+    "image": null
+  },
+  {
+    "slug": "standing-dumbbell-calf-raise",
+    "name": "Elevación de talones con mancuernas",
+    "aliases": [
+      "Gemelos con mancuernas",
+      "Standing Dumbbell Calf Raise"
+    ],
+    "primary_muscle": "calves",
+    "secondary_muscles": [],
+    "equipment": "dumbbell",
+    "source_id": "Standing_Dumbbell_Calf_Raise",
+    "image": null
+  },
+  {
+    "slug": "standing-calf-raises",
+    "name": "Elevación de talones de pie",
+    "aliases": [
+      "Gemelos de pie",
+      "Pantorrillas de pie",
+      "Elevación de talones en máquina",
+      "Elevación de talones parado",
+      "Standing Calf Raises",
+      "Elevación de talón",
+      "Gemelos",
+      "Elevación de talones (gemelos de pie)"
+    ],
+    "primary_muscle": "calves",
+    "secondary_muscles": [],
+    "equipment": "machine",
+    "source_id": "Standing_Calf_Raises",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/622/9a429bd0-afd3-4ad0-8043-e9beec901c81.jpeg",
+      "author": "clafal",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/622/view/"
+    }
+  },
+  {
+    "slug": "smith-machine-calf-raise",
+    "name": "Elevación de talones en máquina Smith",
+    "aliases": [
+      "Gemelos en Smith",
+      "Gemelos en multipower",
+      "Smith Machine Calf Raise"
+    ],
+    "primary_muscle": "calves",
+    "secondary_muscles": [],
+    "equipment": "smith",
+    "source_id": "Smith_Machine_Calf_Raise",
+    "image": null
+  },
+  {
+    "slug": "seated-calf-raise",
+    "name": "Elevación de talones sentado",
+    "aliases": [
+      "Gemelos sentado",
+      "Sóleos sentado",
+      "Gemelos en máquina sentado",
+      "Seated Calf Raise"
+    ],
+    "primary_muscle": "calves",
+    "secondary_muscles": [],
+    "equipment": "machine",
+    "source_id": "Seated_Calf_Raise",
+    "image": null
+  },
+  {
+    "slug": "calf-press-on-the-leg-press-machine",
+    "name": "Gemelos en prensa de piernas",
+    "aliases": [
+      "Gemelos en prensa",
+      "Elevación de talones en prensa",
+      "Calf Press On The Leg Press Machine"
+    ],
+    "primary_muscle": "calves",
+    "secondary_muscles": [],
+    "equipment": "machine",
+    "source_id": "Calf_Press_On_The_Leg_Press_Machine",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/146/8b284904-d072-4381-a256-4c81d8fd9c1f.png",
+      "author": "wger.de",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/146/view/"
+    }
+  },
+  {
+    "slug": "sit-up",
+    "name": "Abdominales completos",
+    "aliases": [
+      "Sit-ups",
+      "Abdominales de suelo completos",
+      "Sit-Up"
+    ],
+    "primary_muscle": "core",
+    "secondary_muscles": [],
+    "equipment": "bodyweight",
+    "source_id": "Sit-Up",
+    "image": null
+  },
+  {
+    "slug": "ab-crunch-machine",
+    "name": "Abdominales en máquina",
+    "aliases": [
+      "Crunch en máquina",
+      "Máquina de abdominales",
+      "Ab Crunch Machine"
+    ],
+    "primary_muscle": "core",
+    "secondary_muscles": [],
+    "equipment": "machine",
+    "source_id": "Ab_Crunch_Machine",
+    "image": null
+  },
+  {
+    "slug": "crunches",
+    "name": "Crunch abdominal",
+    "aliases": [
+      "Crunch",
+      "Abdominales cortos",
+      "Encogimientos abdominales",
+      "Crunches"
+    ],
+    "primary_muscle": "core",
+    "secondary_muscles": [],
+    "equipment": "bodyweight",
+    "source_id": "Crunches",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/91/Crunches-1.png",
+      "author": "wger.de",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/167/view/"
+    }
+  },
+  {
+    "slug": "decline-crunch",
+    "name": "Crunch declinado",
+    "aliases": [
+      "Abdominales en banco declinado",
+      "Crunch en banco declinado",
+      "Decline Crunch"
+    ],
+    "primary_muscle": "core",
+    "secondary_muscles": [],
+    "equipment": "bodyweight",
+    "source_id": "Decline_Crunch",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/93/Decline-crunch-1.png",
+      "author": "wger.de",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/427/view/"
+    }
+  },
+  {
+    "slug": "cable-crunch",
+    "name": "Crunch en polea",
+    "aliases": [
+      "Crunch con soga en polea",
+      "Abdominales en polea",
+      "Crunch arrodillado en polea",
+      "Cable Crunch"
+    ],
+    "primary_muscle": "core",
+    "secondary_muscles": [],
+    "equipment": "cable",
+    "source_id": "Cable_Crunch",
+    "image": null
+  },
+  {
+    "slug": "reverse-crunch",
+    "name": "Crunch inverso",
+    "aliases": [
+      "Crunch invertido",
+      "Abdominales inversos",
+      "Reverse Crunch"
+    ],
+    "primary_muscle": "core",
+    "secondary_muscles": [],
+    "equipment": "bodyweight",
+    "source_id": "Reverse_Crunch",
+    "image": null
+  },
+  {
+    "slug": "oblique-crunches",
+    "name": "Crunch oblicuo",
+    "aliases": [
+      "Abdominales oblicuos",
+      "Oblicuos",
+      "Oblique Crunches"
+    ],
+    "primary_muscle": "core",
+    "secondary_muscles": [],
+    "equipment": "bodyweight",
+    "source_id": "Oblique_Crunches",
+    "image": null
+  },
+  {
+    "slug": "dead-bug",
+    "name": "Dead bug",
+    "aliases": [
+      "Bicho muerto",
+      "Insecto muerto"
+    ],
+    "primary_muscle": "core",
+    "secondary_muscles": [],
+    "equipment": "bodyweight",
+    "source_id": "Dead_Bug",
+    "image": null
+  },
+  {
+    "slug": "flat-bench-lying-leg-raise",
+    "name": "Elevación de piernas acostado",
+    "aliases": [
+      "Elevación de piernas en banco",
+      "Elevación de piernas en el piso",
+      "Flat Bench Lying Leg Raise"
+    ],
+    "primary_muscle": "core",
+    "secondary_muscles": [],
+    "equipment": "bodyweight",
+    "source_id": "Flat_Bench_Lying_Leg_Raise",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/125/Leg-raises-2.png",
+      "author": "Everkinetic",
+      "license": "CC-BY-SA 3",
+      "source_url": "https://wger.de/exercise/377/view/"
+    }
+  },
+  {
+    "slug": "hanging-leg-raise",
+    "name": "Elevación de piernas colgado",
+    "aliases": [
+      "Elevación de piernas en barra",
+      "Elevación de piernas colgado en barra",
+      "Hanging Leg Raise",
+      "Elevación de piernas colgado o en banco",
+      "Elevación de piernas"
+    ],
+    "primary_muscle": "core",
+    "secondary_muscles": [],
+    "equipment": "bodyweight",
+    "source_id": "Hanging_Leg_Raise",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/979/27097a3a-5749-428d-b94c-6082afe390f6.png",
+      "author": "wger.de",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/979/view/"
+    }
+  },
+  {
+    "slug": "knee-hip-raise-on-parallel-bars",
+    "name": "Elevación de rodillas en paralelas",
+    "aliases": [
+      "Elevación de rodillas en silla romana",
+      "Silla romana",
+      "Knee/Hip Raise On Parallel Bars"
+    ],
+    "primary_muscle": "core",
+    "secondary_muscles": [],
+    "equipment": "bodyweight",
+    "source_id": "Knee_Hip_Raise_On_Parallel_Bars",
+    "image": null
+  },
+  {
+    "slug": "russian-twist",
+    "name": "Giro ruso",
+    "aliases": [
+      "Giros rusos",
+      "Russian twist"
+    ],
+    "primary_muscle": "core",
+    "secondary_muscles": [
+      "back"
+    ],
+    "equipment": "bodyweight",
+    "source_id": "Russian_Twist",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1193/70ca5d80-3847-4a8c-8882-c6e9e485e29e.png",
+      "author": "lion",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1193/view/"
+    }
+  },
+  {
+    "slug": "hollow-hold",
+    "name": "Hollow hold",
+    "aliases": [
+      "Hollow",
+      "Hollow body",
+      "Posición hueca"
+    ],
+    "primary_muscle": "core",
+    "secondary_muscles": [],
+    "equipment": "bodyweight",
+    "source_id": null,
+    "image": {
+      "url": "https://wger.de/media/exercise-images/297/b10d3341-baa8-49ab-b462-5b3529389aac.png",
+      "author": "wger.de",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/297/view/"
+    }
+  },
+  {
+    "slug": "dumbbell-side-bend",
+    "name": "Inclinaciones laterales con mancuerna",
+    "aliases": [
+      "Flexiones laterales con mancuerna",
+      "Oblicuos con mancuerna",
+      "Dumbbell Side Bend"
+    ],
+    "primary_muscle": "core",
+    "secondary_muscles": [],
+    "equipment": "dumbbell",
+    "source_id": "Dumbbell_Side_Bend",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1650/1d7a5336-ec0b-4898-a474-78ba32789bf3.webp",
+      "author": "AlucardEvil40",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1650/view/"
+    }
+  },
+  {
+    "slug": "standing-cable-wood-chop",
+    "name": "Leñador en polea",
+    "aliases": [
+      "Leñadores",
+      "Woodchopper",
+      "Wood chop",
+      "Standing Cable Wood Chop"
+    ],
+    "primary_muscle": "core",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "equipment": "cable",
+    "source_id": "Standing_Cable_Wood_Chop",
+    "image": null
+  },
+  {
+    "slug": "pallof-press",
+    "name": "Pallof press",
+    "aliases": [
+      "Press Pallof",
+      "Antirrotación en polea",
+      "Anti-rotación (Pallof press o similar)",
+      "Anti-rotación"
+    ],
+    "primary_muscle": "core",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "equipment": "cable",
+    "source_id": "Pallof_Press",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1194/34c03421-0803-4859-a2b0-5710f2bd94cd.png",
+      "author": "wger.de",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1194/view/"
+    }
+  },
+  {
+    "slug": "plank",
+    "name": "Plancha abdominal",
+    "aliases": [
+      "Plancha frontal",
+      "Plank",
+      "Plancha"
+    ],
+    "primary_muscle": "core",
+    "secondary_muscles": [],
+    "equipment": "bodyweight",
+    "source_id": "Plank",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/458/b7bd9c28-9f1d-4647-bd17-ab6a3adf5770.png",
+      "author": "utkb",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/458/view/"
+    }
+  },
+  {
+    "slug": "side-bridge",
+    "name": "Plancha lateral",
+    "aliases": [
+      "Side plank",
+      "Puente lateral",
+      "Side Bridge"
+    ],
+    "primary_muscle": "core",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "equipment": "bodyweight",
+    "source_id": "Side_Bridge",
+    "image": null
+  },
+  {
+    "slug": "barbell-ab-rollout",
+    "name": "Rollout con barra",
+    "aliases": [
+      "Rueda abdominal con barra",
+      "Barbell Ab Rollout"
+    ],
+    "primary_muscle": "core",
+    "secondary_muscles": [
+      "back",
+      "shoulders"
+    ],
+    "equipment": "barbell",
+    "source_id": "Barbell_Ab_Rollout",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/41/34b37423-269f-43d4-9d29-d2a90eeaa6b4.png",
+      "author": "wger.de",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/41/view/"
+    }
+  },
+  {
+    "slug": "ab-roller",
+    "name": "Rueda abdominal",
+    "aliases": [
+      "Rueda",
+      "Rodillo abdominal",
+      "Ab wheel",
+      "Ab Roller",
+      "Rueda abdominal o Pallof press"
+    ],
+    "primary_muscle": "core",
+    "secondary_muscles": [
+      "shoulders"
+    ],
+    "equipment": "bodyweight",
+    "source_id": "Ab_Roller",
+    "image": {
+      "url": "https://wger.de/media/exercise-images/1573/a9ab402b-61ef-4d60-b91a-df52bf7f41a9.jpg",
+      "author": "wger.de",
+      "license": "CC-BY-SA 4",
+      "source_url": "https://wger.de/exercise/1573/view/"
+    }
+  }
+]

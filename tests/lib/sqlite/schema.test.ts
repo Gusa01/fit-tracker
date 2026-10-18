@@ -25,4 +25,8 @@ describe('local SQLite schema migrations', () => {
       'alter table user_exercise_state_cache add column consecutive_miss_count integer not null default 0'
     );
   });
+
+  it('adds image_path to the cached routine exercises', () => {
+    expect(MIGRATION_STATEMENTS).toContain('alter table routine_exercises_cache add column image_path text');
+  });
 });

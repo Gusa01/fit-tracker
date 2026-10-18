@@ -9,6 +9,8 @@ import {
   RoutineExerciseRepUnit,
   Weekday,
 } from './types';
+import { findMatchingExercise } from '../exercises/search';
+import { Equipment, Muscle } from '../exercises/taxonomy';
 
 const ALL_WEEKDAYS: Weekday[] = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
@@ -367,35 +369,28 @@ export async function reorderRoutineExercises(
 
 export async function findOrCreateExercise(
   supabase: SupabaseClient,
-  name: string,
-  muscleGroup: string
+  input: { name: string; primaryMuscle: Muscle; equipment: Equipment; ownerId: string | null }
 ): Promise<Exercise> {
-  const { data: existing, error: existingError } = await supabase
-    .from('exercises')
-    .select('*')
-    .eq('name', name)
-    .maybeSingle();
-  if (existingError) throw existingError;
+  const name = input.name.trim();
+  const { data: visible, error: listError } = await supabase.from('exercises').select('*');
+  if (listError) throw listError;
+  const existing = findMatchingExercise((visible ?? []) as Exercise[], name, input.ownerId);
   if (existing) return existing;
 
   const { data: created, error: createError } = await supabase
     .from('exercises')
-    .insert({ name, muscle_group: muscleGroup })
+    .insert({ name, primary_muscle: input.primaryMuscle, equipment: input.equipment, owner_id: input.ownerId })
     .select()
     .single();
   if (createError) {
-    // Another concurrent caller created the same name between our select and insert —
-    // fetch what they created instead of failing on the unique constraint.
+    // A concurrent caller created the same name first: return theirs.
     if (createError.code === '23505') {
-      const { data: raceWinner, error: raceError } = await supabase
-        .from('exercises')
-        .select('*')
-        .eq('name', name)
-        .single();
-      if (raceError) throw raceError;
-      return raceWinner;
+      const { data: again, error: againError } = await supabase.from('exercises').select('*');
+      if (againError) throw againError;
+      const winner = findMatchingExercise((again ?? []) as Exercise[], name, input.ownerId);
+      if (winner) return winner;
     }
     throw createError;
   }
-  return created;
+  return created as Exercise;
 }

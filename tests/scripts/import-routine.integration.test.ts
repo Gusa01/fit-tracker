@@ -77,10 +77,11 @@ describe('importRoutine', () => {
     const upperDay = splitDays!.find((d) => d.name === 'Upper')!;
     const { data: upperExercises } = await supabase
       .from('routine_exercises')
-      .select('*, exercises(name)')
+      .select('*, exercises(name, slug)')
       .eq('routine_day_id', upperDay.id)
       .order('order_index');
-    const pressBanca = upperExercises!.find((e: any) => e.exercises.name === 'Press banca');
+    const pressBanca = upperExercises!.find((e: any) => e.exercises.name === 'Press banca con barra');
+    expect(pressBanca.exercises.slug).not.toBeNull();
     expect(pressBanca.scheme_type).toBe('top_set_backoff');
     expect(pressBanca.top_set_reps).toBe(5);
   });

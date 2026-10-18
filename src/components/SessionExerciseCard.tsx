@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Pressable, Modal, Image, StyleSheet } from 'react-native';
 import { CachedRoutineExercise } from '../lib/sqlite/cache';
 import { LoggedSet, SetType } from '../lib/sessions/types';
 import { buildPrescribedSets, formatTargetScheme } from '../lib/sessions/prescribedSets';
@@ -7,6 +7,8 @@ import { WeightStepper } from './WeightStepper';
 import { StepperInput } from './StepperInput';
 import { SetEditor } from './SetEditor';
 import { SetCorrection } from '../lib/history/types';
+import { ExerciseThumbnail } from './ExerciseThumbnail';
+import { exerciseImageUrl } from '../lib/exercises/images';
 
 interface SessionExerciseCardProps {
   exercise: CachedRoutineExercise;
@@ -31,6 +33,8 @@ export function SessionExerciseCard({ exercise, initialWeight, loggedSets, onLog
   const [rir, setRir] = useState<number | null>(exercise.rir_min !== null ? exercise.rir_min : null);
   const [saving, setSaving] = useState(false);
   const [editingSet, setEditingSet] = useState<LoggedSet | null>(null);
+  const [viewerOpen, setViewerOpen] = useState(false);
+  const imageUrl = exerciseImageUrl(exercise.image_path ?? null);
 
   const prescribed = buildPrescribedSets(exercise);
   const showRir = exercise.rir_min !== null;
@@ -55,8 +59,28 @@ export function SessionExerciseCard({ exercise, initialWeight, loggedSets, onLog
 
   return (
     <View style={styles.card}>
-      <Text style={styles.name}>{exercise.exercise_name}</Text>
-      <Text style={styles.target}>{formatTargetScheme(exercise)}</Text>
+      <View style={styles.header}>
+        <Pressable disabled={!imageUrl} onPress={() => setViewerOpen(true)} accessibilityLabel="Ver ilustración">
+          <ExerciseThumbnail
+            imagePath={exercise.image_path ?? null}
+            muscle={exercise.primary_muscle ?? (exercise.muscle_group === 'core' ? 'core' : '')}
+            size={48}
+          />
+        </Pressable>
+        <View style={styles.headerText}>
+          <Text style={styles.name}>{exercise.exercise_name}</Text>
+          <Text style={styles.target}>{formatTargetScheme(exercise)}</Text>
+        </View>
+      </View>
+
+      {imageUrl && (
+        <Modal visible={viewerOpen} transparent animationType="fade" onRequestClose={() => setViewerOpen(false)}>
+          <Pressable style={styles.viewerBackdrop} onPress={() => setViewerOpen(false)}>
+            <Image source={{ uri: imageUrl }} style={styles.viewerImage} resizeMode="contain" />
+            <Text style={styles.viewerCaption}>Ilustración: wger.de (Creative Commons)</Text>
+          </Pressable>
+        </Modal>
+      )}
 
       {prescribed.map((set) => {
         const logged = loggedByIndex.get(set.setIndex);
@@ -145,6 +169,11 @@ export function SessionExerciseCard({ exercise, initialWeight, loggedSets, onLog
 
 const styles = StyleSheet.create({
   card: { gap: 8, borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 12 },
+  header: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  headerText: { flex: 1, gap: 2 },
+  viewerBackdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.85)', alignItems: 'center', justifyContent: 'center', gap: 12 },
+  viewerImage: { width: '90%', aspectRatio: 1, backgroundColor: '#fff', borderRadius: 8 },
+  viewerCaption: { color: '#fff' },
   name: { fontSize: 16, fontWeight: '700' },
   target: { color: '#666' },
   label: { fontWeight: '600', marginTop: 4 },

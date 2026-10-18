@@ -60,7 +60,7 @@ export async function listDayExercises(
 ): Promise<RoutineExerciseWithName[]> {
   const { data, error } = await supabase
     .from('routine_exercises')
-    .select('*, exercises(name, muscle_group)')
+    .select('*, exercises(name, muscle_group, primary_muscle, image_path)')
     .eq('routine_day_id', dayId)
     .eq('is_deleted', false)
     .order('order_index');
@@ -69,6 +69,8 @@ export async function listDayExercises(
     ...row,
     exercise_name: row.exercises.name,
     muscle_group: row.exercises.muscle_group,
+    primary_muscle: row.exercises.primary_muscle,
+    image_path: row.exercises.image_path,
   }));
 }
 

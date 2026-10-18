@@ -3,6 +3,7 @@ import { View, Text, Pressable, StyleSheet, Alert, Modal, ActivityIndicator } fr
 import { NestableDraggableFlatList, RenderItemParams } from 'react-native-draggable-flatlist';
 import { useDayExercises } from '../hooks/useDayExercises';
 import { useExercises } from '../hooks/useExercises';
+import { useAuthSession } from '../hooks/useAuthSession';
 import { supabase } from '../lib/supabase';
 import {
   updateRoutineExercise,
@@ -40,6 +41,7 @@ function toMutationInput(values: ExerciseFormValues) {
 export function DayExercisesSection({ dayId }: DayExercisesSectionProps) {
   const { exercises, isLoading, error, refetch } = useDayExercises(dayId);
   const { exercises: catalog } = useExercises();
+  const { session } = useAuthSession();
 
   const [addingExercise, setAddingExercise] = useState(false);
   const [editingExerciseId, setEditingExerciseId] = useState<string | null>(null);
@@ -51,7 +53,13 @@ export function DayExercisesSection({ dayId }: DayExercisesSectionProps) {
 
   async function handleUpdateExercise(routineExerciseId: string, values: ExerciseFormValues) {
     try {
-      const exercise = await findOrCreateExercise(supabase, values.exerciseName.trim(), values.muscleGroup);
+      if (!session?.user.id) throw new Error('Iniciá sesión para guardar el ejercicio.');
+      const exercise = await findOrCreateExercise(supabase, {
+        name: values.exerciseName.trim(),
+        primaryMuscle: values.primaryMuscle,
+        equipment: values.equipment,
+        ownerId: session?.user.id ?? null,
+      });
       await updateRoutineExercise(supabase, routineExerciseId, {
         exerciseId: exercise.id,
         ...toMutationInput(values),

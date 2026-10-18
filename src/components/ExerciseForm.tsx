@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import { View, Text, TextInput, Pressable, StyleSheet, Switch } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { useAuthSession } from '../hooks/useAuthSession';
+import { View, Text, TextInput, Pressable, StyleSheet, Switch, ScrollView } from 'react-native';
 import {
   Exercise,
   RoutineExerciseRole,
@@ -8,10 +9,23 @@ import {
   RoutineExerciseWithName,
 } from '../lib/routines/types';
 import { StepperInput } from './StepperInput';
+import { ExerciseThumbnail } from './ExerciseThumbnail';
+import { filterExercises, findMatchingExercise } from '../lib/exercises/search';
+import {
+  EQUIPMENT,
+  EQUIPMENT_LABEL,
+  Equipment,
+  MUSCLES,
+  MUSCLE_LABEL,
+  Muscle,
+  isEquipment,
+  isMuscle,
+} from '../lib/exercises/taxonomy';
 
 export interface ExerciseFormValues {
   exerciseName: string;
-  muscleGroup: 'upper' | 'lower' | 'core';
+  primaryMuscle: Muscle;
+  equipment: Equipment;
   role: RoutineExerciseRole;
   schemeType: RoutineExerciseSchemeType;
   repUnit: RoutineExerciseRepUnit;
@@ -33,11 +47,12 @@ interface ExerciseFormProps {
   onCancel: () => void;
 }
 
-function initialValues(initial?: RoutineExerciseWithName): ExerciseFormValues {
+function initialValues(initial?: RoutineExerciseWithName, current?: Exercise): ExerciseFormValues {
   if (!initial) {
     return {
       exerciseName: '',
-      muscleGroup: 'upper',
+      primaryMuscle: 'chest',
+      equipment: 'dumbbell',
       role: 'accessory',
       schemeType: 'normal',
       repUnit: 'reps',
@@ -54,7 +69,8 @@ function initialValues(initial?: RoutineExerciseWithName): ExerciseFormValues {
   }
   return {
     exerciseName: initial.exercise_name,
-    muscleGroup: 'upper',
+    primaryMuscle: current && isMuscle(current.primary_muscle) ? current.primary_muscle : 'chest',
+    equipment: current && isEquipment(current.equipment) ? current.equipment : 'dumbbell',
     role: initial.role,
     schemeType: initial.scheme_type,
     repUnit: initial.rep_unit,
@@ -71,30 +87,47 @@ function initialValues(initial?: RoutineExerciseWithName): ExerciseFormValues {
 }
 
 export function ExerciseForm({ exercises, initial, onSubmit, onCancel }: ExerciseFormProps) {
-  const [values, setValues] = useState<ExerciseFormValues>(initialValues(initial));
+  const { session } = useAuthSession();
+  const currentExercise = initial ? exercises.find((e) => e.id === initial.exercise_id) : undefined;
+  const [values, setValues] = useState<ExerciseFormValues>(initialValues(initial, currentExercise));
+  const touchedKind = useRef(false);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
-  const [browseFilter, setBrowseFilter] = useState<'upper' | 'lower' | 'core' | null>(null);
+  const [browseMuscle, setBrowseMuscle] = useState<Muscle | null>(null);
 
   const unitLabel = values.repUnit === 'seconds' ? 'Segundos' : 'Reps';
 
-  const typedName = values.exerciseName.trim().toLowerCase();
   const suggestions =
-    typedName.length > 0 || browseFilter
-      ? exercises
-          .filter((e) => !browseFilter || e.muscle_group === browseFilter)
-          .filter((e) => !typedName || e.name.toLowerCase().includes(typedName))
-          .slice(0, browseFilter ? 20 : 5)
+    values.exerciseName.trim().length > 0 || browseMuscle
+      ? filterExercises(exercises, {
+          query: values.exerciseName,
+          muscle: browseMuscle,
+          equipment: null,
+        }).slice(0, browseMuscle ? 20 : 5)
       : [];
 
   function selectSuggestion(exercise: Exercise) {
     update('exerciseName', exercise.name);
-    if (exercise.muscle_group === 'upper' || exercise.muscle_group === 'lower' || exercise.muscle_group === 'core') {
-      update('muscleGroup', exercise.muscle_group);
-    }
+    if (isMuscle(exercise.primary_muscle)) update('primaryMuscle', exercise.primary_muscle);
+    if (isEquipment(exercise.equipment)) update('equipment', exercise.equipment);
   }
 
+  // The exercise list may load after the form mounts: seed muscle/equipment once, unless the user already chose.
+  useEffect(() => {
+    if (!currentExercise || touchedKind.current) return;
+    const { primary_muscle: muscle, equipment } = currentExercise;
+    setValues((prev) => ({
+      ...prev,
+      primaryMuscle: isMuscle(muscle) ? muscle : prev.primaryMuscle,
+      equipment: isEquipment(equipment) ? equipment : prev.equipment,
+    }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentExercise?.id]);
+
+  const matchesExisting = findMatchingExercise(exercises, values.exerciseName, session?.user.id ?? null) !== null;
+
   function update<K extends keyof ExerciseFormValues>(key: K, value: ExerciseFormValues[K]) {
+    if (key === 'primaryMuscle' || key === 'equipment') touchedKind.current = true;
     setValues((prev) => ({ ...prev, [key]: value }));
   }
 
@@ -149,46 +182,76 @@ export function ExerciseForm({ exercises, initial, onSubmit, onCancel }: Exercis
       />
 
       <Text style={styles.label}>Explorar ejercicios comunes</Text>
-      <View style={styles.segmented}>
-        {(['upper', 'lower', 'core'] as const).map((option) => (
-          <Pressable
-            key={option}
-            style={[styles.segment, browseFilter === option && styles.segmentSelected]}
-            onPress={() => setBrowseFilter(browseFilter === option ? null : option)}
-          >
-            <Text style={browseFilter === option ? styles.segmentTextSelected : styles.segmentText}>{option}</Text>
-          </Pressable>
-        ))}
-      </View>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <View style={styles.segmented}>
+          {MUSCLES.map((m) => (
+            <Pressable
+              key={m}
+              style={[styles.segment, browseMuscle === m && styles.segmentSelected]}
+              onPress={() => setBrowseMuscle(browseMuscle === m ? null : m)}
+            >
+              <Text style={browseMuscle === m ? styles.segmentTextSelected : styles.segmentText}>
+                {MUSCLE_LABEL[m]}
+              </Text>
+            </Pressable>
+          ))}
+        </View>
+      </ScrollView>
 
       {suggestions.length > 0 && (
         <View style={styles.suggestions}>
           {suggestions.map((s) => (
             <Pressable key={s.id} onPress={() => selectSuggestion(s)} style={styles.suggestionRow}>
-              <Text>{s.name}</Text>
-              <Text style={styles.suggestionMeta}>{s.muscle_group}</Text>
+              <ExerciseThumbnail imagePath={s.image_path} muscle={s.primary_muscle} size={32} />
+              <Text style={styles.suggestionName}>{s.name}</Text>
+              <Text style={styles.suggestionMeta}>
+                {isMuscle(s.primary_muscle) ? MUSCLE_LABEL[s.primary_muscle] : s.primary_muscle}
+              </Text>
             </Pressable>
           ))}
         </View>
       )}
-      {browseFilter && suggestions.length === 0 && (
-        <Text style={styles.hint}>No hay ejercicios cargados todavía en "{browseFilter}".</Text>
+      {browseMuscle && suggestions.length === 0 && (
+        <Text style={styles.hint}>No hay ejercicios cargados todavía en "{MUSCLE_LABEL[browseMuscle]}".</Text>
       )}
 
-      <Text style={styles.label}>Grupo muscular</Text>
-      <View style={styles.segmented}>
-        {(['upper', 'lower', 'core'] as const).map((option) => (
-          <Pressable
-            key={option}
-            style={[styles.segment, values.muscleGroup === option && styles.segmentSelected]}
-            onPress={() => update('muscleGroup', option)}
-          >
-            <Text style={values.muscleGroup === option ? styles.segmentTextSelected : styles.segmentText}>
-              {option}
-            </Text>
-          </Pressable>
-        ))}
-      </View>
+      {!matchesExisting && (
+        <>
+          <Text style={styles.label}>Músculo principal</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <View style={styles.segmented}>
+              {MUSCLES.map((m) => (
+                <Pressable
+                  key={m}
+                  style={[styles.segment, values.primaryMuscle === m && styles.segmentSelected]}
+                  onPress={() => update('primaryMuscle', m)}
+                >
+                  <Text style={values.primaryMuscle === m ? styles.segmentTextSelected : styles.segmentText}>
+                    {MUSCLE_LABEL[m]}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+          </ScrollView>
+
+          <Text style={styles.label}>Equipamiento</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <View style={styles.segmented}>
+              {EQUIPMENT.map((e) => (
+                <Pressable
+                  key={e}
+                  style={[styles.segment, values.equipment === e && styles.segmentSelected]}
+                  onPress={() => update('equipment', e)}
+                >
+                  <Text style={values.equipment === e ? styles.segmentTextSelected : styles.segmentText}>
+                    {EQUIPMENT_LABEL[e]}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+          </ScrollView>
+        </>
+      )}
 
       <Text style={styles.label}>Rol</Text>
       <View style={styles.segmented}>
@@ -198,9 +261,7 @@ export function ExerciseForm({ exercises, initial, onSubmit, onCancel }: Exercis
             style={[styles.segment, values.role === option && styles.segmentSelected]}
             onPress={() => update('role', option)}
           >
-            <Text style={values.role === option ? styles.segmentTextSelected : styles.segmentText}>
-              {option}
-            </Text>
+            <Text style={values.role === option ? styles.segmentTextSelected : styles.segmentText}>{option}</Text>
           </Pressable>
         ))}
       </View>
@@ -273,29 +334,60 @@ export function ExerciseForm({ exercises, initial, onSubmit, onCancel }: Exercis
 }
 
 const styles = StyleSheet.create({
-  form: { gap: 10, borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 12 },
+  form: {
+    gap: 10,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    padding: 12,
+  },
   input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 10 },
   suggestions: { borderWidth: 1, borderColor: '#eee', borderRadius: 8 },
   suggestionRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 8,
     padding: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
   },
+  suggestionName: { flex: 1 },
   suggestionMeta: { color: '#666', fontSize: 12 },
   hint: { color: '#666', fontSize: 12, fontStyle: 'italic' },
   label: { fontWeight: '600', marginTop: 4 },
   segmented: { flexDirection: 'row', gap: 6 },
-  segment: { borderWidth: 1, borderColor: '#ccc', borderRadius: 6, paddingVertical: 6, paddingHorizontal: 10 },
+  segment: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 6,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+  },
   segmentSelected: { backgroundColor: '#111', borderColor: '#111' },
   segmentText: { color: '#111' },
   segmentTextSelected: { color: '#fff' },
-  switchRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  switchRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   error: { color: '#dc2626' },
   actions: { flexDirection: 'row', gap: 8 },
-  button: { flex: 1, backgroundColor: '#111', borderRadius: 8, padding: 12, alignItems: 'center' },
+  button: {
+    flex: 1,
+    backgroundColor: '#111',
+    borderRadius: 8,
+    padding: 12,
+    alignItems: 'center',
+  },
   buttonText: { color: '#fff', fontWeight: '600' },
-  cancelButton: { flex: 1, borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 12, alignItems: 'center' },
+  cancelButton: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 12,
+    alignItems: 'center',
+  },
   cancelButtonText: { color: '#111', fontWeight: '600' },
 });

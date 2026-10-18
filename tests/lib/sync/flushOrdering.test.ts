@@ -24,7 +24,7 @@ describe('flushPendingWrites ordering per row', () => {
     ];
     const result = await flushPendingWrites(client as any, writes);
     expect(calls).toHaveLength(1);
-    expect(result).toEqual({ succeededIds: [], failedIds: ['q1'] });
+    expect(result).toEqual({ succeededIds: [], failedIds: ['q1'], droppedIds: [] });
   });
 
   it('still runs writes for other ids after a failure', async () => {
@@ -36,7 +36,7 @@ describe('flushPendingWrites ordering per row', () => {
     ];
     const result = await flushPendingWrites(client as any, writes);
     expect(calls.map((c) => c.payload.id)).toEqual(['X', 'Y']);
-    expect(result).toEqual({ succeededIds: ['q2'], failedIds: ['q1'] });
+    expect(result).toEqual({ succeededIds: ['q2'], failedIds: ['q1'], droppedIds: [] });
   });
 
   it('runs a later write for the same id when the earlier one succeeded', async () => {
@@ -47,6 +47,27 @@ describe('flushPendingWrites ordering per row', () => {
     ];
     const result = await flushPendingWrites(client as any, writes);
     expect(calls).toHaveLength(2);
-    expect(result).toEqual({ succeededIds: ['q1', 'q2'], failedIds: [] });
+    expect(result).toEqual({ succeededIds: ['q1', 'q2'], failedIds: [], droppedIds: [] });
+  });
+
+  it('drops a user_exercise_state write that fails with an FK violation', async () => {
+    const { client } = fakeSupabase(() => ({ error: { code: '23503', message: 'fk' } }));
+    const writes: PendingWrite[] = [{ id: 'q1', entity: 'user_exercise_state', payload: { exercise_id: 'gone' } }];
+    const result = await flushPendingWrites(client as any, writes);
+    expect(result).toEqual({ succeededIds: [], failedIds: [], droppedIds: ['q1'] });
+  });
+
+  it('keeps an FK violation on logged_sets as failed', async () => {
+    const { client } = fakeSupabase(() => ({ error: { code: '23503', message: 'fk' } }));
+    const writes: PendingWrite[] = [{ id: 'q1', entity: 'logged_sets', payload: { id: 'X' } }];
+    const result = await flushPendingWrites(client as any, writes);
+    expect(result).toEqual({ succeededIds: [], failedIds: ['q1'], droppedIds: [] });
+  });
+
+  it('keeps other user_exercise_state errors as failed', async () => {
+    const { client } = fakeSupabase(() => ({ error: { code: '08006', message: 'net' } }));
+    const writes: PendingWrite[] = [{ id: 'q1', entity: 'user_exercise_state', payload: { exercise_id: 'e' } }];
+    const result = await flushPendingWrites(client as any, writes);
+    expect(result).toEqual({ succeededIds: [], failedIds: ['q1'], droppedIds: [] });
   });
 });

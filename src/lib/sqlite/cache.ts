@@ -99,8 +99,8 @@ export async function refreshLocalCache(
         `insert into routine_exercises_cache
            (id, routine_day_id, exercise_id, exercise_name, order_index, role, scheme_type, rep_unit,
             sets, rep_min, rep_max, rir_min, rir_max, top_set_reps, backoff_sets, backoff_rep_min, backoff_rep_max,
-            muscle_group)
-         values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            muscle_group, image_path, primary_muscle)
+         values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           exercise.id,
           exercise.routine_day_id,
@@ -120,6 +120,8 @@ export async function refreshLocalCache(
           exercise.backoff_rep_min,
           exercise.backoff_rep_max,
           exercise.muscle_group ?? null,
+          exercise.image_path ?? null,
+          exercise.primary_muscle ?? null,
         ]
       );
     });
