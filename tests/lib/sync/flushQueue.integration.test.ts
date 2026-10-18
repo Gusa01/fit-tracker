@@ -21,7 +21,7 @@ describe('flushPendingWrites', () => {
   it('returns empty results for an empty queue', async () => {
     const { client } = fakeSupabase(() => ({ error: null }));
     const result = await flushPendingWrites(client as any, []);
-    expect(result).toEqual({ succeededIds: [], failedIds: [] });
+    expect(result).toEqual({ succeededIds: [], failedIds: [], droppedIds: [] });
   });
 
   it('upserts every write in order and reports all as succeeded', async () => {
@@ -31,7 +31,7 @@ describe('flushPendingWrites', () => {
       { id: 'w2', entity: 'logged_sets', payload: { id: 'w2', weight: 60 } },
     ];
     const result = await flushPendingWrites(client as any, writes);
-    expect(result).toEqual({ succeededIds: ['w1', 'w2'], failedIds: [] });
+    expect(result).toEqual({ succeededIds: ['w1', 'w2'], failedIds: [], droppedIds: [] });
     expect(calls.map((c) => c.table)).toEqual(['workout_sessions', 'logged_sets']);
     expect(calls[0].payload).toEqual({ id: 'w1', status: 'in_progress' });
   });
@@ -103,7 +103,7 @@ describe('flushPendingWrites against the real hosted project', () => {
       },
     };
     const firstResult = await flushPendingWrites(supabase, [firstWrite]);
-    expect(firstResult).toEqual({ succeededIds: ['first'], failedIds: [] });
+    expect(firstResult).toEqual({ succeededIds: ['first'], failedIds: [], droppedIds: [] });
 
     const secondWrite: PendingWrite = {
       id: 'second',
@@ -118,7 +118,7 @@ describe('flushPendingWrites against the real hosted project', () => {
       },
     };
     const secondResult = await flushPendingWrites(supabase, [secondWrite]);
-    expect(secondResult).toEqual({ succeededIds: ['second'], failedIds: [] });
+    expect(secondResult).toEqual({ succeededIds: ['second'], failedIds: [], droppedIds: [] });
 
     const { data: rows, error } = await supabase
       .from('user_exercise_state')
