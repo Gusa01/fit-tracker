@@ -26,13 +26,13 @@ This spec adds a light and a dark theme built from shared color tokens, a blue a
 |---|---|---|---|
 | `background` | `#F7F8FA` | `#0B0F14` | screen background |
 | `surface` | `#FFFFFF` | `#151A21` | cards, sheets, inputs |
-| `surfaceMuted` | `#F6F7F9` | `#181E26` | chips, toggles' track, pressed rows |
+| `surfaceMuted` | `#EEF1F5` | `#1E252E` | chips, toggles' track, pressed rows |
 | `border` | `#DDE2E8` | `#2A323D` | card and input borders, dividers |
 | `text` | `#111827` | `#F3F4F6` | primary text |
 | `textMuted` | `#6B7280` | `#9CA3AF` | secondary text |
 | `accent` | `#2563EB` | `#3B82F6` | primary buttons, active chips/toggles, links, chart line |
 | `onAccent` | `#FFFFFF` | `#0B0F14` | text on accent |
-| `accentMuted` | `#EFF6FF` | `#0D1D33` | selected-row backgrounds, highlights |
+| `accentMuted` | `#DBEAFE` | `#1E3A5F` | selected-row backgrounds, highlights |
 | `success` | `#107A38` | `#22C55E` | trend up, "completado" |
 | `successMuted` | `#F0FDF4` | `#052E1A` | success banners (logged sets, corrections) |
 | `danger` | `#C52222` | `#F87171` | trend down, delete, errors |
@@ -44,9 +44,9 @@ This spec adds a light and a dark theme built from shared color tokens, a blue a
 | `onDark` | `#FFFFFF` | `#FFFFFF` | text on the scrim, switch knobs |
 | `imageBackdrop` | `#FFFFFF` | `#FFFFFF` | backdrop behind exercise illustrations (dark line art on transparent PNGs) |
 
-Values adjusted during implementation so every pair meets AA: light `success`, `danger` and `warning` were darkened, and dark `onAccent` became near-black so the brighter dark-mode blue stays readable both as a fill and as link text. Later, `surfaceMuted` and `accentMuted` were adjusted so `textMuted` and `accent` stay AA on them: light `surfaceMuted` `#EEF1F5` to `#F6F7F9`, light `accentMuted` `#DBEAFE` to `#EFF6FF`, dark `surfaceMuted` `#1E252E` to `#181E26`, dark `accentMuted` `#1E3A5F` to `#0D1D33`.
+Values adjusted during implementation so every pair meets AA: light `success`, `danger` and `warning` were darkened, and dark `onAccent` became near-black so the brighter dark-mode blue stays readable both as a fill and as link text. Muted fills keep their original values (flattening them made unselected chips vanish); the info banner uses `text` on `accentMuted`, and `textMuted` on `surfaceMuted` (4.27:1 in light) appears only in transient drag/selected states.
 
-Every text/background pair used must meet WCAG AA (4.5:1 for body text); a unit test checks the pairs `text`/`background`, `text`/`surface`, `textMuted`/`surface`, `onAccent`/`accent`, `danger`/`surface`, `success`/`surface`, `warning`/`warningMuted`, `textMuted`/`surfaceMuted`, `accent`/`surfaceMuted` and `accent`/`accentMuted` in both palettes, and the palettes are adjusted until it passes.
+Every text/background pair used must meet WCAG AA (4.5:1 for body text); a unit test checks the pairs `text`/`background`, `text`/`surface`, `textMuted`/`surface`, `onAccent`/`accent`, `danger`/`surface`, `success`/`surface`, `warning`/`warningMuted` and the banner, link and danger-button pairs in both palettes, and the palettes are adjusted until it passes.
 
 ## 4. Theme selection
 

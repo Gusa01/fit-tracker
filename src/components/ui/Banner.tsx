@@ -16,7 +16,7 @@ export function Banner({ tone, children }: Props) {
       success: { background: colors.successMuted, strong: colors.success },
       warning: { background: colors.warningMuted, strong: colors.warning },
       danger: { background: colors.dangerMuted, strong: colors.danger },
-      info: { background: colors.accentMuted, strong: colors.accent },
+      info: { background: colors.accentMuted, strong: colors.text },
     }[tone];
     return StyleSheet.create({
       banner: { backgroundColor: palette.background, borderRadius: 8, padding: 12, gap: 8 },
