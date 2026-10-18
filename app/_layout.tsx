@@ -1,6 +1,7 @@
 import { ReactNode, useEffect } from 'react';
+import { View } from 'react-native';
 import { Slot, useRouter, useSegments } from 'expo-router';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useAuthSession } from '../src/hooks/useAuthSession';
 import { initDatabase, getDatabase } from '../src/lib/sqlite/db';
@@ -15,9 +16,7 @@ initDatabase();
 function ThemedRoot({ children }: { children: ReactNode }) {
   const { colors } = useTheme();
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={['bottom']}>
-      {children}
-    </SafeAreaView>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>{children}</View>
   );
 }
 
@@ -52,7 +51,7 @@ export default function RootLayout() {
   useEffect(() => {
     setupNotifications().catch((err) => console.warn('Could not set up notifications', err));
     const subscription = Notifications.addNotificationResponseReceivedListener(() => {
-      router.navigate('/(app)/(tabs)' as any);
+      router.dismissTo('/(app)/(tabs)' as any);
     });
     return () => subscription.remove();
   }, []);

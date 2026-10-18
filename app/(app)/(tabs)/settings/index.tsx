@@ -114,7 +114,13 @@ export default function SettingsScreen() {
           <AppText variant="heading" style={styles.title}>
             Recordatorio de entrenamiento
           </AppText>
-          <Switch disabled={!loaded} value={settings.trainingEnabled} onValueChange={(v) => toggle('trainingEnabled', v)} />
+          <Switch
+            disabled={!loaded}
+            trackColor={{ false: colors.surfaceMuted, true: colors.accent }}
+            thumbColor={colors.onDark}
+            value={settings.trainingEnabled}
+            onValueChange={(v) => toggle('trainingEnabled', v)}
+          />
         </View>
         <AppText variant="muted">Te avisa los días que toca entrenar, si todavía no lo hiciste.</AppText>
       </Card>
@@ -124,7 +130,13 @@ export default function SettingsScreen() {
           <AppText variant="heading" style={styles.title}>
             Racha en riesgo
           </AppText>
-          <Switch disabled={!loaded} value={settings.streakEnabled} onValueChange={(v) => toggle('streakEnabled', v)} />
+          <Switch
+            disabled={!loaded}
+            trackColor={{ false: colors.surfaceMuted, true: colors.accent }}
+            thumbColor={colors.onDark}
+            value={settings.streakEnabled}
+            onValueChange={(v) => toggle('streakEnabled', v)}
+          />
         </View>
         <AppText variant="muted">Te avisa el sábado si todavía no entrenaste en la semana.</AppText>
       </Card>

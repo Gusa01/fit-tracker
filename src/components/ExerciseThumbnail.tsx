@@ -16,7 +16,7 @@ export function ExerciseThumbnail({ imagePath, muscle, size = 40 }: { imagePath:
     return (
       <Image
         source={{ uri }}
-        style={{ width: size, height: size, borderRadius: 8, backgroundColor: colors.surfaceMuted }}
+        style={{ width: size, height: size, borderRadius: 8, backgroundColor: colors.imageBackdrop }}
         resizeMode="contain"
         onError={() => setFailed(true)}
         accessibilityLabel={`Ilustración de ${label}`}

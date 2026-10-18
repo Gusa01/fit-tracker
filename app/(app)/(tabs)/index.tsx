@@ -61,11 +61,10 @@ export default function Home() {
     }
   }
 
-
   return (
     <Screen scroll padded={false}>
       <View style={styles.container}>
-        {loading && <ActivityIndicator />}
+        {loading && <ActivityIndicator color={colors.accent} />}
         {error && <AppText color="danger">{error}</AppText>}
 
         {!loading && !error && (
@@ -145,7 +144,7 @@ export default function Home() {
               </>
             ) : (
               <Card style={styles.fullWidth}>
-                <AppText>No tenés una rutina activa. Activá una desde el menú "Rutinas".</AppText>
+                <AppText>No tenés una rutina activa. Activá una desde la pestaña Rutinas.</AppText>
               </Card>
             )}
           </>

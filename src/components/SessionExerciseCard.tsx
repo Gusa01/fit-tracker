@@ -178,7 +178,7 @@ function makeStyles(c: ColorTokens) {
     header: { flexDirection: 'row', alignItems: 'center', gap: 12 },
     headerText: { flex: 1, gap: 2 },
     viewerBackdrop: { flex: 1, backgroundColor: c.scrim, alignItems: 'center', justifyContent: 'center', gap: 12 },
-    viewerImage: { width: '90%', aspectRatio: 1, backgroundColor: c.surface, borderRadius: 8 },
+    viewerImage: { width: '90%', aspectRatio: 1, backgroundColor: c.imageBackdrop, borderRadius: 8 },
     viewerCaption: { color: c.onDark },
     label: { marginTop: 4 },
     activeSetTitle: { marginTop: 4 },

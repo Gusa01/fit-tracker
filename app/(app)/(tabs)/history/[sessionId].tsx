@@ -24,6 +24,9 @@ export default function SessionHistoryDetail() {
   if (isLoading && !detail) {
     return (
       <Screen>
+        <Pressable onPress={() => router.back()} hitSlop={12} style={styles.backRow}>
+          <AppText style={styles.back}>←</AppText>
+        </Pressable>
         <View style={styles.centered}>
           <ActivityIndicator color={colors.accent} />
         </View>
@@ -34,6 +37,9 @@ export default function SessionHistoryDetail() {
   if (!detail) {
     return (
       <Screen>
+        <Pressable onPress={() => router.back()} hitSlop={12} style={styles.backRow}>
+          <AppText style={styles.back}>←</AppText>
+        </Pressable>
         <View style={styles.centered}>
           <AppText variant="muted" style={styles.message}>
             {error ?? 'Conectate para ver tu historial'}

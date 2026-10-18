@@ -61,7 +61,7 @@ export function HomeProgressCard() {
         <AppText variant="heading" style={styles.title}>
           Progreso
         </AppText>
-        <ActivityIndicator />
+        <ActivityIndicator color={colors.accent} />
       </Card>
     );
   }

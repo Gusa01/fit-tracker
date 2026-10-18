@@ -38,19 +38,19 @@ export default function SessionScreen() {
 
   async function handleFinish() {
     await completeSession();
-    router.replace('/(app)/(tabs)' as any);
+    router.dismissTo('/(app)/(tabs)' as any);
   }
 
   if (loading) {
     return (
-      <Screen>
+      <Screen safeBottom>
         <ActivityIndicator color={colors.accent} />
       </Screen>
     );
   }
 
   return (
-    <Screen padded={false}>
+    <Screen padded={false} safeBottom>
       <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
         <AppText variant="title" style={styles.title}>
           {resolvedDayName ?? dayName ?? 'Entrenamiento'}

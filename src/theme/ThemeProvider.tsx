@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
-import { useColorScheme } from 'react-native';
+import { Appearance, useColorScheme } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { DarkTheme, DefaultTheme, ThemeProvider as NavigationThemeProvider } from '@react-navigation/native';
+import { DarkTheme, DefaultTheme, ThemeProvider as NavigationThemeProvider } from 'expo-router';
 import { ColorTokens, darkColors, lightColors } from './colors';
 import { loadThemePreference, resolveScheme, saveThemePreference, ThemePreference } from './preference';
 
@@ -22,6 +22,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     loadThemePreference().then(setPreferenceState);
   }, []);
 
+  // Makes native Alerts and the keyboard follow the in-app choice; null restores the system scheme.
+  useEffect(() => {
+    if (typeof Appearance.setColorScheme === 'function') {
+      // The installed typings omit null, which the runtime accepts to restore the system scheme.
+      Appearance.setColorScheme((preference === 'system' ? null : preference) as any);
+    }
+  }, [preference]);
+
   const scheme = resolveScheme(preference, system === 'light' || system === 'dark' ? system : null);
   const colors = scheme === 'dark' ? darkColors : lightColors;
 
@@ -38,19 +46,21 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     [colors, scheme, preference]
   );
 
-  const base = scheme === 'dark' ? DarkTheme : DefaultTheme;
-  const navigationTheme = {
-    ...base,
-    colors: {
-      ...base.colors,
-      primary: colors.accent,
-      background: colors.background,
-      card: colors.surface,
-      text: colors.text,
-      border: colors.border,
-      notification: colors.danger,
-    },
-  };
+  const navigationTheme = useMemo(() => {
+    const base = scheme === 'dark' ? DarkTheme : DefaultTheme;
+    return {
+      ...base,
+      colors: {
+        ...base.colors,
+        primary: colors.accent,
+        background: colors.background,
+        card: colors.surface,
+        text: colors.text,
+        border: colors.border,
+        notification: colors.danger,
+      },
+    };
+  }, [scheme, colors]);
 
   return (
     <ThemeContext.Provider value={value}>

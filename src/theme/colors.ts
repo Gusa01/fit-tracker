@@ -17,18 +17,19 @@ export interface ColorTokens {
   overlay: string;
   scrim: string;
   onDark: string;
+  imageBackdrop: string;
 }
 
 export const lightColors: ColorTokens = {
   background: '#F7F8FA',
   surface: '#FFFFFF',
-  surfaceMuted: '#EEF1F5',
+  surfaceMuted: '#F6F7F9',
   border: '#DDE2E8',
   text: '#111827',
   textMuted: '#6B7280',
   accent: '#2563EB',
   onAccent: '#FFFFFF',
-  accentMuted: '#DBEAFE',
+  accentMuted: '#EFF6FF',
   success: '#107A38',
   successMuted: '#F0FDF4',
   danger: '#C52222',
@@ -38,18 +39,19 @@ export const lightColors: ColorTokens = {
   overlay: 'rgba(0,0,0,0.3)',
   scrim: 'rgba(0,0,0,0.85)',
   onDark: '#FFFFFF',
+  imageBackdrop: '#FFFFFF',
 };
 
 export const darkColors: ColorTokens = {
   background: '#0B0F14',
   surface: '#151A21',
-  surfaceMuted: '#1E252E',
+  surfaceMuted: '#181E26',
   border: '#2A323D',
   text: '#F3F4F6',
   textMuted: '#9CA3AF',
   accent: '#3B82F6',
   onAccent: '#0B0F14',
-  accentMuted: '#1E3A5F',
+  accentMuted: '#0D1D33',
   success: '#22C55E',
   successMuted: '#052E1A',
   danger: '#F87171',
@@ -59,4 +61,5 @@ export const darkColors: ColorTokens = {
   overlay: 'rgba(0,0,0,0.6)',
   scrim: 'rgba(0,0,0,0.85)',
   onDark: '#FFFFFF',
+  imageBackdrop: '#FFFFFF',
 };

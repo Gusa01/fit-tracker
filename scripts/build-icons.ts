@@ -12,7 +12,7 @@ function render(svgName: string, outName: string, size: number): void {
 }
 
 render('icon.svg', 'icon.png', 1024);
-render('icon.svg', 'favicon.png', 48);
-render('icon.svg', 'splash.png', 1024);
+render('icon-rounded.svg', 'favicon.png', 48);
+render('icon-rounded.svg', 'splash.png', 1024);
 render('adaptive-foreground.svg', 'adaptive-icon.png', 1024);
 render('notification.svg', 'notification-icon.png', 96);

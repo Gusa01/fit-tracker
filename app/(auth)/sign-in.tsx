@@ -27,7 +27,7 @@ export default function SignIn() {
   }
 
   return (
-    <Screen padded={false}>
+    <Screen padded={false} safeBottom>
       <View style={styles.container}>
         <AppText variant="title" style={styles.title}>
           Iniciar sesión

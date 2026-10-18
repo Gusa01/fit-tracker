@@ -27,7 +27,7 @@ export default function SignUp() {
   }
 
   return (
-    <Screen padded={false}>
+    <Screen padded={false} safeBottom>
       <View style={styles.container}>
         <AppText variant="title" style={styles.title}>
           Crear cuenta
