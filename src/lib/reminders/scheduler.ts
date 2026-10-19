@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import * as Notifications from 'expo-notifications';
+import { getNotifications } from './notificationsModule';
 import { supabase } from '../supabase';
 import { getDatabase } from '../sqlite/db';
 import { getCachedActiveRoutine, getCachedRoutineDays } from '../sqlite/cache';
@@ -9,6 +9,8 @@ import { planReminders } from './plan';
 export const REMINDER_CHANNEL_ID = 'reminders';
 
 export async function setupNotifications(): Promise<void> {
+  const Notifications = getNotifications();
+  if (!Notifications) return;
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
       shouldShowBanner: true,
@@ -26,22 +28,30 @@ export async function setupNotifications(): Promise<void> {
 }
 
 export async function hasNotificationPermission(): Promise<boolean> {
+  const Notifications = getNotifications();
+  if (!Notifications) return false;
   return (await Notifications.getPermissionsAsync()).granted;
 }
 
 /** 'undetermined' = the system prompt can still be shown; 'denied' = only the phone settings can change it. */
 export async function getNotificationPermissionStatus(): Promise<'granted' | 'denied' | 'undetermined'> {
+  const Notifications = getNotifications();
+  if (!Notifications) return 'denied';
   const permissions = await Notifications.getPermissionsAsync();
   if (permissions.granted) return 'granted';
   return permissions.canAskAgain ? 'undetermined' : 'denied';
 }
 
 export async function requestNotificationPermission(): Promise<boolean> {
+  const Notifications = getNotifications();
+  if (!Notifications) return false;
   if (await hasNotificationPermission()) return true;
   return (await Notifications.requestPermissionsAsync()).granted;
 }
 
 async function syncOnce(): Promise<void> {
+  const Notifications = getNotifications();
+  if (!Notifications) return;
   // Reads the locally stored session (no network): never schedule on a signed-out device.
   const { data } = await supabase.auth.getSession();
   if (!data.session) {
@@ -99,7 +109,7 @@ export function syncReminders(): Promise<void> {
 /** Used on sign-out. Runs in the sync chain so it can't interleave with a sync. Never rejects. */
 export function cancelAllReminders(): Promise<void> {
   syncChain = syncChain.then(() =>
-    Notifications.cancelAllScheduledNotificationsAsync().catch((err) => {
+    (getNotifications()?.cancelAllScheduledNotificationsAsync() ?? Promise.resolve()).catch((err) => {
       console.warn('Could not cancel reminders', err);
     })
   );
@@ -107,8 +117,14 @@ export function cancelAllReminders(): Promise<void> {
 }
 
 export async function sendTestReminder(): Promise<void> {
+  const Notifications = getNotifications();
+  if (!Notifications) return;
   await Notifications.scheduleNotificationAsync({
     content: { title: '🔔 Aviso de prueba', body: 'Así te van a llegar los recordatorios.' },
     trigger: Platform.OS === 'android' ? { channelId: REMINDER_CHANNEL_ID } : null,
   });
+}
+
+export function notificationsAvailable(): boolean {
+  return getNotifications() !== null;
 }

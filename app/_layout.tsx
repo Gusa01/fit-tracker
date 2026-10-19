@@ -7,8 +7,8 @@ import { useAuthSession } from '../src/hooks/useAuthSession';
 import { initDatabase, getDatabase } from '../src/lib/sqlite/db';
 import { supabase } from '../src/lib/supabase';
 import { startSyncListener } from '../src/lib/sync/syncService';
-import * as Notifications from 'expo-notifications';
 import { cancelAllReminders, setupNotifications } from '../src/lib/reminders/scheduler';
+import { getNotifications } from '../src/lib/reminders/notificationsModule';
 import { ThemeProvider, useTheme } from '../src/theme/ThemeProvider';
 
 initDatabase();
@@ -50,10 +50,10 @@ export default function RootLayout() {
 
   useEffect(() => {
     setupNotifications().catch((err) => console.warn('Could not set up notifications', err));
-    const subscription = Notifications.addNotificationResponseReceivedListener(() => {
+    const subscription = getNotifications()?.addNotificationResponseReceivedListener(() => {
       router.dismissTo('/(app)/(tabs)' as any);
     });
-    return () => subscription.remove();
+    return () => subscription?.remove();
   }, []);
 
   if (isLoading) return null;
