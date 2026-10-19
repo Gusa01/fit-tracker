@@ -22,11 +22,13 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     loadThemePreference().then(setPreferenceState);
   }, []);
 
-  // Makes native Alerts and the keyboard follow the in-app choice; null restores the system scheme.
+  // Makes native Alerts and the keyboard follow the in-app choice; 'unspecified' restores the system scheme
+  // (Android rejects null).
   useEffect(() => {
-    if (typeof Appearance.setColorScheme === 'function') {
-      // The installed typings omit null, which the runtime accepts to restore the system scheme.
-      Appearance.setColorScheme((preference === 'system' ? null : preference) as any);
+    try {
+      Appearance.setColorScheme(preference === 'system' ? 'unspecified' : preference);
+    } catch (err) {
+      console.warn('Could not set the native color scheme', err);
     }
   }, [preference]);
 
