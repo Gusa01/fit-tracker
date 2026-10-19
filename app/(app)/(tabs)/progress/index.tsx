@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { View, FlatList, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
 import { router } from 'expo-router';
 import { useAuthSession } from '../../../../src/hooks/useAuthSession';
+import { usePullToRefresh } from '../../../../src/hooks/usePullToRefresh';
 import { useProgressSummary } from '../../../../src/hooks/useExerciseProgress';
 import { Sparkline } from '../../../../src/components/Sparkline';
 import { AppText, Button, Card, Screen } from '../../../../src/components/ui';
@@ -19,6 +20,7 @@ export default function ProgressList() {
   const styles = useMemo(() => makeStyles(colors), [colors]);
   const { session } = useAuthSession();
   const { rows, summaries, isLoading, error, refetch } = useProgressSummary(session?.user.id);
+  const refreshControl = usePullToRefresh(refetch);
   const sparklines = useMemo(() => sparklinesByExercise(rows, summaries), [rows, summaries]);
 
   if (isLoading && summaries.length === 0) {
@@ -51,6 +53,7 @@ export default function ProgressList() {
   return (
     <Screen padded={false}>
       <FlatList
+        refreshControl={refreshControl}
         style={styles.container}
         contentContainerStyle={styles.content}
         data={summaries}

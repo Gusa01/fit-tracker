@@ -1,6 +1,8 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { View, Pressable, StyleSheet, Alert, Modal, ActivityIndicator } from 'react-native';
-import { NestableDraggableFlatList, RenderItemParams } from 'react-native-draggable-flatlist';
+import { NestableDraggableFlatList, RenderItemParams, ScaleDecorator } from 'react-native-draggable-flatlist';
+import { hapticDrop, hapticLift, hapticTick } from '../lib/haptics';
+import { Ionicons } from '@expo/vector-icons';
 import { useDayExercises } from '../hooks/useDayExercises';
 import { useExercises } from '../hooks/useExercises';
 import { useAuthSession } from '../hooks/useAuthSession';
@@ -47,6 +49,10 @@ export function DayExercisesSection({ dayId }: DayExercisesSectionProps) {
   const { exercises, isLoading, error, refetch } = useDayExercises(dayId);
   const { exercises: catalog } = useExercises();
   const { session } = useAuthSession();
+
+  // Local order so a drop shows the new order at once instead of waiting for a refetch.
+  const [ordered, setOrdered] = useState(exercises);
+  useEffect(() => setOrdered(exercises), [exercises]);
 
   const [addingExercise, setAddingExercise] = useState(false);
   const [editingExerciseId, setEditingExerciseId] = useState<string | null>(null);
@@ -95,15 +101,25 @@ export function DayExercisesSection({ dayId }: DayExercisesSectionProps) {
   }
 
   async function handleReorder(data: RoutineExerciseWithName[]) {
+    setOrdered(data);
     try {
       await reorderRoutineExercises(
         supabase,
         data.map((exercise) => exercise.id)
       );
-      await refetch();
     } catch (err) {
       Alert.alert('Error', err instanceof Error ? err.message : 'No se pudo reordenar el ejercicio.');
+      await refetch();
     }
+  }
+
+  // Screen-reader alternative to dragging.
+  function moveBy(index: number, delta: number) {
+    const target = index + delta;
+    if (target < 0 || target >= ordered.length) return;
+    const next = [...ordered];
+    [next[index], next[target]] = [next[target], next[index]];
+    handleReorder(next);
   }
 
   if (error) {
@@ -134,10 +150,18 @@ export function DayExercisesSection({ dayId }: DayExercisesSectionProps) {
         Ejercicios
       </AppText>
       <NestableDraggableFlatList
-        data={exercises}
+        data={ordered}
         keyExtractor={(exercise: RoutineExerciseWithName) => exercise.id}
-        onDragEnd={({ data }) => handleReorder(data)}
-        renderItem={({ item: exercise, drag, isActive }: RenderItemParams<RoutineExerciseWithName>) =>
+        // Lower than the library default (20) so the lifted card follows the finger sooner, still high
+        // enough that a vertical swipe over the list scrolls the screen.
+        activationDistance={12}
+        onDragBegin={hapticLift}
+        onPlaceholderIndexChange={hapticTick}
+        onDragEnd={({ data, from, to }) => {
+          hapticDrop();
+          if (from !== to) handleReorder(data);
+        }}
+        renderItem={({ item: exercise, drag, isActive, getIndex }: RenderItemParams<RoutineExerciseWithName>) =>
           editingExerciseId === exercise.id ? (
             <ExerciseForm
               exercises={catalog}
@@ -146,24 +170,43 @@ export function DayExercisesSection({ dayId }: DayExercisesSectionProps) {
               onCancel={() => setEditingExerciseId(null)}
             />
           ) : (
-            <View style={[styles.exerciseRow, isActive && styles.exerciseRowActive]}>
-              <Pressable style={styles.exerciseRowMain} onPress={() => setEditingExerciseId(exercise.id)}>
-                <AppText variant="heading">{exercise.exercise_name}</AppText>
-                <AppText variant="muted">{formatTargetScheme(exercise)}</AppText>
+            <ScaleDecorator activeScale={1.03}>
+              {/* Long-press anywhere on the card lifts it; a tap opens the editor. */}
+              <Pressable
+                style={[styles.exerciseRow, isActive && styles.exerciseRowActive]}
+                onPress={() => setEditingExerciseId(exercise.id)}
+                onLongPress={drag}
+                delayLongPress={250}
+                disabled={isActive}
+                accessibilityRole="button"
+                accessibilityHint="Tocá para editar. Mantené presionado y arrastrá para reordenar."
+                accessibilityActions={[
+                  { name: 'moveUp', label: 'Subir' },
+                  { name: 'moveDown', label: 'Bajar' },
+                ]}
+                onAccessibilityAction={(event) => {
+                  const index = getIndex();
+                  if (index === undefined) return;
+                  moveBy(index, event.nativeEvent.actionName === 'moveUp' ? -1 : 1);
+                }}
+              >
+                <View style={styles.exerciseRowMain}>
+                  <AppText variant="heading">{exercise.exercise_name}</AppText>
+                  <AppText variant="muted">{formatTargetScheme(exercise)}</AppText>
+                </View>
+                <View style={styles.exerciseActions}>
+                  {/* The handle drags on touch, without the long-press wait. */}
+                  <Pressable onPressIn={drag} disabled={isActive} hitSlop={8} accessibilityElementsHidden importantForAccessibility="no">
+                    <Ionicons name="reorder-three" size={24} color={colors.textMuted} style={styles.dragHandle} />
+                  </Pressable>
+                  <Pressable onPress={() => handleDeleteExercise(exercise.id, exercise.exercise_name)} hitSlop={8}>
+                    <AppText color="danger" style={styles.deleteButton}>
+                      Eliminar
+                    </AppText>
+                  </Pressable>
+                </View>
               </Pressable>
-              <View style={styles.exerciseActions}>
-                <Pressable onLongPress={drag} disabled={isActive}>
-                  <AppText color="textMuted" style={styles.dragHandle}>
-                    ☰
-                  </AppText>
-                </Pressable>
-                <Pressable onPress={() => handleDeleteExercise(exercise.id, exercise.exercise_name)}>
-                  <AppText color="danger" style={styles.deleteButton}>
-                    Eliminar
-                  </AppText>
-                </Pressable>
-              </View>
-            </View>
+            </ScaleDecorator>
           )
         }
       />
@@ -196,10 +239,18 @@ function makeStyles(c: ColorTokens) {
       padding: 12,
       marginBottom: 8,
     },
-    exerciseRowActive: { borderColor: c.accent, backgroundColor: c.surfaceMuted },
+    exerciseRowActive: {
+      borderColor: c.accent,
+      backgroundColor: c.surfaceMuted,
+      elevation: 6,
+      shadowColor: c.text,
+      shadowOpacity: 0.2,
+      shadowRadius: 8,
+      shadowOffset: { width: 0, height: 4 },
+    },
     exerciseRowMain: { flex: 1 },
     exerciseActions: { flexDirection: 'row', gap: 12, alignItems: 'center' },
-    dragHandle: { fontSize: 20, paddingHorizontal: 6 },
+    dragHandle: { paddingHorizontal: 4 },
     deleteButton: { fontWeight: '600' },
     modalRoot: { flex: 1, justifyContent: 'flex-end' },
     modalBackdrop: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: c.overlay },
