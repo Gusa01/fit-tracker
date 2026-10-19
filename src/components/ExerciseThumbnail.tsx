@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { Image, View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import { Image } from 'expo-image';
 import { exerciseImageUrl } from '../lib/exercises/images';
 import { MUSCLE_LABEL, isMuscle } from '../lib/exercises/taxonomy';
 import { useTheme } from '../theme/ThemeProvider';
@@ -17,7 +18,11 @@ export function ExerciseThumbnail({ imagePath, muscle, size = 40 }: { imagePath:
       <Image
         source={{ uri }}
         style={{ width: size, height: size, borderRadius: 8, backgroundColor: colors.imageBackdrop }}
-        resizeMode="contain"
+        contentFit="contain"
+        // Disk cache: the bucket images are fetched once, not on every list render.
+        cachePolicy="memory-disk"
+        recyclingKey={uri}
+        transition={150}
         onError={() => setFailed(true)}
         accessibilityLabel={`Ilustración de ${label}`}
       />
