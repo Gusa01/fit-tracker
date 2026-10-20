@@ -8,7 +8,7 @@ import {
   createDay,
   updateDay,
   softDeleteDay,
-  moveDay,
+  reorderDays,
   createRoutineExercise,
   updateRoutineExercise,
   softDeleteRoutineExercise,
@@ -101,7 +101,7 @@ describe('routine mutations', () => {
     const dayTwo = await createDay(supabase, routine.id, { name: 'Day Two', isRestDay: false });
     expect(dayTwo.order_index).toBe(dayOne.order_index + 1);
 
-    await moveDay(supabase, routine.id, dayTwo.id, 'up');
+    await reorderDays(supabase, [dayTwo.id, dayOne.id]);
     const { data: reordered } = await supabase
       .from('routine_days')
       .select('id, order_index')

@@ -191,39 +191,11 @@ export async function softDeleteDay(supabase: SupabaseClient, dayId: string): Pr
   if (dayError) throw dayError;
 }
 
-export async function moveDay(
-  supabase: SupabaseClient,
-  routineId: string,
-  dayId: string,
-  direction: 'up' | 'down'
-): Promise<void> {
-  const { data, error } = await supabase
-    .from('routine_days')
-    .select('id, order_index')
-    .eq('routine_id', routineId)
-    .eq('is_deleted', false)
-    .order('order_index');
-  if (error) throw error;
-  const days = data ?? [];
-
-  const index = days.findIndex((d: { id: string }) => d.id === dayId);
-  const swapWithIndex = direction === 'up' ? index - 1 : index + 1;
-  if (index === -1 || swapWithIndex < 0 || swapWithIndex >= days.length) return;
-
-  const current = days[index];
-  const swapWith = days[swapWithIndex];
-
-  const { error: error1 } = await supabase
-    .from('routine_days')
-    .update({ order_index: swapWith.order_index })
-    .eq('id', current.id);
-  if (error1) throw error1;
-
-  const { error: error2 } = await supabase
-    .from('routine_days')
-    .update({ order_index: current.order_index })
-    .eq('id', swapWith.id);
-  if (error2) throw error2;
+export async function reorderDays(supabase: SupabaseClient, orderedIds: string[]): Promise<void> {
+  for (let i = 0; i < orderedIds.length; i++) {
+    const { error } = await supabase.from('routine_days').update({ order_index: i }).eq('id', orderedIds[i]);
+    if (error) throw error;
+  }
 }
 
 export async function setDayWeekdays(
