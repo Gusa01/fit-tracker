@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { View, Text, Pressable, Modal, Image, StyleSheet } from 'react-native';
+import { View, Text, Pressable, Modal, StyleSheet } from 'react-native';
+import { Image } from 'expo-image';
 import { CachedRoutineExercise } from '../lib/sqlite/cache';
 import { LoggedSet, SetType } from '../lib/sessions/types';
 import { buildPrescribedSets, formatTargetScheme } from '../lib/sessions/prescribedSets';
@@ -81,7 +82,7 @@ export function SessionExerciseCard({ exercise, initialWeight, loggedSets, onLog
       {imageUrl && (
         <Modal visible={viewerOpen} transparent animationType="fade" onRequestClose={() => setViewerOpen(false)}>
           <Pressable style={styles.viewerBackdrop} onPress={() => setViewerOpen(false)}>
-            <Image source={{ uri: imageUrl }} style={styles.viewerImage} resizeMode="contain" />
+            <Image source={{ uri: imageUrl }} style={styles.viewerImage} contentFit="contain" cachePolicy="memory-disk" />
             <Text style={styles.viewerCaption}>Ilustración: wger.de (Creative Commons)</Text>
           </Pressable>
         </Modal>

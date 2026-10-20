@@ -15,14 +15,11 @@ interface DayCardProps {
   day: RoutineDay;
   routineId: string;
   weekdaySchedule: Record<string, unknown>;
-  index: number;
-  totalDays: number;
   onChanged: () => void;
-  onMove: (dayId: string, direction: 'up' | 'down') => void;
   onDelete: (dayId: string) => void;
 }
 
-export function DayCard({ day, routineId, weekdaySchedule, index, totalDays, onChanged, onMove, onDelete }: DayCardProps) {
+export function DayCard({ day, routineId, weekdaySchedule, onChanged, onDelete }: DayCardProps) {
   const { colors } = useTheme();
   const styles = useMemo(() => makeStyles(colors), [colors]);
   const [name, setName] = useState(day.name);
@@ -77,12 +74,6 @@ export function DayCard({ day, routineId, weekdaySchedule, index, totalDays, onC
           onBlur={handleNameBlur}
         />
         <View style={styles.headerActions}>
-          <Pressable disabled={index === 0} onPress={() => onMove(day.id, 'up')}>
-            <AppText style={styles.moveButton}>↑</AppText>
-          </Pressable>
-          <Pressable disabled={index === totalDays - 1} onPress={() => onMove(day.id, 'down')}>
-            <AppText style={styles.moveButton}>↓</AppText>
-          </Pressable>
           <Pressable onPress={handleDeletePress}>
             <AppText color="danger" style={styles.deleteButton}>
               Eliminar
@@ -129,7 +120,6 @@ function makeStyles(c: ColorTokens) {
       fontWeight: '600',
     },
     headerActions: { flexDirection: 'row', gap: 12, alignItems: 'center' },
-    moveButton: { fontSize: 18, paddingHorizontal: 6 },
     deleteButton: { fontWeight: '600' },
     switchRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
     label: { marginTop: 4 },

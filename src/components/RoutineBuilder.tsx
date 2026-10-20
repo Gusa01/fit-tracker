@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { View, TextInput, Pressable, StyleSheet, Switch, ActivityIndicator } from 'react-native';
+import { View, TextInput, Pressable, StyleSheet, Switch, ActivityIndicator, Alert } from 'react-native';
 import { NestableScrollContainer } from 'react-native-draggable-flatlist';
 import { router } from 'expo-router';
 import { useAuthSession } from '../hooks/useAuthSession';
@@ -7,7 +7,8 @@ import { useRoutine } from '../hooks/useRoutine';
 import { useRoutineDays } from '../hooks/useRoutineDays';
 import { useRoutines } from '../hooks/useRoutines';
 import { supabase } from '../lib/supabase';
-import { createRoutine, updateRoutine, createDay, moveDay, softDeleteDay } from '../lib/routines/mutations';
+import { createRoutine, updateRoutine, createDay, reorderDays, softDeleteDay } from '../lib/routines/mutations';
+import { DayReorderList } from './DayReorderList';
 import { Routine } from '../lib/routines/types';
 import { DayCard } from './DayCard';
 import { AppText, Button, Screen } from './ui';
@@ -35,6 +36,7 @@ export function RoutineBuilder({ initialRoutineId }: RoutineBuilderProps) {
   const [nextRoutineId, setNextRoutineId] = useState<string | null>(null);
   const [initialized, setInitialized] = useState(false);
   const [nameError, setNameError] = useState<string | null>(null);
+  const [reorderingDays, setReorderingDays] = useState(false);
 
   useEffect(() => {
     if (routine && !initialized) {
@@ -107,9 +109,12 @@ export function RoutineBuilder({ initialRoutineId }: RoutineBuilderProps) {
     await refetchDays();
   }
 
-  async function handleMoveDay(dayId: string, direction: 'up' | 'down') {
-    if (!routineId) return;
-    await moveDay(supabase, routineId, dayId, direction);
+  async function handleReorderDays(orderedIds: string[]) {
+    try {
+      await reorderDays(supabase, orderedIds);
+    } catch (err) {
+      Alert.alert('Error', err instanceof Error ? err.message : 'No se pudo reordenar los días.');
+    }
     await refetchDays();
   }
 
@@ -186,24 +191,37 @@ export function RoutineBuilder({ initialRoutineId }: RoutineBuilderProps) {
         </View>
       )}
 
-      <AppText variant="title" style={styles.sectionTitle}>
-        Días
-      </AppText>
-      {days.map((day, index) => (
-        <DayCard
-          key={day.id}
-          day={day}
-          routineId={routineId as string}
-          weekdaySchedule={weekdaySchedule}
-          index={index}
-          totalDays={days.length}
-          onChanged={handleChanged}
-          onMove={handleMoveDay}
-          onDelete={handleDeleteDay}
-        />
-      ))}
+      <View style={styles.daysHeader}>
+        <AppText variant="title">Días</AppText>
+        {days.length > 1 && (
+          <Button
+            title={reorderingDays ? 'Listo' : 'Reordenar'}
+            variant="ghost"
+            onPress={() => setReorderingDays((current) => !current)}
+          />
+        )}
+      </View>
+      {reorderingDays ? (
+        <>
+          <AppText variant="muted">Mantené presionado un día y arrastralo.</AppText>
+          <DayReorderList days={days} weekdaySchedule={weekdaySchedule} onReorder={handleReorderDays} />
+        </>
+      ) : (
+        <>
+          {days.map((day) => (
+            <DayCard
+              key={day.id}
+              day={day}
+              routineId={routineId as string}
+              weekdaySchedule={weekdaySchedule}
+              onChanged={handleChanged}
+              onDelete={handleDeleteDay}
+            />
+          ))}
 
-      <Button title="+ Nuevo día" variant="secondary" onPress={handleAddDay} />
+          <Button title="+ Nuevo día" variant="secondary" onPress={handleAddDay} />
+        </>
+      )}
 
       <View style={styles.doneButton}>
         <Button title="Listo" onPress={handleDone} />
@@ -230,6 +248,7 @@ function makeStyles(c: ColorTokens) {
     pickerRow: { borderWidth: 1, borderColor: c.border, borderRadius: 6, padding: 10 },
     pickerRowSelected: { borderColor: c.accent, backgroundColor: c.surfaceMuted },
     sectionTitle: { marginTop: 12 },
+    daysHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 12 },
     doneButton: { marginTop: 8 },
   });
 }

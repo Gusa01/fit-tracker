@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { View, FlatList, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
 import { router } from 'expo-router';
 import { useAuthSession } from '../../../../src/hooks/useAuthSession';
+import { usePullToRefresh } from '../../../../src/hooks/usePullToRefresh';
 import { useSessionHistory } from '../../../../src/hooks/useSessionHistory';
 import { formatSessionTitle } from '../../../../src/lib/history/format';
 import { AppText, Banner, Button, Card, Screen } from '../../../../src/components/ui';
@@ -15,6 +16,7 @@ export default function HistoryList() {
   const { sessions, isLoading, error, isLoadingMore, loadMoreError, loadMore, refetch } = useSessionHistory(
     session?.user.id
   );
+  const refreshControl = usePullToRefresh(refetch);
 
   if (isLoading && sessions.length === 0) {
     return (
@@ -44,6 +46,7 @@ export default function HistoryList() {
   return (
     <Screen padded={false}>
       <FlatList
+        refreshControl={refreshControl}
         style={styles.list}
         contentContainerStyle={styles.content}
         data={sessions}

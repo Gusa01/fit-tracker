@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import sharp from 'sharp';
 import { CatalogEntry, imagePath } from './build-catalog-migration';
 
 // Same bucket as src/lib/exercises/images.ts. Not imported from there: that module loads the
@@ -20,6 +21,17 @@ function contentTypeFor(objectName: string, responseHeader: string | null): stri
   return CONTENT_TYPES[ext] ?? responseHeader?.split(';')[0].trim() ?? 'image/png';
 }
 
+// Longest side in pixels. The viewer shows the image at ~90% of the screen width; sources reach 7 MB.
+const MAX_SIDE = 600;
+
+/** Downscales to MAX_SIDE and re-encodes in the same format, so the object name and content type stay valid. */
+export async function shrinkImage(bytes: Buffer, contentType: string): Promise<Buffer> {
+  const image = sharp(bytes).rotate().resize(MAX_SIDE, MAX_SIDE, { fit: 'inside', withoutEnlargement: true });
+  if (contentType === 'image/jpeg') return image.jpeg({ quality: 80, mozjpeg: true }).toBuffer();
+  if (contentType === 'image/webp') return image.webp({ quality: 80 }).toBuffer();
+  return image.png({ compressionLevel: 9, palette: true }).toBuffer();
+}
+
 async function alreadyUploaded(supabase: SupabaseClient, objectName: string): Promise<boolean> {
   const { data, error } = await supabase.storage.from(EXERCISE_IMAGES_BUCKET).list('', { search: objectName });
   if (error) throw error;
@@ -34,6 +46,8 @@ async function main() {
     process.exit(1);
   }
 
+  // --force re-uploads every image (e.g. after changing MAX_SIDE) instead of skipping existing ones.
+  const force = process.argv.includes('--force');
   const supabase = createClient(url, serviceKey, { auth: { persistSession: false } });
   const root = path.join(__dirname, '..');
   const entries: CatalogEntry[] = JSON.parse(
@@ -49,19 +63,19 @@ async function main() {
     if (!entry.image || !objectName) continue;
 
     try {
-      if (await alreadyUploaded(supabase, objectName)) {
+      if (!force && (await alreadyUploaded(supabase, objectName))) {
         skipped++;
         continue;
       }
 
       const res = await fetch(entry.image.url);
       if (!res.ok) throw new Error(`download failed with HTTP ${res.status}`);
-      const bytes = Buffer.from(await res.arrayBuffer());
       const contentType = contentTypeFor(objectName, res.headers.get('content-type'));
+      const bytes = await shrinkImage(Buffer.from(await res.arrayBuffer()), contentType);
 
       const { error } = await supabase.storage
         .from(EXERCISE_IMAGES_BUCKET)
-        .upload(objectName, bytes, { contentType, upsert: false });
+        .upload(objectName, bytes, { contentType, upsert: force, cacheControl: '604800' });
       if (error) throw error;
 
       uploaded++;

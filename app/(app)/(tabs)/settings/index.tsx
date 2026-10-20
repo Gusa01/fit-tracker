@@ -5,6 +5,7 @@ import { DEFAULT_REMINDER_SETTINGS, loadReminderSettings, saveReminderSettings }
 import { ReminderSettings } from '../../../../src/lib/reminders/types';
 import {
   getNotificationPermissionStatus,
+  notificationsAvailable,
   requestNotificationPermission,
   sendTestReminder,
   syncReminders,
@@ -96,7 +97,13 @@ export default function SettingsScreen() {
         </View>
       </Card>
 
-      {permissionDenied && (
+      {!notificationsAvailable() && (
+        <Banner tone="warning">
+          <AppText color="warning">Esta versión de la app no puede mostrar notificaciones. Los recordatorios funcionan en la app instalada.</AppText>
+        </Banner>
+      )}
+
+      {notificationsAvailable() && permissionDenied && (
         <Banner tone="warning">
           <AppText color="warning">
             Para recibir avisos, activá las notificaciones de Fit Tracker en los ajustes del celular.

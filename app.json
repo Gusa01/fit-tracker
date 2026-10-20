@@ -2,6 +2,7 @@
   "expo": {
     "name": "fit-tracker",
     "slug": "fit-tracker",
+    "scheme": "fittracker",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -46,7 +47,8 @@
           "icon": "./assets/notification-icon.png",
           "color": "#2563EB"
         }
-      ]
+      ],
+      "expo-image"
     ],
     "experiments": {
       "typedRoutes": true

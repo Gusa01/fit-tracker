@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { View, FlatList, Pressable, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { router } from 'expo-router';
 import { useAuthSession } from '../../../../src/hooks/useAuthSession';
+import { usePullToRefresh } from '../../../../src/hooks/usePullToRefresh';
 import { useRoutines } from '../../../../src/hooks/useRoutines';
 import { supabase } from '../../../../src/lib/supabase';
 import { activateRoutine, softDeleteRoutine } from '../../../../src/lib/routines/mutations';
@@ -15,6 +16,7 @@ export default function RoutinesList() {
   const { session } = useAuthSession();
   const userId = session?.user.id;
   const { routines, isLoading, error, refetch } = useRoutines(userId);
+  const refreshControl = usePullToRefresh(refetch);
   const [busyId, setBusyId] = useState<string | null>(null);
 
   async function handleActivate(routineId: string) {
@@ -59,7 +61,7 @@ export default function RoutinesList() {
     );
   }
 
-  if (isLoading) {
+  if (isLoading && routines.length === 0) {
     return (
       <Screen>
         <ActivityIndicator color={colors.accent} />
@@ -70,6 +72,7 @@ export default function RoutinesList() {
   return (
     <Screen>
       <FlatList
+        refreshControl={refreshControl}
         data={routines}
         keyExtractor={(item) => item.id}
         ListEmptyComponent={
