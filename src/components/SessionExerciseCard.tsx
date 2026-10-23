@@ -31,12 +31,18 @@ const SET_TYPE_LABELS: Record<SetType, string> = {
   warmup: 'Entrada en calor',
 };
 
-export function SessionExerciseCard({ exercise, initialWeight, loggedSets, onLogSet, onCorrectSet }: SessionExerciseCardProps) {
+export function SessionExerciseCard({
+  exercise,
+  initialWeight,
+  loggedSets,
+  onLogSet,
+  onCorrectSet,
+}: SessionExerciseCardProps) {
   const { colors } = useTheme();
   const styles = useMemo(() => makeStyles(colors), [colors]);
   const [weight, setWeight] = useState(initialWeight !== null ? String(initialWeight) : '0');
   const [reps, setReps] = useState('');
-  const [rir, setRir] = useState<number | null>(exercise.rir_min !== null ? exercise.rir_min : null);
+  const [rir, setRir] = useState<number | null>(exercise.rir_min);
   const [saving, setSaving] = useState(false);
   const [editingSet, setEditingSet] = useState<LoggedSet | null>(null);
   const [viewerOpen, setViewerOpen] = useState(false);
@@ -82,7 +88,12 @@ export function SessionExerciseCard({ exercise, initialWeight, loggedSets, onLog
       {imageUrl && (
         <Modal visible={viewerOpen} transparent animationType="fade" onRequestClose={() => setViewerOpen(false)}>
           <Pressable style={styles.viewerBackdrop} onPress={() => setViewerOpen(false)}>
-            <Image source={{ uri: imageUrl }} style={styles.viewerImage} contentFit="contain" cachePolicy="memory-disk" />
+            <Image
+              source={{ uri: imageUrl }}
+              style={styles.viewerImage}
+              contentFit="contain"
+              cachePolicy="memory-disk"
+            />
             <Text style={styles.viewerCaption}>Ilustración: wger.de (Creative Commons)</Text>
           </Pressable>
         </Modal>

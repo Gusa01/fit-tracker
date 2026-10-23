@@ -6,7 +6,7 @@ import { getCachedActiveRoutine, getCachedRoutineDays } from '../sqlite/cache';
 import { loadCompletedDates, loadReminderSettings } from './storage';
 import { planReminders } from './plan';
 
-export const REMINDER_CHANNEL_ID = 'reminders';
+const REMINDER_CHANNEL_ID = 'reminders';
 
 export async function setupNotifications(): Promise<void> {
   const Notifications = getNotifications();
@@ -27,7 +27,7 @@ export async function setupNotifications(): Promise<void> {
   }
 }
 
-export async function hasNotificationPermission(): Promise<boolean> {
+async function hasNotificationPermission(): Promise<boolean> {
   const Notifications = getNotifications();
   if (!Notifications) return false;
   return (await Notifications.getPermissionsAsync()).granted;

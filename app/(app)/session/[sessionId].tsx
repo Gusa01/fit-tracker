@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { getDatabase } from '../../../src/lib/sqlite/db';
@@ -8,11 +8,9 @@ import { SessionExerciseCard } from '../../../src/components/SessionExerciseCard
 import { PrBanner } from '../../../src/components/PrBanner';
 import { AppText, Button, Screen } from '../../../src/components/ui';
 import { useTheme } from '../../../src/theme/ThemeProvider';
-import { ColorTokens } from '../../../src/theme/colors';
 
 export default function SessionScreen() {
   const { colors } = useTheme();
-  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { sessionId } = useLocalSearchParams<{ sessionId: string }>();
   const {
     dayName,
@@ -31,14 +29,14 @@ export default function SessionScreen() {
 
   useEffect(() => {
     const resolved = resolveToday(getDatabase());
-    if (!resolved || !resolved.day) return;
+    if (!resolved?.day) return;
     setResolvedDayName(resolved.day.name);
     loadForDay(resolved.day.id, resolved.day.name);
   }, [loadForDay]);
 
   async function handleFinish() {
     await completeSession();
-    router.dismissTo('/(app)/(tabs)' as any);
+    router.dismissTo('/(app)/(tabs)');
   }
 
   if (loading) {
@@ -84,10 +82,8 @@ export default function SessionScreen() {
   );
 }
 
-function makeStyles(c: ColorTokens) {
-  return StyleSheet.create({
-    scroll: { flex: 1 },
-    content: { padding: 16, gap: 12 },
-    title: { fontSize: 22, marginBottom: 8 },
-  });
-}
+const styles = StyleSheet.create({
+  scroll: { flex: 1 },
+  content: { padding: 16, gap: 12 },
+  title: { fontSize: 22, marginBottom: 8 },
+});

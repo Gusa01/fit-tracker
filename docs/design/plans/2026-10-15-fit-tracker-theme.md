@@ -8,7 +8,7 @@
 
 **Tech Stack:** Expo SDK 57 / React Native 0.86, expo-router (Tabs + Stack), @react-navigation/native theme, @expo/vector-icons (Ionicons), AsyncStorage, @resvg/resvg-js (dev, icon rendering), Jest + ts-jest.
 
-**Spec:** `docs/superpowers/specs/2026-10-15-fit-tracker-theme-design.md`
+**Spec:** `docs/design/specs/2026-10-15-fit-tracker-theme-design.md`
 
 **Depends on:** the exercise-catalog branch (it adds `ExerciseThumbnail`, the credits screen and changes the picker); this branch starts from it.
 

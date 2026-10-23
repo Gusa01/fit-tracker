@@ -9,7 +9,6 @@ import { useRoutines } from '../hooks/useRoutines';
 import { supabase } from '../lib/supabase';
 import { createRoutine, updateRoutine, createDay, reorderDays, softDeleteDay } from '../lib/routines/mutations';
 import { DayReorderList } from './DayReorderList';
-import { Routine } from '../lib/routines/types';
 import { DayCard } from './DayCard';
 import { AppText, Button, Screen } from './ui';
 import { useTheme } from '../theme/ThemeProvider';
@@ -123,10 +122,6 @@ export function RoutineBuilder({ initialRoutineId }: RoutineBuilderProps) {
     await refetchDays();
   }
 
-  function handleDone() {
-    router.back();
-  }
-
   if (initialRoutineId && (routineLoading || !routine)) {
     return (
       <Screen>
@@ -136,7 +131,7 @@ export function RoutineBuilder({ initialRoutineId }: RoutineBuilderProps) {
   }
 
   const weekdaySchedule = routine?.weekday_schedule ?? {};
-  const pickableRoutines = allRoutines.filter((r: Routine) => r.id !== routineId);
+  const pickableRoutines = allRoutines.filter((r) => r.id !== routineId);
 
   return (
     <NestableScrollContainer style={styles.container} contentContainerStyle={styles.content}>
@@ -179,7 +174,7 @@ export function RoutineBuilder({ initialRoutineId }: RoutineBuilderProps) {
       {pickableRoutines.length > 0 && (
         <View style={styles.pickerSection}>
           <AppText variant="label">Rutina siguiente (opcional)</AppText>
-          {pickableRoutines.map((r: Routine) => (
+          {pickableRoutines.map((r) => (
             <Pressable
               key={r.id}
               style={[styles.pickerRow, nextRoutineId === r.id && styles.pickerRowSelected]}
@@ -224,7 +219,7 @@ export function RoutineBuilder({ initialRoutineId }: RoutineBuilderProps) {
       )}
 
       <View style={styles.doneButton}>
-        <Button title="Listo" onPress={handleDone} />
+        <Button title="Listo" onPress={() => router.back()} />
       </View>
     </NestableScrollContainer>
   );
@@ -247,7 +242,6 @@ function makeStyles(c: ColorTokens) {
     pickerSection: { gap: 6 },
     pickerRow: { borderWidth: 1, borderColor: c.border, borderRadius: 6, padding: 10 },
     pickerRowSelected: { borderColor: c.accent, backgroundColor: c.surfaceMuted },
-    sectionTitle: { marginTop: 12 },
     daysHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 12 },
     doneButton: { marginTop: 8 },
   });

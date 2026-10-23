@@ -20,14 +20,12 @@ export async function listExerciseSetHistory(
       .range(from, from + PAGE_SIZE - 1);
     if (error) throw error;
 
-    const page = (data ?? []).map(
-      (raw): ExerciseSetRow => ({
-        ...raw,
-        weight: Number(raw.weight),
-        reps: Number(raw.reps),
-        set_index: Number(raw.set_index),
-      })
-    );
+    const page = (data ?? []).map((raw): ExerciseSetRow => ({
+      ...raw,
+      weight: Number(raw.weight),
+      reps: Number(raw.reps),
+      set_index: Number(raw.set_index),
+    }));
     rows.push(...page);
     if (page.length < PAGE_SIZE) return rows;
   }

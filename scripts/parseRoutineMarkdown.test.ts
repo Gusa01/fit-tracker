@@ -2,10 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { parseRoutineMarkdown } from './parseRoutineMarkdown';
 
-const fixture = fs.readFileSync(
-  path.join(__dirname, '..', 'rutina_gym_top_set_back_off.md'),
-  'utf-8'
-);
+const fixture = fs.readFileSync(path.join(__dirname, 'data', 'rutina_gym_top_set_back_off.md'), 'utf-8');
 
 describe('parseRoutineMarkdown', () => {
   const routines = parseRoutineMarkdown(fixture);
@@ -103,14 +100,7 @@ describe('parseRoutineMarkdown', () => {
     });
 
     it('has six days including a genuine rest day', () => {
-      expect(split.days.map((d) => d.name)).toEqual([
-        'Upper',
-        'Lower',
-        'Descanso',
-        'Push',
-        'Pull',
-        'Legs',
-      ]);
+      expect(split.days.map((d) => d.name)).toEqual(['Upper', 'Lower', 'Descanso', 'Push', 'Pull', 'Legs']);
       const descanso = split.days.find((d) => d.name === 'Descanso')!;
       expect(descanso.isRestDay).toBe(true);
       expect(descanso.exercises).toEqual([]);

@@ -6,11 +6,7 @@ export function hasTopSetDeficit(set: LoggedSet, targetReps: number, rirMin: num
   return repDeficit || rirDeficit;
 }
 
-export function hasConsecutiveDeficit(
-  recentTopSets: LoggedSet[],
-  targetReps: number,
-  rirMin: number | null
-): boolean {
+export function hasConsecutiveDeficit(recentTopSets: LoggedSet[], targetReps: number, rirMin: number | null): boolean {
   if (recentTopSets.length < 2) return false;
   return recentTopSets.slice(0, 2).every((set) => hasTopSetDeficit(set, targetReps, rirMin));
 }

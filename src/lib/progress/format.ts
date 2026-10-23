@@ -1,9 +1,7 @@
 import { BrokenRecord, Metric } from './types';
 
-/** Labels for the detail screen's metric toggle. */
 export const TOGGLE_LABEL: Record<'e1rm' | 'weight', string> = { e1rm: '1RM est.', weight: 'Peso' };
 
-/** Labels for the detail screen's records card. */
 export const RECORD_LABEL: Record<Metric, string> = {
   e1rm: 'Mejor 1RM est.',
   weight: 'Mejor peso',

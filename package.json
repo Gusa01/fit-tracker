@@ -15,6 +15,8 @@
     "test:unit": "jest --selectProjects unit",
     "test:integration": "jest --selectProjects integration --runInBand",
     "typecheck": "tsc --noEmit",
+    "format": "prettier --write app src scripts tests",
+    "format:check": "prettier --check app src scripts tests",
     "seed-demo": "tsx scripts/seed-demo-user.ts",
     "build-icons": "tsx scripts/build-icons.ts",
     "postinstall": "patch-package"
@@ -59,6 +61,7 @@
     "dotenv": "^17.4.2",
     "jest": "^30.5.1",
     "patch-package": "^8.0.1",
+    "prettier": "^3.9.10",
     "sharp": "^0.35.5",
     "supabase": "^2.117.0",
     "ts-jest": "^29.4.12",

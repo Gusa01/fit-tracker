@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { View, FlatList, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
 import { router } from 'expo-router';
 import { useAuthSession } from '../../../../src/hooks/useAuthSession';
@@ -7,11 +6,9 @@ import { useSessionHistory } from '../../../../src/hooks/useSessionHistory';
 import { formatSessionTitle } from '../../../../src/lib/history/format';
 import { AppText, Banner, Button, Card, Screen } from '../../../../src/components/ui';
 import { useTheme } from '../../../../src/theme/ThemeProvider';
-import { ColorTokens } from '../../../../src/theme/colors';
 
 export default function HistoryList() {
   const { colors } = useTheme();
-  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { session } = useAuthSession();
   const { sessions, isLoading, error, isLoadingMore, loadMoreError, loadMore, refetch } = useSessionHistory(
     session?.user.id
@@ -75,10 +72,7 @@ export default function HistoryList() {
           ) : null
         }
         renderItem={({ item }) => (
-          <Pressable
-            style={styles.rowWrap}
-            onPress={() => router.push(`/(app)/(tabs)/history/${item.id}` as any)}
-          >
+          <Pressable style={styles.rowWrap} onPress={() => router.push(`/(app)/(tabs)/history/${item.id}`)}>
             <Card style={styles.row}>
               <View style={styles.rowMain}>
                 <AppText variant="heading">{formatSessionTitle(item.sessionDate, item.dayName)}</AppText>
@@ -98,19 +92,17 @@ export default function HistoryList() {
   );
 }
 
-function makeStyles(_c: ColorTokens) {
-  return StyleSheet.create({
-    list: { flex: 1 },
-    content: { padding: 16 },
-    centered: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
-    message: { textAlign: 'center', marginTop: 32 },
-    retry: { marginTop: 16 },
-    banner: { marginBottom: 8 },
-    rowWrap: { marginBottom: 8 },
-    row: { flexDirection: 'row', alignItems: 'center', padding: 12, gap: 0 },
-    rowMain: { flex: 1, gap: 2 },
-    chevron: { fontSize: 22, marginLeft: 8 },
-    footer: { marginVertical: 16 },
-    footerRetry: { padding: 16, alignItems: 'center' },
-  });
-}
+const styles = StyleSheet.create({
+  list: { flex: 1 },
+  content: { padding: 16 },
+  centered: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
+  message: { textAlign: 'center', marginTop: 32 },
+  retry: { marginTop: 16 },
+  banner: { marginBottom: 8 },
+  rowWrap: { marginBottom: 8 },
+  row: { flexDirection: 'row', alignItems: 'center', padding: 12, gap: 0 },
+  rowMain: { flex: 1, gap: 2 },
+  chevron: { fontSize: 22, marginLeft: 8 },
+  footer: { marginVertical: 16 },
+  footerRetry: { padding: 16, alignItems: 'center' },
+});

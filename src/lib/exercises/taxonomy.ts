@@ -29,7 +29,17 @@ export const MUSCLE_LABEL: Record<Muscle, string> = {
   core: 'Core',
 };
 
-export const EQUIPMENT = ['barbell', 'dumbbell', 'machine', 'cable', 'bodyweight', 'kettlebell', 'ez_bar', 'smith', 'band'] as const;
+export const EQUIPMENT = [
+  'barbell',
+  'dumbbell',
+  'machine',
+  'cable',
+  'bodyweight',
+  'kettlebell',
+  'ez_bar',
+  'smith',
+  'band',
+] as const;
 export type Equipment = (typeof EQUIPMENT)[number];
 
 export const EQUIPMENT_LABEL: Record<Equipment, string> = {

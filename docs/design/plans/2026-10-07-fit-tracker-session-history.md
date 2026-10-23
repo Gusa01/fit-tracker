@@ -8,7 +8,7 @@
 
 **Tech Stack:** Expo SDK 57 / React Native 0.86 / expo-router (drawer + stack), Supabase (Postgres + supabase-js v2), expo-sqlite, expo-crypto, Jest + ts-jest.
 
-**Spec:** `docs/superpowers/specs/2026-10-07-fit-tracker-session-history-design.md`
+**Spec:** `docs/design/specs/2026-10-07-fit-tracker-session-history-design.md`
 
 ## Global Constraints
 

@@ -47,8 +47,12 @@ describe('exerciseMatchesQuery', () => {
 
 describe('filterExercises', () => {
   it('combines query, muscle and equipment', () => {
-    expect(filterExercises(catalog, { query: '', muscle: 'chest', equipment: null }).map((e) => e.id)).toEqual(['bench']);
-    expect(filterExercises(catalog, { query: 'press', muscle: null, equipment: 'cable' }).map((e) => e.id)).toEqual(['pallof']);
+    expect(filterExercises(catalog, { query: '', muscle: 'chest', equipment: null }).map((e) => e.id)).toEqual([
+      'bench',
+    ]);
+    expect(filterExercises(catalog, { query: 'press', muscle: null, equipment: 'cable' }).map((e) => e.id)).toEqual([
+      'pallof',
+    ]);
     expect(filterExercises(catalog, { query: '', muscle: 'chest', equipment: 'dumbbell' })).toEqual([]);
   });
 });

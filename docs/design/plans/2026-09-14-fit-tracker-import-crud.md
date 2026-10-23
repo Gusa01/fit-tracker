@@ -8,9 +8,9 @@
 
 **Tech Stack:** Same as the Foundation plan (Expo Router, `@supabase/supabase-js`, Jest + `ts-jest`) — no new dependencies. No drag-and-drop or picker library: reordering is a pair of up/down buttons that swap `order_index`; picking an existing routine or exercise is an inline filtered list within the same screen.
 
-**Spec:** `docs/superpowers/specs/2026-09-13-fit-tracker-design.md` (§4 Data model, §5 Import flow, §6 Routine management)
+**Spec:** `docs/design/specs/2026-09-13-fit-tracker-design.md` (§4 Data model, §5 Import flow, §6 Routine management)
 
-**Prior plan (already implemented and merged to `main`):** `docs/superpowers/plans/2026-09-13-fit-tracker-foundation.md` — this plan builds on its schema (`supabase/migrations/`), Supabase client (`src/lib/supabase.ts`), and auth (`src/hooks/useAuthSession.ts`, `app/(app)/`).
+**Prior plan (already implemented and merged to `main`):** `docs/design/plans/2026-09-13-fit-tracker-foundation.md` — this plan builds on its schema (`supabase/migrations/`), Supabase client (`src/lib/supabase.ts`), and auth (`src/hooks/useAuthSession.ts`, `app/(app)/`).
 
 ## Global Constraints
 

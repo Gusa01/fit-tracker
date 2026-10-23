@@ -97,18 +97,12 @@ describe('isSetHit', () => {
 
 describe('isExerciseHit', () => {
   it('is true only when every set hits', () => {
-    const sets = [
-      baseSet({ set_index: 1, reps: 10, rir: 2 }),
-      baseSet({ set_index: 2, reps: 10, rir: 3 }),
-    ];
+    const sets = [baseSet({ set_index: 1, reps: 10, rir: 2 }), baseSet({ set_index: 2, reps: 10, rir: 3 })];
     expect(isExerciseHit(sets, normalExercise)).toBe(true);
   });
 
   it('is false if any set misses', () => {
-    const sets = [
-      baseSet({ set_index: 1, reps: 10, rir: 2 }),
-      baseSet({ set_index: 2, reps: 8, rir: 2 }),
-    ];
+    const sets = [baseSet({ set_index: 1, reps: 10, rir: 2 }), baseSet({ set_index: 2, reps: 8, rir: 2 })];
     expect(isExerciseHit(sets, normalExercise)).toBe(false);
   });
 

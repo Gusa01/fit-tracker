@@ -23,7 +23,13 @@ export function imagePath(entry: CatalogEntry): string | null {
 
 function row(e: CatalogEntry): string {
   const credit = e.image
-    ? q(JSON.stringify({ author: e.image.author, license: e.image.license, source_url: e.image.source_url }, null, 1).replace(/\n/g, ' '))
+    ? q(
+        JSON.stringify(
+          { author: e.image.author, license: e.image.license, source_url: e.image.source_url },
+          null,
+          1
+        ).replace(/\n/g, ' ')
+      )
     : 'null';
   const img = imagePath(e);
   return `  (${q(e.slug)}, ${q(e.name)}, ${arr(e.aliases)}, ${q(e.primary_muscle)}, ${arr(e.secondary_muscles)}, ${q(e.equipment)}, ${img ? q(img) : 'null'}, ${credit === 'null' ? 'null' : `${credit}::jsonb`})`;
@@ -120,7 +126,9 @@ create unique index exercises_owner_name_key on public.exercises (owner_id, lowe
 const isMainModule = process.argv[1]?.endsWith('build-catalog-migration.ts') ?? false;
 if (isMainModule) {
   const root = path.join(__dirname, '..');
-  const entries: CatalogEntry[] = JSON.parse(fs.readFileSync(path.join(root, 'supabase/catalog/exercises.json'), 'utf-8'));
+  const entries: CatalogEntry[] = JSON.parse(
+    fs.readFileSync(path.join(root, 'supabase/catalog/exercises.json'), 'utf-8')
+  );
   const out = path.join(root, 'supabase/migrations/20261015120100_seed_exercise_catalog.sql');
   fs.writeFileSync(out, buildCatalogSeedSql(entries));
   console.log(`Wrote ${out} (${entries.length} exercises)`);

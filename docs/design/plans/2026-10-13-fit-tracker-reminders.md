@@ -8,7 +8,7 @@
 
 **Tech Stack:** Expo SDK 57 / React Native 0.86 / expo-router, `expo-notifications` (local DATE triggers), AsyncStorage, expo-sqlite cache, Jest + ts-jest.
 
-**Spec:** `docs/superpowers/specs/2026-10-12-fit-tracker-reminders-design.md`
+**Spec:** `docs/design/specs/2026-10-12-fit-tracker-reminders-design.md`
 
 ## Global Constraints
 

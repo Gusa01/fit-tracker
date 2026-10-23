@@ -118,7 +118,9 @@ describe('validateSetEdit', () => {
 
   it('requires an RIR in 0-10 only when the exercise has an RIR target', () => {
     expect(validateSetEdit({ weight: '80', reps: '6', rir: null }, weighted)).toBe('Elegí el RIR.');
-    expect(validateSetEdit({ weight: '80', reps: '6', rir: 11 }, weighted)).toBe('El RIR tiene que estar entre 0 y 10.');
+    expect(validateSetEdit({ weight: '80', reps: '6', rir: 11 }, weighted)).toBe(
+      'El RIR tiene que estar entre 0 y 10.'
+    );
     expect(validateSetEdit({ weight: '80', reps: '6', rir: null }, noRir)).toBeNull();
   });
 });
@@ -135,7 +137,11 @@ describe('editFromValues', () => {
 
   it('keeps the original weight for time-based exercises and the original RIR when none is shown', () => {
     expect(
-      editFromValues({ weight: '999', reps: '50', rir: 3 }, { rep_unit: 'seconds', rir_min: null }, set({ weight: 0, rir: null }))
+      editFromValues(
+        { weight: '999', reps: '50', rir: 3 },
+        { rep_unit: 'seconds', rir_min: null },
+        set({ weight: 0, rir: null })
+      )
     ).toEqual({ kind: 'edit', weight: 0, reps: 50, rir: null });
   });
 });

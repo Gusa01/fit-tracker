@@ -10,7 +10,7 @@
 
 **Infra note (pivoted mid-Task-2):** the plan originally called for `supabase start` running Postgres/Auth locally via Docker. Docker Desktop is not available on this machine, so the schema/RLS/auth work in this plan runs against a real hosted Supabase project (free tier) instead. Practical differences from the original local-Docker design: (1) `.env.local` holds real project secrets, not fixed local-dev demo keys — it must never be committed and its values must never appear in any tool output or report; (2) migrations apply via `npx supabase db push` (cumulative) instead of `npx supabase db reset` (wipe-and-reapply-from-zero) — each task's migration is still additive and independently testable, it just can't be re-verified "from a clean slate" the way a local reset allows; (3) test data (users, exercises, routines) that Jest creates lands in the real hosted project — the tests already clean up what they create in `afterAll`, but this is worth knowing since it's not a disposable local container anymore.
 
-**Spec:** `docs/superpowers/specs/2026-09-13-fit-tracker-design.md`
+**Spec:** `docs/design/specs/2026-09-13-fit-tracker-design.md`
 
 ## Global Constraints
 

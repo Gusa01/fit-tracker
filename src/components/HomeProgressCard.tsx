@@ -96,13 +96,15 @@ export function HomeProgressCard() {
           <Text style={styles.value}>{formatMetricValue(summary.latestValue, summary.metric)}</Text>
         )}
         {summary.trend && (
-          <Text style={[styles.arrow, { color: colors[TREND_COLOR[summary.trend]] }]}>{TREND_ARROW[summary.trend]}</Text>
+          <Text style={[styles.arrow, { color: colors[TREND_COLOR[summary.trend]] }]}>
+            {TREND_ARROW[summary.trend]}
+          </Text>
         )}
       </Pressable>
 
       <ProgressChart key={summary.exerciseId} points={points} metric={summary.metric} width={chartWidth} height={160} />
 
-      <Pressable onPress={() => router.push('/(app)/(tabs)/progress' as any)}>
+      <Pressable onPress={() => router.push('/(app)/(tabs)/progress')}>
         <Text style={styles.link}>Ver todo →</Text>
       </Pressable>
 
@@ -119,7 +121,9 @@ export function HomeProgressCard() {
                   {item.exerciseName}
                 </Text>
                 {item.trend && (
-                  <Text style={[styles.arrow, { color: colors[TREND_COLOR[item.trend]] }]}>{TREND_ARROW[item.trend]}</Text>
+                  <Text style={[styles.arrow, { color: colors[TREND_COLOR[item.trend]] }]}>
+                    {TREND_ARROW[item.trend]}
+                  </Text>
                 )}
               </Pressable>
             )}

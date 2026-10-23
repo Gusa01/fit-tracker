@@ -8,7 +8,7 @@
 
 **Tech Stack:** Expo SDK 57 / React Native 0.86 / expo-router drawer + stack, Supabase (Postgres view + supabase-js v2), expo-sqlite, Jest + ts-jest, `react-native-gifted-charts` (+ `react-native-svg`, `expo-linear-gradient`).
 
-**Spec:** `docs/superpowers/specs/2026-10-01-fit-tracker-progress-and-prs-design.md`
+**Spec:** `docs/design/specs/2026-10-01-fit-tracker-progress-and-prs-design.md`
 
 ## Global Constraints
 

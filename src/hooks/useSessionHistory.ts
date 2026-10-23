@@ -9,7 +9,7 @@ import { queueSetCorrection } from '../lib/history/submitCorrection';
 import { HistorySessionRow, SessionDetail, SetCorrection } from '../lib/history/types';
 import { useAuthSession } from './useAuthSession';
 
-export const HISTORY_OFFLINE_MESSAGE = 'Conectate para ver tu historial';
+const HISTORY_OFFLINE_MESSAGE = 'Conectate para ver tu historial';
 
 // Refetch on focus; a request counter keeps an older in-flight response from overwriting newer state.
 export function useSessionHistory(userId: string | undefined) {

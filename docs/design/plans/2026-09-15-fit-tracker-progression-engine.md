@@ -8,7 +8,7 @@
 
 **Tech Stack:** Same as the prior two plans — Expo Router, `expo-sqlite`, `@supabase/supabase-js`. No new dependencies.
 
-**Spec:** `docs/superpowers/specs/2026-09-13-fit-tracker-design.md` — §8 (progression, deload, routine-switch logic). Builds on the session-logging plan (`docs/superpowers/plans/2026-09-14-fit-tracker-session-logging.md`, merged) and the routine-CRUD plan (`docs/superpowers/plans/2026-09-14-fit-tracker-import-crud.md`, merged).
+**Spec:** `docs/design/specs/2026-09-13-fit-tracker-design.md` — §8 (progression, deload, routine-switch logic). Builds on the session-logging plan (`docs/design/plans/2026-09-14-fit-tracker-session-logging.md`, merged) and the routine-CRUD plan (`docs/design/plans/2026-09-14-fit-tracker-import-crud.md`, merged).
 
 **Resolved open items from the spec (§12 "Exact increment table" was explicitly left open):**
 - Weight increment: **+1.25kg for `muscle_group = 'upper'`, +2.5kg for `'lower'`, +0 for anything else** (including `'core'` — core exercises are time-based and are excluded from automatic progression entirely for this plan).

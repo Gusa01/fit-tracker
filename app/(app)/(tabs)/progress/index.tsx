@@ -66,10 +66,7 @@ export default function ProgressList() {
         renderItem={({ item }) => {
           const trendColor = item.trend ? colors[TREND_COLOR[item.trend]] : colors.textMuted;
           return (
-            <Pressable
-              style={styles.rowWrap}
-              onPress={() => router.push(`/(app)/(tabs)/progress/${item.exerciseId}` as any)}
-            >
+            <Pressable style={styles.rowWrap} onPress={() => router.push(`/(app)/(tabs)/progress/${item.exerciseId}`)}>
               <Card style={styles.row}>
                 <View style={styles.rowMain}>
                   <AppText variant="heading">{item.exerciseName}</AppText>

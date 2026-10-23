@@ -38,7 +38,7 @@ describe('buildWeekCalendar', () => {
     expect(tue?.dayName).toBeNull();
   });
 
-  it('flags only today\'s weekday as isToday', () => {
+  it("flags only today's weekday as isToday", () => {
     // 2026-01-20 is a Tuesday
     const week = buildWeekCalendar({}, days, 1, new Date(2026, 0, 20));
     const flagged = week.filter((d) => d.isToday);

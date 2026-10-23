@@ -54,7 +54,10 @@ describe('planReminders — training', () => {
 
   it('skips rest days, unscheduled weekdays and unknown day ids', () => {
     const reminders = planReminders(
-      input({ settings: trainingOnly, routine: { startedAt: '2026-10-05T09:00:00', weekdaySchedule: { sat: 'rest', sun: 'gone' } } })
+      input({
+        settings: trainingOnly,
+        routine: { startedAt: '2026-10-05T09:00:00', weekdaySchedule: { sat: 'rest', sun: 'gone' } },
+      })
     );
     expect(reminders).toEqual([]);
   });
@@ -64,7 +67,7 @@ describe('planReminders — training', () => {
     expect(dates[0]).toBe('training 2026-10-16 18:30');
   });
 
-  it("skips today when the reminder time has already passed", () => {
+  it('skips today when the reminder time has already passed', () => {
     const dates = summary(planReminders(input({ settings: trainingOnly, now: new Date(2026, 9, 14, 19, 0) })));
     expect(dates[0]).toBe('training 2026-10-16 18:30');
   });
@@ -76,7 +79,7 @@ describe('planReminders — training', () => {
 });
 
 describe('planReminders — streak at risk', () => {
-  it("alerts this Saturday when the week has no session and the streak is alive", () => {
+  it('alerts this Saturday when the week has no session and the streak is alive', () => {
     const reminders = planReminders(input({ settings: streakOnly, completedDates: ['2026-10-07'] }));
     expect(summary(reminders)).toEqual(['streak 2026-10-17 18:30']);
     expect(reminders[0]).toMatchObject({
@@ -85,7 +88,7 @@ describe('planReminders — streak at risk', () => {
     });
   });
 
-  it("alerts next Saturday when this week already has a session", () => {
+  it('alerts next Saturday when this week already has a session', () => {
     const reminders = planReminders(
       input({ settings: streakOnly, completedDates: ['2026-09-30', '2026-10-07', '2026-10-13'] })
     );
@@ -104,13 +107,21 @@ describe('planReminders — streak at risk', () => {
   });
 
   it('plans none when streak alerts are off', () => {
-    expect(planReminders(input({ settings: trainingOnly, completedDates: ['2026-10-07'] })).every((r) => r.kind === 'training')).toBe(true);
+    expect(
+      planReminders(input({ settings: trainingOnly, completedDates: ['2026-10-07'] })).every(
+        (r) => r.kind === 'training'
+      )
+    ).toBe(true);
   });
 });
 
 describe('planReminders — both kinds', () => {
   it('returns training and streak reminders sorted by date', () => {
     const kinds = summary(planReminders(input({ completedDates: ['2026-10-07'] })));
-    expect(kinds.slice(0, 3)).toEqual(['training 2026-10-14 18:30', 'training 2026-10-16 18:30', 'streak 2026-10-17 18:30']);
+    expect(kinds.slice(0, 3)).toEqual([
+      'training 2026-10-14 18:30',
+      'training 2026-10-16 18:30',
+      'streak 2026-10-17 18:30',
+    ]);
   });
 });

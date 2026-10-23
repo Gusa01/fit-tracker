@@ -2,17 +2,25 @@ import { buildCatalogSeedSql } from '../../scripts/build-catalog-migration';
 
 const entry = {
   slug: 'barbell-bench-press',
-  name: "Press banca con barra",
+  name: 'Press banca con barra',
   aliases: ['Press banca', "O'Brien's press"],
   primary_muscle: 'chest',
   secondary_muscles: ['triceps', 'shoulders'],
   equipment: 'barbell',
   source_id: 'Barbell_Bench_Press',
-  image: { url: 'https://wger.de/media/exercise-images/1/bench.png', author: 'Jane', license: 'CC-BY-SA 4', source_url: 'https://wger.de/exercise/1/' },
+  image: {
+    url: 'https://wger.de/media/exercise-images/1/bench.png',
+    author: 'Jane',
+    license: 'CC-BY-SA 4',
+    source_url: 'https://wger.de/exercise/1/',
+  },
 };
 
 describe('buildCatalogSeedSql', () => {
-  const sql = buildCatalogSeedSql([entry, { ...entry, slug: 'plank', name: 'Plancha abdominal', aliases: [], image: null }]);
+  const sql = buildCatalogSeedSql([
+    entry,
+    { ...entry, slug: 'plank', name: 'Plancha abdominal', aliases: [], image: null },
+  ]);
 
   it('upserts every entry by slug', () => {
     expect(sql).toContain('on conflict (slug) do update');
@@ -20,7 +28,7 @@ describe('buildCatalogSeedSql', () => {
     expect(sql).toContain("'plank'");
   });
 
-  it("escapes single quotes", () => {
+  it('escapes single quotes', () => {
     expect(sql).toContain("'O''Brien''s press'");
   });
 
@@ -35,7 +43,9 @@ describe('buildCatalogSeedSql', () => {
 
   it('defines the merge as a service-only function, calls it, then adds the uniqueness indexes', () => {
     const define = sql.indexOf('create or replace function public.merge_legacy_exercises()');
-    const revoke = sql.indexOf('revoke all on function public.merge_legacy_exercises() from public, anon, authenticated');
+    const revoke = sql.indexOf(
+      'revoke all on function public.merge_legacy_exercises() from public, anon, authenticated'
+    );
     const call = sql.indexOf('select public.merge_legacy_exercises();');
     const index = sql.indexOf('create unique index exercises_catalog_name_key');
     expect(define).toBeGreaterThan(0);

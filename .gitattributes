@@ -1,1 +1,5 @@
+* text=auto eol=lf
+supabase/migrations/** -text
 patches/*.patch text eol=lf
+*.png binary
+*.gif binary

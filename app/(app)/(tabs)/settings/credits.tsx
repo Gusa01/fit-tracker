@@ -55,8 +55,8 @@ export default function CreditsScreen() {
       ListHeaderComponent={
         <View style={styles.header}>
           <AppText variant="muted">
-            Las ilustraciones de ejercicios provienen de wger.de y se usan bajo licencias Creative Commons. Los datos del
-            catálogo provienen de free-exercise-db (dominio público).
+            Las ilustraciones de ejercicios provienen de wger.de y se usan bajo licencias Creative Commons. Los datos
+            del catálogo provienen de free-exercise-db (dominio público).
           </AppText>
         </View>
       }

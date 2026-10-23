@@ -30,8 +30,22 @@ async function seedCompletedSessionWithSets(userId: string) {
   const { data: sets, error: setsError } = await admin
     .from('logged_sets')
     .insert([
-      { session_id: session.id, routine_exercise_id: seeded.routineExercise.id, set_index: 1, set_type: 'top_set', weight: 80, reps: 5 },
-      { session_id: session.id, routine_exercise_id: seeded.routineExercise.id, set_index: 2, set_type: 'top_set', weight: 70, reps: 8 },
+      {
+        session_id: session.id,
+        routine_exercise_id: seeded.routineExercise.id,
+        set_index: 1,
+        set_type: 'top_set',
+        weight: 80,
+        reps: 5,
+      },
+      {
+        session_id: session.id,
+        routine_exercise_id: seeded.routineExercise.id,
+        set_index: 2,
+        set_type: 'top_set',
+        weight: 70,
+        reps: 8,
+      },
     ])
     .select('*')
     .order('set_index');
@@ -91,7 +105,10 @@ describe('recreated exercise_set_history keeps row level security', () => {
     await seedCompletedSessionWithSets(owner.userId);
 
     const otherClient = createClient(url, anonKey, { auth: { persistSession: false } });
-    const { error: signInError } = await otherClient.auth.signInWithPassword({ email: other.email, password: PASSWORD });
+    const { error: signInError } = await otherClient.auth.signInWithPassword({
+      email: other.email,
+      password: PASSWORD,
+    });
     if (signInError) throw signInError;
 
     const { data, error } = await otherClient.from('exercise_set_history').select('*');

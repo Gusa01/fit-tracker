@@ -1,7 +1,11 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { View, Text, Switch, Pressable, Modal, FlatList, StyleSheet, Linking, Alert } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
-import { DEFAULT_REMINDER_SETTINGS, loadReminderSettings, saveReminderSettings } from '../../../../src/lib/reminders/storage';
+import {
+  DEFAULT_REMINDER_SETTINGS,
+  loadReminderSettings,
+  saveReminderSettings,
+} from '../../../../src/lib/reminders/storage';
 import { ReminderSettings } from '../../../../src/lib/reminders/types';
 import {
   getNotificationPermissionStatus,
@@ -99,7 +103,9 @@ export default function SettingsScreen() {
 
       {!notificationsAvailable() && (
         <Banner tone="warning">
-          <AppText color="warning">Esta versión de la app no puede mostrar notificaciones. Los recordatorios funcionan en la app instalada.</AppText>
+          <AppText color="warning">
+            Esta versión de la app no puede mostrar notificaciones. Los recordatorios funcionan en la app instalada.
+          </AppText>
         </Banner>
       )}
 
@@ -161,7 +167,7 @@ export default function SettingsScreen() {
 
       <Button title="Enviar aviso de prueba" variant="secondary" disabled={!loaded} onPress={handleTest} />
 
-      <Pressable onPress={() => router.push('/(app)/(tabs)/settings/credits' as any)}>
+      <Pressable onPress={() => router.push('/(app)/(tabs)/settings/credits')}>
         <Card style={styles.row}>
           <AppText variant="heading" style={styles.title}>
             Créditos de imágenes ›

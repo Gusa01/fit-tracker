@@ -32,11 +32,16 @@ describe('palettes', () => {
     ['onAccent', 'danger'],
   ];
 
-  for (const [name, palette] of [['light', lightColors], ['dark', darkColors]] as const) {
+  for (const [name, palette] of [
+    ['light', lightColors],
+    ['dark', darkColors],
+  ] as const) {
     it(`meet WCAG AA (4.5:1) in ${name} mode`, () => {
       for (const [fg, bg] of pairs) {
         const ratio = contrastRatio(palette[fg], palette[bg]);
-        expect({ pair: `${fg} on ${bg}`, ok: ratio >= 4.5, ratio: Math.round(ratio * 100) / 100 }).toMatchObject({ ok: true });
+        expect({ pair: `${fg} on ${bg}`, ok: ratio >= 4.5, ratio: Math.round(ratio * 100) / 100 }).toMatchObject({
+          ok: true,
+        });
       }
     });
   }

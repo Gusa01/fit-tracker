@@ -1,0 +1,8 @@
+node_modules
+supabase/migrations
+patches
+package-lock.json
+.expo
+assets
+docs
+scripts/data

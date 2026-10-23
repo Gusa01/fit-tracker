@@ -26,7 +26,7 @@ afterAll(async () => {
 });
 
 describe('getActiveRoutine', () => {
-  it('returns the user\'s active routine', async () => {
+  it("returns the user's active routine", async () => {
     const { routine } = await seedActiveRoutine(supabase, userId);
     const active = await getActiveRoutine(supabase, userId);
     expect(active?.id).toBe(routine.id);

@@ -15,9 +15,7 @@ initDatabase();
 
 function ThemedRoot({ children }: { children: ReactNode }) {
   const { colors } = useTheme();
-  return (
-    <View style={{ flex: 1, backgroundColor: colors.background }}>{children}</View>
-  );
+  return <View style={{ flex: 1, backgroundColor: colors.background }}>{children}</View>;
 }
 
 export default function RootLayout() {
@@ -32,7 +30,7 @@ export default function RootLayout() {
     if (!session && !inAuthGroup) {
       router.replace('/(auth)/sign-in');
     } else if (session && inAuthGroup) {
-      router.replace('/(app)/(tabs)' as any);
+      router.replace('/(app)/(tabs)');
     }
   }, [session, isLoading, segments]);
 
@@ -44,14 +42,13 @@ export default function RootLayout() {
   useEffect(() => {
     const userId = session?.user.id;
     if (!userId) return;
-    const stop = startSyncListener(getDatabase(), supabase, userId);
-    return stop;
+    return startSyncListener(getDatabase(), supabase, userId);
   }, [session?.user.id]);
 
   useEffect(() => {
     setupNotifications().catch((err) => console.warn('Could not set up notifications', err));
     const subscription = getNotifications()?.addNotificationResponseReceivedListener(() => {
-      router.dismissTo('/(app)/(tabs)' as any);
+      router.dismissTo('/(app)/(tabs)');
     });
     return () => subscription?.remove();
   }, []);

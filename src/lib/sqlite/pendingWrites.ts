@@ -7,10 +7,12 @@ export function enqueueWrite(
   entity: PendingWrite['entity'],
   payload: Record<string, unknown>
 ): void {
-  db.runSync(
-    'insert into pending_writes (id, entity, payload_json, created_at, attempts) values (?, ?, ?, ?, 0)',
-    [id, entity, JSON.stringify(payload), new Date().toISOString()]
-  );
+  db.runSync('insert into pending_writes (id, entity, payload_json, created_at, attempts) values (?, ?, ?, ?, 0)', [
+    id,
+    entity,
+    JSON.stringify(payload),
+    new Date().toISOString(),
+  ]);
 }
 
 export function removePendingWrite(db: SQLiteDatabase, id: string): void {

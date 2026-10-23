@@ -71,22 +71,14 @@ describe('row level security', () => {
     await admin.auth.admin.deleteUser(userB.userId);
   });
 
-  it("lets user A read their own routine", async () => {
-    const { data, error } = await userA.client
-      .from('routines')
-      .select()
-      .eq('id', routineAId)
-      .maybeSingle();
+  it('lets user A read their own routine', async () => {
+    const { data, error } = await userA.client.from('routines').select().eq('id', routineAId).maybeSingle();
     expect(error).toBeNull();
     expect(data?.id).toBe(routineAId);
   });
 
   it("hides user A's routine from user B", async () => {
-    const { data, error } = await userB.client
-      .from('routines')
-      .select()
-      .eq('id', routineAId)
-      .maybeSingle();
+    const { data, error } = await userB.client.from('routines').select().eq('id', routineAId).maybeSingle();
     expect(error).toBeNull();
     expect(data).toBeNull();
   });
@@ -104,13 +96,23 @@ describe('row level security', () => {
   it('lets any authenticated user read catalog exercises but only their own custom ones', async () => {
     const { data: catalogExercise, error: catalogError } = await admin
       .from('exercises')
-      .insert({ name: '[test-fixture] RLS Catalog Test Exercise', primary_muscle: 'chest', equipment: 'barbell', owner_id: null })
+      .insert({
+        name: '[test-fixture] RLS Catalog Test Exercise',
+        primary_muscle: 'chest',
+        equipment: 'barbell',
+        owner_id: null,
+      })
       .select()
       .single();
     if (catalogError) throw catalogError;
     const { data: ownedByA, error: ownedError } = await admin
       .from('exercises')
-      .insert({ name: '[test-fixture] RLS Private Test Exercise', primary_muscle: 'core', equipment: 'bodyweight', owner_id: userA.userId })
+      .insert({
+        name: '[test-fixture] RLS Private Test Exercise',
+        primary_muscle: 'core',
+        equipment: 'bodyweight',
+        owner_id: userA.userId,
+      })
       .select()
       .single();
     if (ownedError) throw ownedError;
@@ -135,11 +137,7 @@ describe('row level security', () => {
   });
 
   it("blocks user B from deleting user A's routine (RLS filters, admin confirms it survives)", async () => {
-    const { data, error } = await userB.client
-      .from('routines')
-      .delete()
-      .eq('id', routineAId)
-      .select();
+    const { data, error } = await userB.client.from('routines').delete().eq('id', routineAId).select();
     expect(error).toBeNull();
     expect(data).toEqual([]);
 

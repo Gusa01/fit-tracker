@@ -11,12 +11,7 @@ export interface SearchableExercise {
 
 /** Lowercase, accents removed, whitespace collapsed — used everywhere names are compared. */
 export function normalizeText(text: string): string {
-  return text
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .toLowerCase()
-    .replace(/\s+/g, ' ')
-    .trim();
+  return text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
 }
 
 function namesOf(exercise: SearchableExercise): string[] {

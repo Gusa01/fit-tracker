@@ -35,7 +35,10 @@ describe('reminder settings', () => {
   });
 
   it('falls back per field for missing or invalid values', async () => {
-    await AsyncStorage.setItem('fit-tracker:reminder-settings', JSON.stringify({ trainingEnabled: true, hour: 25, minute: 'x' }));
+    await AsyncStorage.setItem(
+      'fit-tracker:reminder-settings',
+      JSON.stringify({ trainingEnabled: true, hour: 25, minute: 'x' })
+    );
     expect(await loadReminderSettings()).toEqual({ trainingEnabled: true, streakEnabled: false, hour: 18, minute: 30 });
   });
 });

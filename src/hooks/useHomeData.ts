@@ -42,7 +42,9 @@ export function useHomeData() {
   const [switchDismissed, setSwitchDismissed] = useState(false);
   const [weekCalendar, setWeekCalendar] = useState<WeekCalendarDay[]>([]);
   const [weekProgress, setWeekProgress] = useState<number | null>(null);
-  const [recentActivity, setRecentActivity] = useState<{ sessionId: string; sessionDate: string; dayName: string }[]>([]);
+  const [recentActivity, setRecentActivity] = useState<{ sessionId: string; sessionDate: string; dayName: string }[]>(
+    []
+  );
   const [consistencyStreak, setConsistencyStreak] = useState(0);
 
   const load = useCallback(async () => {
@@ -85,7 +87,12 @@ export function useHomeData() {
       const recentSessions = await listRecentCompletedSessions(supabase, userId, 200).catch(() => null);
       if (recentSessions !== null) {
         setRecentActivity(recentSessions.slice(0, 5));
-        setConsistencyStreak(computeConsecutiveActiveWeeks(recentSessions.map((s) => s.sessionDate), new Date()));
+        setConsistencyStreak(
+          computeConsecutiveActiveWeeks(
+            recentSessions.map((s) => s.sessionDate),
+            new Date()
+          )
+        );
         await mergeCompletedDates(recentSessions.map((s) => s.sessionDate)).catch(() => {});
       }
       // else: offline / request failure — preserve whatever recentActivity/consistencyStreak
@@ -134,14 +141,12 @@ export function useHomeData() {
       setTodayIsRestDay(day.is_rest_day);
 
       if (!day.is_rest_day) {
-        const today = new Date();
-        const todayStr = formatDateOnly(today);
+        const todayStr = formatDateOnly(new Date());
         // Local-first: a pointer for today is authoritative, so an offline completion is
         // still recognized here instead of offering to start a duplicate session.
         const pointer = await loadCurrentSession();
-        const pointerMatchesToday = pointer && pointer.dayId === day.id && pointer.sessionDate === todayStr;
-        if (pointerMatchesToday) {
-          setSessionStatus(pointer!.status === 'completed' ? 'completed' : 'in_progress');
+        if (pointer && pointer.dayId === day.id && pointer.sessionDate === todayStr) {
+          setSessionStatus(pointer.status === 'completed' ? 'completed' : 'in_progress');
         } else {
           const existing = await getSessionForDate(supabase, userId, day.id, todayStr).catch(() => null);
           setSessionStatus(existing ? (existing.status === 'completed' ? 'completed' : 'in_progress') : 'none');
@@ -177,8 +182,7 @@ export function useHomeData() {
         return pointer.sessionId;
       }
 
-      const today = new Date();
-      const sessionDate = formatDateOnly(today);
+      const sessionDate = formatDateOnly(new Date());
       const week = weekNumber ?? 1;
 
       const existing = await getSessionForDate(supabase, userId, todayDayId, sessionDate).catch(() => null);

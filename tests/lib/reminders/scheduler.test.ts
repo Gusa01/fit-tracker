@@ -1,7 +1,9 @@
 const calls: string[] = [];
 
 jest.mock('react-native', () => ({ Platform: { OS: 'android' } }));
-jest.mock('../../../src/lib/reminders/notificationsModule', () => ({ getNotifications: () => require('expo-notifications') }));
+jest.mock('../../../src/lib/reminders/notificationsModule', () => ({
+  getNotifications: () => require('expo-notifications'),
+}));
 jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock')
 );

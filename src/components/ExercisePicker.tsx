@@ -17,7 +17,8 @@ import { supabase } from '../lib/supabase';
 import { createRoutineExercise, findOrCreateExercise } from '../lib/routines/mutations';
 import { Exercise } from '../lib/routines/types';
 import { ExerciseThumbnail } from './ExerciseThumbnail';
-import { AppText, Button, Chip } from './ui';
+import { ChipRow } from './ChipRow';
+import { AppText, Button } from './ui';
 import { useTheme } from '../theme/ThemeProvider';
 import { ColorTokens } from '../theme/colors';
 
@@ -119,33 +120,21 @@ export function ExercisePicker({ dayId, onDone, onCancel }: ExercisePickerProps)
         onChangeText={setSearch}
       />
 
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <View style={styles.segmented}>
-          <Chip label="Todos los músculos" selected={!muscle} onPress={() => setMuscle(null)} />
-          {MUSCLES.map((m) => (
-            <Chip
-              key={m}
-              label={MUSCLE_LABEL[m]}
-              selected={muscle === m}
-              onPress={() => setMuscle(muscle === m ? null : m)}
-            />
-          ))}
-        </View>
-      </ScrollView>
+      <ChipRow
+        options={MUSCLES}
+        labelFor={(m) => MUSCLE_LABEL[m]}
+        selected={muscle}
+        onSelect={setMuscle}
+        allLabel="Todos los músculos"
+      />
 
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <View style={styles.segmented}>
-          <Chip label="Todo el equipamiento" selected={!equipment} onPress={() => setEquipment(null)} />
-          {EQUIPMENT.map((e) => (
-            <Chip
-              key={e}
-              label={EQUIPMENT_LABEL[e]}
-              selected={equipment === e}
-              onPress={() => setEquipment(equipment === e ? null : e)}
-            />
-          ))}
-        </View>
-      </ScrollView>
+      <ChipRow
+        options={EQUIPMENT}
+        labelFor={(e) => EQUIPMENT_LABEL[e]}
+        selected={equipment}
+        onSelect={setEquipment}
+        allLabel="Todo el equipamiento"
+      />
 
       <ScrollView style={styles.list}>
         {visible.map((exercise) => {
@@ -153,7 +142,11 @@ export function ExercisePicker({ dayId, onDone, onCancel }: ExercisePickerProps)
           return (
             <Pressable key={exercise.id} style={styles.row} onPress={() => toggle(exercise.id)}>
               <View style={[styles.checkbox, checked && styles.checkboxChecked]}>
-                {checked && <AppText color="onAccent" style={styles.checkmark}>✓</AppText>}
+                {checked && (
+                  <AppText color="onAccent" style={styles.checkmark}>
+                    ✓
+                  </AppText>
+                )}
               </View>
               <ExerciseThumbnail imagePath={exercise.image_path} muscle={exercise.primary_muscle} />
               <View style={styles.rowText}>
@@ -167,7 +160,11 @@ export function ExercisePicker({ dayId, onDone, onCancel }: ExercisePickerProps)
             </Pressable>
           );
         })}
-        {visible.length === 0 && <AppText variant="muted" style={styles.hint}>Sin resultados.</AppText>}
+        {visible.length === 0 && (
+          <AppText variant="muted" style={styles.hint}>
+            Sin resultados.
+          </AppText>
+        )}
       </ScrollView>
 
       {addingCustom ? (
@@ -179,27 +176,20 @@ export function ExercisePicker({ dayId, onDone, onCancel }: ExercisePickerProps)
             value={newName}
             onChangeText={setNewName}
           />
-          <AppText variant="label">Músculo principal</AppText>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={styles.segmented}>
-              {MUSCLES.map((m) => (
-                <Chip key={m} label={MUSCLE_LABEL[m]} selected={newMuscle === m} onPress={() => setNewMuscle(m)} />
-              ))}
-            </View>
-          </ScrollView>
-          <AppText variant="label">Equipamiento</AppText>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={styles.segmented}>
-              {EQUIPMENT.map((e) => (
-                <Chip
-                  key={e}
-                  label={EQUIPMENT_LABEL[e]}
-                  selected={newEquipment === e}
-                  onPress={() => setNewEquipment(e)}
-                />
-              ))}
-            </View>
-          </ScrollView>
+          <ChipRow
+            label="Músculo principal"
+            options={MUSCLES}
+            labelFor={(m) => MUSCLE_LABEL[m]}
+            selected={newMuscle}
+            onSelect={setNewMuscle}
+          />
+          <ChipRow
+            label="Equipamiento"
+            options={EQUIPMENT}
+            labelFor={(e) => EQUIPMENT_LABEL[e]}
+            selected={newEquipment}
+            onSelect={setNewEquipment}
+          />
           <Button title="+ Agregar a la lista" variant="secondary" onPress={handleAddCustom} />
         </View>
       ) : (
@@ -211,7 +201,11 @@ export function ExercisePicker({ dayId, onDone, onCancel }: ExercisePickerProps)
       <View style={styles.actions}>
         <View style={styles.action}>
           <Button
-            title={saving ? 'Agregando...' : `Agregar ${selectedIds.length || ''} ejercicio${selectedIds.length === 1 ? '' : 's'}`}
+            title={
+              saving
+                ? 'Agregando...'
+                : `Agregar ${selectedIds.length || ''} ejercicio${selectedIds.length === 1 ? '' : 's'}`
+            }
             onPress={handleConfirm}
             disabled={saving || selectedIds.length === 0}
           />
@@ -242,7 +236,6 @@ function makeStyles(c: ColorTokens) {
       borderRadius: 8,
       padding: 10,
     },
-    segmented: { flexDirection: 'row', gap: 6 },
     list: { maxHeight: 260, borderWidth: 1, borderColor: c.border, borderRadius: 8 },
     row: {
       flexDirection: 'row',

@@ -41,8 +41,7 @@ const RIR_CELL = /^(\d+)-(\d+)$/;
 const SPLIT_RIR_CELL = /^(\d+)-(\d+)\s*\/\s*\d+-\d+$/;
 
 // Matches "Top set 1×5-6 + Back-off 2×8-10" or "Top set 1×6 + Back-off 2×8-10".
-const TOP_SET_BACKOFF_CELL =
-  /^Top set (\d+)×(\d+)(?:-(\d+))?\s*\+\s*Back-off (\d+)×(\d+)-(\d+)$/;
+const TOP_SET_BACKOFF_CELL = /^Top set (\d+)×(\d+)(?:-(\d+))?\s*\+\s*Back-off (\d+)×(\d+)-(\d+)$/;
 
 function parseRepsCell(cell: string): {
   sets: number;
@@ -236,11 +235,7 @@ function extractTableBlock(afterHeading: string): string | null {
 // sections (a day's body ends at the next day heading or the next phase).
 // Phase-level sections must NOT stop at their own nested ### day headings, so
 // callers extracting a phase body pass a level-2-only boundary (/\n##\s/).
-function sectionBody(
-  markdown: string,
-  headingPattern: RegExp,
-  boundaryPattern: RegExp = /\n#{2,3}\s/
-): string {
+function sectionBody(markdown: string, headingPattern: RegExp, boundaryPattern: RegExp = /\n#{2,3}\s/): string {
   const match = headingPattern.exec(markdown);
   if (!match) return '';
   const start = match.index + match[0].length;
