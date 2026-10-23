@@ -196,7 +196,13 @@ export function DayExercisesSection({ dayId }: DayExercisesSectionProps) {
                 </View>
                 <View style={styles.exerciseActions}>
                   {/* The handle drags on touch, without the long-press wait. */}
-                  <Pressable onPressIn={drag} disabled={isActive} hitSlop={8} accessibilityElementsHidden importantForAccessibility="no">
+                  <Pressable
+                    onPressIn={drag}
+                    disabled={isActive}
+                    hitSlop={8}
+                    accessibilityElementsHidden
+                    importantForAccessibility="no"
+                  >
                     <Ionicons name="reorder-three" size={24} color={colors.textMuted} style={styles.dragHandle} />
                   </Pressable>
                   <Pressable onPress={() => handleDeleteExercise(exercise.id, exercise.exercise_name)} hitSlop={8}>

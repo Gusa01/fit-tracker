@@ -28,7 +28,7 @@ export function Chip({ label, selected, onPress }: Props) {
           color: selected ? colors.onAccent : colors.text,
         },
       }),
-    [colors, selected],
+    [colors, selected]
   );
   return (
     <Pressable

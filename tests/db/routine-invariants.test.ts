@@ -36,10 +36,7 @@ describe('routine invariants', () => {
       .single();
     expect(createError).toBeNull();
 
-    const { error: activateError } = await supabase
-      .from('routines')
-      .update({ is_active: true })
-      .eq('id', routineB!.id);
+    const { error: activateError } = await supabase.from('routines').update({ is_active: true }).eq('id', routineB!.id);
     expect(activateError).not.toBeNull();
   });
 
@@ -54,10 +51,7 @@ describe('routine invariants', () => {
       .single();
 
     await supabase.from('routines').update({ is_active: false }).eq('id', routineA.id);
-    const { error: activateError } = await supabase
-      .from('routines')
-      .update({ is_active: true })
-      .eq('id', routineB!.id);
+    const { error: activateError } = await supabase.from('routines').update({ is_active: true }).eq('id', routineB!.id);
     expect(activateError).toBeNull();
   });
 });

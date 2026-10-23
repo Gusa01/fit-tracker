@@ -153,7 +153,11 @@ export function ExercisePicker({ dayId, onDone, onCancel }: ExercisePickerProps)
           return (
             <Pressable key={exercise.id} style={styles.row} onPress={() => toggle(exercise.id)}>
               <View style={[styles.checkbox, checked && styles.checkboxChecked]}>
-                {checked && <AppText color="onAccent" style={styles.checkmark}>✓</AppText>}
+                {checked && (
+                  <AppText color="onAccent" style={styles.checkmark}>
+                    ✓
+                  </AppText>
+                )}
               </View>
               <ExerciseThumbnail imagePath={exercise.image_path} muscle={exercise.primary_muscle} />
               <View style={styles.rowText}>
@@ -167,7 +171,11 @@ export function ExercisePicker({ dayId, onDone, onCancel }: ExercisePickerProps)
             </Pressable>
           );
         })}
-        {visible.length === 0 && <AppText variant="muted" style={styles.hint}>Sin resultados.</AppText>}
+        {visible.length === 0 && (
+          <AppText variant="muted" style={styles.hint}>
+            Sin resultados.
+          </AppText>
+        )}
       </ScrollView>
 
       {addingCustom ? (
@@ -211,7 +219,11 @@ export function ExercisePicker({ dayId, onDone, onCancel }: ExercisePickerProps)
       <View style={styles.actions}>
         <View style={styles.action}>
           <Button
-            title={saving ? 'Agregando...' : `Agregar ${selectedIds.length || ''} ejercicio${selectedIds.length === 1 ? '' : 's'}`}
+            title={
+              saving
+                ? 'Agregando...'
+                : `Agregar ${selectedIds.length || ''} ejercicio${selectedIds.length === 1 ? '' : 's'}`
+            }
             onPress={handleConfirm}
             disabled={saving || selectedIds.length === 0}
           />

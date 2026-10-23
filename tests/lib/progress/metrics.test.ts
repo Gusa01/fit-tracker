@@ -108,10 +108,7 @@ describe('bestSetPerSession', () => {
   });
 
   it('picks the heaviest set in the weight view', () => {
-    const points = bestSetPerSession(
-      [set({ weight: 80, reps: 6 }), set({ weight: 85, reps: 3 })],
-      'weight'
-    );
+    const points = bestSetPerSession([set({ weight: 80, reps: 6 }), set({ weight: 85, reps: 3 })], 'weight');
     expect(points).toEqual([{ sessionId: 's1', date: '2026-09-01', value: 85, weight: 85, reps: 3 }]);
   });
 

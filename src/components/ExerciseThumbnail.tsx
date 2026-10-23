@@ -7,7 +7,15 @@ import { useTheme } from '../theme/ThemeProvider';
 import { ColorTokens } from '../theme/colors';
 
 /** Exercise illustration, or the muscle's initials when there's no image (or it fails to load). */
-export function ExerciseThumbnail({ imagePath, muscle, size = 40 }: { imagePath: string | null; muscle: string; size?: number }) {
+export function ExerciseThumbnail({
+  imagePath,
+  muscle,
+  size = 40,
+}: {
+  imagePath: string | null;
+  muscle: string;
+  size?: number;
+}) {
   const { colors } = useTheme();
   const styles = useMemo(() => makeStyles(colors), [colors]);
   const [failed, setFailed] = useState(false);

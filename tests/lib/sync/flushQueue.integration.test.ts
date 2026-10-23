@@ -37,7 +37,9 @@ describe('flushPendingWrites', () => {
   });
 
   it('keeps a failed write out of succeededIds but still attempts the rest', async () => {
-    const { client } = fakeSupabase((table) => ({ error: table === 'workout_sessions' ? { message: 'network' } : null }));
+    const { client } = fakeSupabase((table) => ({
+      error: table === 'workout_sessions' ? { message: 'network' } : null,
+    }));
     const writes: PendingWrite[] = [
       { id: 'w1', entity: 'workout_sessions', payload: { id: 'w1' } },
       { id: 'w2', entity: 'logged_sets', payload: { id: 'w2' } },

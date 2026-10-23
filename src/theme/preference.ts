@@ -12,7 +12,10 @@ export async function saveThemePreference(preference: ThemePreference): Promise<
   await AsyncStorage.setItem(KEY, preference);
 }
 
-export function resolveScheme(preference: ThemePreference, system: 'light' | 'dark' | null | undefined): 'light' | 'dark' {
+export function resolveScheme(
+  preference: ThemePreference,
+  system: 'light' | 'dark' | null | undefined
+): 'light' | 'dark' {
   if (preference === 'system') return system === 'dark' ? 'dark' : 'light';
   return preference;
 }

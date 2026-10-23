@@ -47,11 +47,7 @@ describe('routine mutations', () => {
     expect(routineRow!.is_deleted).toBe(true);
     expect(routineRow!.is_active).toBe(false);
 
-    const { data: dayRow } = await supabase
-      .from('routine_days')
-      .select('is_deleted')
-      .eq('id', day.id)
-      .single();
+    const { data: dayRow } = await supabase.from('routine_days').select('is_deleted').eq('id', day.id).single();
     expect(dayRow!.is_deleted).toBe(true);
 
     const { data: exerciseRow } = await supabase
@@ -110,7 +106,12 @@ describe('routine mutations', () => {
     expect(reordered![0].id).toBe(dayTwo.id);
     expect(reordered![1].id).toBe(dayOne.id);
 
-    const exercise = await findOrCreateExercise(supabase, { name: '[test-fixture] Cascade Delete Exercise', primaryMuscle: 'chest', equipment: 'bodyweight', ownerId: null });
+    const exercise = await findOrCreateExercise(supabase, {
+      name: '[test-fixture] Cascade Delete Exercise',
+      primaryMuscle: 'chest',
+      equipment: 'bodyweight',
+      ownerId: null,
+    });
     const routineExercise = await createRoutineExercise(supabase, dayOne.id, {
       exerciseId: exercise.id,
       role: 'main',
@@ -138,7 +139,12 @@ describe('routine mutations', () => {
 
   it('soft-deletes an exercise within a day', async () => {
     const { day } = await seedTestRoutine(supabase, userId);
-    const exerciseOne = await findOrCreateExercise(supabase, { name: '[test-fixture] Delete Exercise A', primaryMuscle: 'chest', equipment: 'bodyweight', ownerId: null });
+    const exerciseOne = await findOrCreateExercise(supabase, {
+      name: '[test-fixture] Delete Exercise A',
+      primaryMuscle: 'chest',
+      equipment: 'bodyweight',
+      ownerId: null,
+    });
     const input = {
       role: 'accessory' as const,
       schemeType: 'normal' as const,
@@ -170,9 +176,24 @@ describe('routine mutations', () => {
 
   it('reorderRoutineExercises applies an arbitrary new order in one call', async () => {
     const { day } = await seedTestRoutine(supabase, userId);
-    const exerciseOne = await findOrCreateExercise(supabase, { name: '[test-fixture] Drag Exercise A', primaryMuscle: 'chest', equipment: 'bodyweight', ownerId: null });
-    const exerciseTwo = await findOrCreateExercise(supabase, { name: '[test-fixture] Drag Exercise B', primaryMuscle: 'chest', equipment: 'bodyweight', ownerId: null });
-    const exerciseThree = await findOrCreateExercise(supabase, { name: '[test-fixture] Drag Exercise C', primaryMuscle: 'chest', equipment: 'bodyweight', ownerId: null });
+    const exerciseOne = await findOrCreateExercise(supabase, {
+      name: '[test-fixture] Drag Exercise A',
+      primaryMuscle: 'chest',
+      equipment: 'bodyweight',
+      ownerId: null,
+    });
+    const exerciseTwo = await findOrCreateExercise(supabase, {
+      name: '[test-fixture] Drag Exercise B',
+      primaryMuscle: 'chest',
+      equipment: 'bodyweight',
+      ownerId: null,
+    });
+    const exerciseThree = await findOrCreateExercise(supabase, {
+      name: '[test-fixture] Drag Exercise C',
+      primaryMuscle: 'chest',
+      equipment: 'bodyweight',
+      ownerId: null,
+    });
     const input = {
       role: 'accessory' as const,
       schemeType: 'normal' as const,
@@ -196,11 +217,7 @@ describe('routine mutations', () => {
     });
 
     // Move the last one to the front — not reachable via a single adjacent swap.
-    await reorderRoutineExercises(supabase, [
-      routineExerciseThree.id,
-      routineExerciseOne.id,
-      routineExerciseTwo.id,
-    ]);
+    await reorderRoutineExercises(supabase, [routineExerciseThree.id, routineExerciseOne.id, routineExerciseTwo.id]);
 
     const { data: reordered } = await supabase
       .from('routine_exercises')
@@ -216,8 +233,18 @@ describe('routine mutations', () => {
 
   it('findOrCreateExercise deduplicates by name', async () => {
     const name = '[test-fixture] Dedup Exercise';
-    const first = await findOrCreateExercise(supabase, { name, primaryMuscle: 'core', equipment: 'bodyweight', ownerId: null });
-    const second = await findOrCreateExercise(supabase, { name, primaryMuscle: 'core', equipment: 'bodyweight', ownerId: null });
+    const first = await findOrCreateExercise(supabase, {
+      name,
+      primaryMuscle: 'core',
+      equipment: 'bodyweight',
+      ownerId: null,
+    });
+    const second = await findOrCreateExercise(supabase, {
+      name,
+      primaryMuscle: 'core',
+      equipment: 'bodyweight',
+      ownerId: null,
+    });
     expect(second.id).toBe(first.id);
     await supabase.from('exercises').delete().eq('id', first.id);
   });
@@ -243,11 +270,7 @@ describe('routine mutations', () => {
     expect(updated.is_rest_day).toBe(true);
     expect(updated.name).toBe(day.name);
 
-    const { data: row } = await supabase
-      .from('routine_days')
-      .select('is_rest_day, name')
-      .eq('id', day.id)
-      .single();
+    const { data: row } = await supabase.from('routine_days').select('is_rest_day, name').eq('id', day.id).single();
     expect(row!.is_rest_day).toBe(true);
     expect(row!.name).toBe(day.name);
   });

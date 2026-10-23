@@ -75,10 +75,7 @@ export default function HistoryList() {
           ) : null
         }
         renderItem={({ item }) => (
-          <Pressable
-            style={styles.rowWrap}
-            onPress={() => router.push(`/(app)/(tabs)/history/${item.id}` as any)}
-          >
+          <Pressable style={styles.rowWrap} onPress={() => router.push(`/(app)/(tabs)/history/${item.id}` as any)}>
             <Card style={styles.row}>
               <View style={styles.rowMain}>
                 <AppText variant="heading">{formatSessionTitle(item.sessionDate, item.dayName)}</AppText>

@@ -34,9 +34,7 @@ export function detectLiveRecord(
     if (cached === null) continue;
     const value = metricValue(newSet, metric);
     if (value === null) continue;
-    const earlierValues = earlier
-      .map((s) => metricValue(s, metric))
-      .filter((v): v is number => v !== null);
+    const earlierValues = earlier.map((s) => metricValue(s, metric)).filter((v): v is number => v !== null);
     const baseline = Math.max(cached, ...earlierValues);
     if (value > baseline) broken.push({ metric, value, previous: baseline });
   }

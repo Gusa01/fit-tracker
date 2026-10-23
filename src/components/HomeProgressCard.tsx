@@ -96,7 +96,9 @@ export function HomeProgressCard() {
           <Text style={styles.value}>{formatMetricValue(summary.latestValue, summary.metric)}</Text>
         )}
         {summary.trend && (
-          <Text style={[styles.arrow, { color: colors[TREND_COLOR[summary.trend]] }]}>{TREND_ARROW[summary.trend]}</Text>
+          <Text style={[styles.arrow, { color: colors[TREND_COLOR[summary.trend]] }]}>
+            {TREND_ARROW[summary.trend]}
+          </Text>
         )}
       </Pressable>
 
@@ -119,7 +121,9 @@ export function HomeProgressCard() {
                   {item.exerciseName}
                 </Text>
                 {item.trend && (
-                  <Text style={[styles.arrow, { color: colors[TREND_COLOR[item.trend]] }]}>{TREND_ARROW[item.trend]}</Text>
+                  <Text style={[styles.arrow, { color: colors[TREND_COLOR[item.trend]] }]}>
+                    {TREND_ARROW[item.trend]}
+                  </Text>
                 )}
               </Pressable>
             )}

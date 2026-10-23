@@ -97,7 +97,9 @@ export default function Home() {
                           </AppText>
                         ) : (
                           <Button
-                            title={sessionStatus === 'in_progress' ? 'Continuar entrenamiento' : 'Empezar entrenamiento'}
+                            title={
+                              sessionStatus === 'in_progress' ? 'Continuar entrenamiento' : 'Empezar entrenamiento'
+                            }
                             onPress={handleStart}
                           />
                         )}

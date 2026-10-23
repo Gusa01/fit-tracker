@@ -49,16 +49,10 @@ export async function updateRoutine(
   const update: Record<string, unknown> = {};
   if (patch.name !== undefined) update.name = patch.name;
   if (patch.usesTopSetBackoff !== undefined) update.uses_top_set_backoff = patch.usesTopSetBackoff;
-  if (patch.suggestedDurationWeeks !== undefined)
-    update.suggested_duration_weeks = patch.suggestedDurationWeeks;
+  if (patch.suggestedDurationWeeks !== undefined) update.suggested_duration_weeks = patch.suggestedDurationWeeks;
   if (patch.nextRoutineId !== undefined) update.next_routine_id = patch.nextRoutineId;
 
-  const { data, error } = await supabase
-    .from('routines')
-    .update(update)
-    .eq('id', routineId)
-    .select()
-    .single();
+  const { data, error } = await supabase.from('routines').update(update).eq('id', routineId).select().single();
   if (error) throw error;
   return data;
 }
@@ -98,11 +92,7 @@ export async function softDeleteRoutine(supabase: SupabaseClient, routineId: str
   if (routineError) throw routineError;
 }
 
-export async function activateRoutine(
-  supabase: SupabaseClient,
-  userId: string,
-  routineId: string
-): Promise<void> {
+export async function activateRoutine(supabase: SupabaseClient, userId: string, routineId: string): Promise<void> {
   const { error: deactivateError } = await supabase
     .from('routines')
     .update({ is_active: false })
@@ -167,12 +157,7 @@ export async function updateDay(
   if (patch.name !== undefined) update.name = patch.name;
   if (patch.isRestDay !== undefined) update.is_rest_day = patch.isRestDay;
 
-  const { data, error } = await supabase
-    .from('routine_days')
-    .update(update)
-    .eq('id', dayId)
-    .select()
-    .single();
+  const { data, error } = await supabase.from('routine_days').update(update).eq('id', dayId).select().single();
   if (error) throw error;
   return data;
 }
@@ -184,10 +169,7 @@ export async function softDeleteDay(supabase: SupabaseClient, dayId: string): Pr
     .eq('routine_day_id', dayId);
   if (exercisesError) throw exercisesError;
 
-  const { error: dayError } = await supabase
-    .from('routine_days')
-    .update({ is_deleted: true })
-    .eq('id', dayId);
+  const { error: dayError } = await supabase.from('routine_days').update({ is_deleted: true }).eq('id', dayId);
   if (dayError) throw dayError;
 }
 
@@ -315,26 +297,14 @@ export async function updateRoutineExercise(
   return data;
 }
 
-export async function softDeleteRoutineExercise(
-  supabase: SupabaseClient,
-  routineExerciseId: string
-): Promise<void> {
-  const { error } = await supabase
-    .from('routine_exercises')
-    .update({ is_deleted: true })
-    .eq('id', routineExerciseId);
+export async function softDeleteRoutineExercise(supabase: SupabaseClient, routineExerciseId: string): Promise<void> {
+  const { error } = await supabase.from('routine_exercises').update({ is_deleted: true }).eq('id', routineExerciseId);
   if (error) throw error;
 }
 
-export async function reorderRoutineExercises(
-  supabase: SupabaseClient,
-  orderedIds: string[]
-): Promise<void> {
+export async function reorderRoutineExercises(supabase: SupabaseClient, orderedIds: string[]): Promise<void> {
   for (let i = 0; i < orderedIds.length; i++) {
-    const { error } = await supabase
-      .from('routine_exercises')
-      .update({ order_index: i })
-      .eq('id', orderedIds[i]);
+    const { error } = await supabase.from('routine_exercises').update({ order_index: i }).eq('id', orderedIds[i]);
     if (error) throw error;
   }
 }

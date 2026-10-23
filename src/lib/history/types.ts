@@ -1,9 +1,7 @@
 import { RoutineExerciseRepUnit, RoutineExerciseSchemeType } from '../routines/types';
 import { LoggedSet } from '../sessions/types';
 
-export type SetCorrection =
-  | { kind: 'edit'; weight: number; reps: number; rir: number | null }
-  | { kind: 'delete' };
+export type SetCorrection = { kind: 'edit'; weight: number; reps: number; rir: number | null } | { kind: 'delete' };
 
 /** The routine exercise a historical set points to (soft-deleted ones included). */
 export interface HistoryExercise {

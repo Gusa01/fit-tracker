@@ -123,10 +123,7 @@ describe('exercise_set_history row level security', () => {
     expect(unfilteredError).toBeNull();
     expect(unfiltered).toHaveLength(0);
 
-    const { data: targeted } = await otherClient
-      .from('exercise_set_history')
-      .select('*')
-      .eq('user_id', owner.userId);
+    const { data: targeted } = await otherClient.from('exercise_set_history').select('*').eq('user_id', owner.userId);
     expect(targeted).toHaveLength(0);
   });
 });

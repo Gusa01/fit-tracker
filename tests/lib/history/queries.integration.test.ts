@@ -7,7 +7,11 @@ const createdUserIds: string[] = [];
 
 async function createUser(prefix: string) {
   const email = `${prefix}-${Date.now()}-${Math.floor(Math.random() * 1e6)}@example.com`;
-  const { data, error } = await admin.auth.admin.createUser({ email, password: 'testpassword123', email_confirm: true });
+  const { data, error } = await admin.auth.admin.createUser({
+    email,
+    password: 'testpassword123',
+    email_confirm: true,
+  });
   if (error) throw error;
   createdUserIds.push(data.user.id);
   return data.user.id;
@@ -45,10 +49,42 @@ describe('listCompletedSessions', () => {
     // The newest completed session gets 3 sets on 2 exercises, plus 1 deleted set on a third count.
     countedSessionId = sessions!.find((s) => s.session_date === dateOffset('2026-01-01', HISTORY_PAGE_SIZE))!.id;
     const { error: setsError } = await admin.from('logged_sets').insert([
-      { session_id: countedSessionId, routine_exercise_id: first.routineExercise.id, set_index: 1, set_type: 'working', weight: 50, reps: 10, is_deleted: false },
-      { session_id: countedSessionId, routine_exercise_id: first.routineExercise.id, set_index: 2, set_type: 'working', weight: 50, reps: 10, is_deleted: false },
-      { session_id: countedSessionId, routine_exercise_id: second.routineExercise.id, set_index: 1, set_type: 'working', weight: 20, reps: 12, is_deleted: false },
-      { session_id: countedSessionId, routine_exercise_id: second.routineExercise.id, set_index: 2, set_type: 'working', weight: 20, reps: 12, is_deleted: true },
+      {
+        session_id: countedSessionId,
+        routine_exercise_id: first.routineExercise.id,
+        set_index: 1,
+        set_type: 'working',
+        weight: 50,
+        reps: 10,
+        is_deleted: false,
+      },
+      {
+        session_id: countedSessionId,
+        routine_exercise_id: first.routineExercise.id,
+        set_index: 2,
+        set_type: 'working',
+        weight: 50,
+        reps: 10,
+        is_deleted: false,
+      },
+      {
+        session_id: countedSessionId,
+        routine_exercise_id: second.routineExercise.id,
+        set_index: 1,
+        set_type: 'working',
+        weight: 20,
+        reps: 12,
+        is_deleted: false,
+      },
+      {
+        session_id: countedSessionId,
+        routine_exercise_id: second.routineExercise.id,
+        set_index: 2,
+        set_type: 'working',
+        weight: 20,
+        reps: 12,
+        is_deleted: true,
+      },
     ]);
     if (setsError) throw setsError;
   });
@@ -92,9 +128,33 @@ describe('getSessionDetail', () => {
       .single();
     if (error) throw error;
     const { error: setsError } = await admin.from('logged_sets').insert([
-      { session_id: session.id, routine_exercise_id: seeded.routineExercise.id, set_index: 2, set_type: 'working', weight: 40, reps: 9, is_deleted: false },
-      { session_id: session.id, routine_exercise_id: seeded.routineExercise.id, set_index: 1, set_type: 'working', weight: 40, reps: 10, is_deleted: false },
-      { session_id: session.id, routine_exercise_id: seeded.routineExercise.id, set_index: 3, set_type: 'working', weight: 40, reps: 7, is_deleted: true },
+      {
+        session_id: session.id,
+        routine_exercise_id: seeded.routineExercise.id,
+        set_index: 2,
+        set_type: 'working',
+        weight: 40,
+        reps: 9,
+        is_deleted: false,
+      },
+      {
+        session_id: session.id,
+        routine_exercise_id: seeded.routineExercise.id,
+        set_index: 1,
+        set_type: 'working',
+        weight: 40,
+        reps: 10,
+        is_deleted: false,
+      },
+      {
+        session_id: session.id,
+        routine_exercise_id: seeded.routineExercise.id,
+        set_index: 3,
+        set_type: 'working',
+        weight: 40,
+        reps: 7,
+        is_deleted: true,
+      },
     ]);
     if (setsError) throw setsError;
     const { error: removeError } = await admin

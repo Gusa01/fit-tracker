@@ -178,7 +178,9 @@ export function ExerciseForm({ exercises, initial, onSubmit, onCancel }: Exercis
 
   return (
     <View style={styles.form}>
-      <AppText variant="label" style={styles.label}>Nombre del ejercicio</AppText>
+      <AppText variant="label" style={styles.label}>
+        Nombre del ejercicio
+      </AppText>
       <TextInput
         style={styles.input}
         placeholder="Ej: Press banca, Sentadilla, Remo..."
@@ -187,7 +189,9 @@ export function ExerciseForm({ exercises, initial, onSubmit, onCancel }: Exercis
         onChangeText={(text) => update('exerciseName', text)}
       />
 
-      <AppText variant="label" style={styles.label}>Explorar ejercicios comunes</AppText>
+      <AppText variant="label" style={styles.label}>
+        Explorar ejercicios comunes
+      </AppText>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={styles.segmented}>
           {MUSCLES.map((m) => (
@@ -222,7 +226,9 @@ export function ExerciseForm({ exercises, initial, onSubmit, onCancel }: Exercis
 
       {!matchesExisting && (
         <>
-          <AppText variant="label" style={styles.label}>Músculo principal</AppText>
+          <AppText variant="label" style={styles.label}>
+            Músculo principal
+          </AppText>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View style={styles.segmented}>
               {MUSCLES.map((m) => (
@@ -236,7 +242,9 @@ export function ExerciseForm({ exercises, initial, onSubmit, onCancel }: Exercis
             </View>
           </ScrollView>
 
-          <AppText variant="label" style={styles.label}>Equipamiento</AppText>
+          <AppText variant="label" style={styles.label}>
+            Equipamiento
+          </AppText>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View style={styles.segmented}>
               {EQUIPMENT.map((e) => (
@@ -252,7 +260,9 @@ export function ExerciseForm({ exercises, initial, onSubmit, onCancel }: Exercis
         </>
       )}
 
-      <AppText variant="label" style={styles.label}>Rol</AppText>
+      <AppText variant="label" style={styles.label}>
+        Rol
+      </AppText>
       <View style={styles.segmented}>
         {(['main', 'accessory', 'core'] as const).map((option) => (
           <Chip key={option} label={option} selected={values.role === option} onPress={() => update('role', option)} />
@@ -281,27 +291,41 @@ export function ExerciseForm({ exercises, initial, onSubmit, onCancel }: Exercis
 
       {values.schemeType === 'normal' ? (
         <>
-          <AppText variant="label" style={styles.label}>Series</AppText>
+          <AppText variant="label" style={styles.label}>
+            Series
+          </AppText>
           <StepperInput value={values.sets} onChange={(text) => update('sets', text)} min={1} max={10} />
-          <AppText variant="label" style={styles.label}>{unitLabel} mínimas</AppText>
+          <AppText variant="label" style={styles.label}>
+            {unitLabel} mínimas
+          </AppText>
           <StepperInput value={values.repMin} onChange={(text) => update('repMin', text)} min={1} max={50} />
-          <AppText variant="label" style={styles.label}>{unitLabel} máximas</AppText>
+          <AppText variant="label" style={styles.label}>
+            {unitLabel} máximas
+          </AppText>
           <StepperInput value={values.repMax} onChange={(text) => update('repMax', text)} min={1} max={50} />
         </>
       ) : (
         <>
-          <AppText variant="label" style={styles.label}>{unitLabel} del top set</AppText>
+          <AppText variant="label" style={styles.label}>
+            {unitLabel} del top set
+          </AppText>
           <StepperInput value={values.topSetReps} onChange={(text) => update('topSetReps', text)} min={1} max={20} />
-          <AppText variant="label" style={styles.label}>Series de back-off</AppText>
+          <AppText variant="label" style={styles.label}>
+            Series de back-off
+          </AppText>
           <StepperInput value={values.backoffSets} onChange={(text) => update('backoffSets', text)} min={1} max={10} />
-          <AppText variant="label" style={styles.label}>{unitLabel} mínimas de back-off</AppText>
+          <AppText variant="label" style={styles.label}>
+            {unitLabel} mínimas de back-off
+          </AppText>
           <StepperInput
             value={values.backoffRepMin}
             onChange={(text) => update('backoffRepMin', text)}
             min={1}
             max={50}
           />
-          <AppText variant="label" style={styles.label}>{unitLabel} máximas de back-off</AppText>
+          <AppText variant="label" style={styles.label}>
+            {unitLabel} máximas de back-off
+          </AppText>
           <StepperInput
             value={values.backoffRepMax}
             onChange={(text) => update('backoffRepMax', text)}
@@ -311,9 +335,13 @@ export function ExerciseForm({ exercises, initial, onSubmit, onCancel }: Exercis
         </>
       )}
 
-      <AppText variant="label" style={styles.label}>RIR mínimo (opcional)</AppText>
+      <AppText variant="label" style={styles.label}>
+        RIR mínimo (opcional)
+      </AppText>
       <StepperInput value={values.rirMin} onChange={(text) => update('rirMin', text)} min={0} max={10} />
-      <AppText variant="label" style={styles.label}>RIR máximo (opcional)</AppText>
+      <AppText variant="label" style={styles.label}>
+        RIR máximo (opcional)
+      </AppText>
       <StepperInput value={values.rirMax} onChange={(text) => update('rirMax', text)} min={0} max={10} />
 
       {error && <AppText color="danger">{error}</AppText>}

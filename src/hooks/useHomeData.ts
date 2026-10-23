@@ -42,7 +42,9 @@ export function useHomeData() {
   const [switchDismissed, setSwitchDismissed] = useState(false);
   const [weekCalendar, setWeekCalendar] = useState<WeekCalendarDay[]>([]);
   const [weekProgress, setWeekProgress] = useState<number | null>(null);
-  const [recentActivity, setRecentActivity] = useState<{ sessionId: string; sessionDate: string; dayName: string }[]>([]);
+  const [recentActivity, setRecentActivity] = useState<{ sessionId: string; sessionDate: string; dayName: string }[]>(
+    []
+  );
   const [consistencyStreak, setConsistencyStreak] = useState(0);
 
   const load = useCallback(async () => {
@@ -85,7 +87,12 @@ export function useHomeData() {
       const recentSessions = await listRecentCompletedSessions(supabase, userId, 200).catch(() => null);
       if (recentSessions !== null) {
         setRecentActivity(recentSessions.slice(0, 5));
-        setConsistencyStreak(computeConsecutiveActiveWeeks(recentSessions.map((s) => s.sessionDate), new Date()));
+        setConsistencyStreak(
+          computeConsecutiveActiveWeeks(
+            recentSessions.map((s) => s.sessionDate),
+            new Date()
+          )
+        );
         await mergeCompletedDates(recentSessions.map((s) => s.sessionDate)).catch(() => {});
       }
       // else: offline / request failure — preserve whatever recentActivity/consistencyStreak

@@ -30,9 +30,7 @@ export function buildPrescribedSets(exercise: {
 export function formatTargetScheme(exercise: RoutineExerciseWithName): string {
   const unit = exercise.rep_unit === 'seconds' ? 's' : '';
   const rir =
-    exercise.rir_min !== null && exercise.rir_max !== null
-      ? ` @ RIR ${exercise.rir_min}-${exercise.rir_max}`
-      : '';
+    exercise.rir_min !== null && exercise.rir_max !== null ? ` @ RIR ${exercise.rir_min}-${exercise.rir_max}` : '';
   if (exercise.scheme_type === 'top_set_backoff') {
     return `Top set 1×${exercise.top_set_reps} + Back-off ${exercise.backoff_sets}×${exercise.backoff_rep_min}-${exercise.backoff_rep_max}${unit}${rir}`;
   }

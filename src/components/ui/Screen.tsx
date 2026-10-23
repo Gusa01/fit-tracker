@@ -28,7 +28,11 @@ export function Screen({ children, scroll = false, padded = true, safeBottom = f
     return (
       <ScrollView
         style={styles.container}
-        contentContainerStyle={[styles.content, padded && styles.padded, safeBottom && { paddingBottom: insets.bottom }]}
+        contentContainerStyle={[
+          styles.content,
+          padded && styles.padded,
+          safeBottom && { paddingBottom: insets.bottom },
+        ]}
       >
         {children}
       </ScrollView>

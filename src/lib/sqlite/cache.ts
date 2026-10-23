@@ -37,11 +37,7 @@ export interface CachedUserExerciseState {
   consecutive_miss_count: number;
 }
 
-export async function refreshLocalCache(
-  db: SQLiteDatabase,
-  supabase: SupabaseClient,
-  userId: string
-): Promise<void> {
+export async function refreshLocalCache(db: SQLiteDatabase, supabase: SupabaseClient, userId: string): Promise<void> {
   const routine = await getActiveRoutine(supabase, userId);
   const days = routine ? await listRoutineDays(supabase, routine.id) : [];
   const exercisesByDay = await Promise.all(days.map((day) => listDayExercises(supabase, day.id)));
@@ -186,10 +182,9 @@ export function getCachedDayExercises(db: SQLiteDatabase, dayId: string): Cached
 }
 
 export function getCachedExerciseState(db: SQLiteDatabase, exerciseId: string): CachedUserExerciseState | null {
-  const rows = db.getAllSync<CachedUserExerciseState>(
-    'select * from user_exercise_state_cache where exercise_id = ?',
-    [exerciseId]
-  );
+  const rows = db.getAllSync<CachedUserExerciseState>('select * from user_exercise_state_cache where exercise_id = ?', [
+    exerciseId,
+  ]);
   return rows[0] ?? null;
 }
 

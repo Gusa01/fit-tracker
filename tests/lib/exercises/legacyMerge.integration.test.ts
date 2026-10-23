@@ -13,7 +13,11 @@ const NAMES = {
 };
 
 async function createUser(email: string) {
-  const { data, error } = await admin.auth.admin.createUser({ email, password: 'testpassword123', email_confirm: true });
+  const { data, error } = await admin.auth.admin.createUser({
+    email,
+    password: 'testpassword123',
+    email_confirm: true,
+  });
   if (error) throw error;
   return data.user!.id;
 }
@@ -43,7 +47,16 @@ async function addRoutineExercise(userId: string, exerciseId: string) {
   if (e2) throw e2;
   const { data: re, error: e3 } = await admin
     .from('routine_exercises')
-    .insert({ routine_day_id: day.id, exercise_id: exerciseId, order_index: 0, role: 'main', scheme_type: 'normal', sets: 3, rep_min: 8, rep_max: 10 })
+    .insert({
+      routine_day_id: day.id,
+      exercise_id: exerciseId,
+      order_index: 0,
+      role: 'main',
+      scheme_type: 'normal',
+      sets: 3,
+      rep_min: 8,
+      rep_max: 10,
+    })
     .select('id')
     .single();
   if (e3) throw e3;

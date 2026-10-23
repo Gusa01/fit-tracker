@@ -4,9 +4,10 @@ import { ExerciseSetGroup, HistoryExercise, SetCorrection, SetEditValues } from 
 
 const MAX_RIR = 10;
 
-export function summarizeSession(
-  sets: Array<{ routine_exercise_id: string; is_deleted?: boolean }>
-): { exerciseCount: number; setCount: number } {
+export function summarizeSession(sets: Array<{ routine_exercise_id: string; is_deleted?: boolean }>): {
+  exerciseCount: number;
+  setCount: number;
+} {
   const live = sets.filter((s) => !s.is_deleted);
   return { exerciseCount: new Set(live.map((s) => s.routine_exercise_id)).size, setCount: live.length };
 }

@@ -10,11 +10,7 @@ export interface ImportResult {
   routineIds?: Record<string, string>;
 }
 
-export async function importRoutine(
-  supabase: SupabaseClient,
-  userId: string,
-  markdown: string
-): Promise<ImportResult> {
+export async function importRoutine(supabase: SupabaseClient, userId: string, markdown: string): Promise<ImportResult> {
   const routines = parseRoutineMarkdown(markdown);
 
   for (const routine of routines) {
@@ -142,10 +138,7 @@ async function main() {
     process.exit(1);
   }
 
-  const markdown = fs.readFileSync(
-    path.join(__dirname, '..', 'rutina_gym_top_set_back_off.md'),
-    'utf-8'
-  );
+  const markdown = fs.readFileSync(path.join(__dirname, '..', 'rutina_gym_top_set_back_off.md'), 'utf-8');
   const result = await importRoutine(supabase, user.id, markdown);
   if (!result.imported) {
     console.log(`Import skipped: ${result.reason}`);

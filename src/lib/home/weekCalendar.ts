@@ -35,7 +35,7 @@ export function buildWeekCalendar(
 
   return WEEK_ORDER.map(({ weekday, label }) => {
     const dayId = resolveTodayDayId(weekdaySchedule, weekday, weekNumber);
-    const day = dayId ? days.find((d) => d.id === dayId) ?? null : null;
+    const day = dayId ? (days.find((d) => d.id === dayId) ?? null) : null;
     const isRestDay = !day || day.is_rest_day;
 
     return {

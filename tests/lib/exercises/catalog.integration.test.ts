@@ -25,27 +25,42 @@ afterAll(async () => {
 
 describe('researched exercise catalog', () => {
   it('seeds 150-200 catalog rows with a generated muscle_group', async () => {
-    const { data, error } = await admin.from('exercises').select('slug, primary_muscle, muscle_group').not('slug', 'is', null);
+    const { data, error } = await admin
+      .from('exercises')
+      .select('slug, primary_muscle, muscle_group')
+      .not('slug', 'is', null);
     expect(error).toBeNull();
     expect(data!.length).toBeGreaterThanOrEqual(150);
     expect(data!.length).toBeLessThanOrEqual(200);
     for (const row of data!) {
-      const lower = ['quadriceps', 'hamstrings', 'glutes', 'adductors_abductors', 'calves'].includes(row.primary_muscle);
+      const lower = ['quadriceps', 'hamstrings', 'glutes', 'adductors_abductors', 'calves'].includes(
+        row.primary_muscle
+      );
       expect(row.muscle_group).toBe(row.primary_muscle === 'core' ? 'core' : lower ? 'lower' : 'upper');
     }
   });
 
   it('resolves an importer alias to the catalog row instead of creating one', async () => {
     const { userId } = await signedInUser('catalog-alias');
-    const viaAlias = await findOrCreateExercise(admin, { name: 'press banca', primaryMuscle: 'chest', equipment: 'bodyweight', ownerId: userId });
+    const viaAlias = await findOrCreateExercise(admin, {
+      name: 'press banca',
+      primaryMuscle: 'chest',
+      equipment: 'bodyweight',
+      ownerId: userId,
+    });
     expect(viaAlias.slug).not.toBeNull();
     expect(viaAlias.name).toBe('Press banca con barra');
   });
 
-  it("keeps custom exercises private to their owner", async () => {
+  it('keeps custom exercises private to their owner', async () => {
     const a = await signedInUser('catalog-owner-a');
     const b = await signedInUser('catalog-owner-b');
-    const custom = await findOrCreateExercise(a.client, { name: 'Ejercicio inventado A', primaryMuscle: 'core', equipment: 'bodyweight', ownerId: a.userId });
+    const custom = await findOrCreateExercise(a.client, {
+      name: 'Ejercicio inventado A',
+      primaryMuscle: 'core',
+      equipment: 'bodyweight',
+      ownerId: a.userId,
+    });
     expect(custom.owner_id).toBe(a.userId);
 
     const { data: seenByA } = await a.client.from('exercises').select('id').eq('id', custom.id);
@@ -54,20 +69,34 @@ describe('researched exercise catalog', () => {
     expect(seenByB).toHaveLength(0);
   });
 
-  it('refuses a signed-in user writing a catalog row or another user\'s row', async () => {
+  it("refuses a signed-in user writing a catalog row or another user's row", async () => {
     const a = await signedInUser('catalog-write-a');
     const b = await signedInUser('catalog-write-b');
-    const { error: catalogError } = await a.client.from('exercises').insert({ name: 'Intento catálogo', primary_muscle: 'core', equipment: 'bodyweight', owner_id: null });
+    const { error: catalogError } = await a.client
+      .from('exercises')
+      .insert({ name: 'Intento catálogo', primary_muscle: 'core', equipment: 'bodyweight', owner_id: null });
     expect(catalogError).not.toBeNull();
-    const { error: otherError } = await a.client.from('exercises').insert({ name: 'Intento ajeno', primary_muscle: 'core', equipment: 'bodyweight', owner_id: b.userId });
+    const { error: otherError } = await a.client
+      .from('exercises')
+      .insert({ name: 'Intento ajeno', primary_muscle: 'core', equipment: 'bodyweight', owner_id: b.userId });
     expect(otherError).not.toBeNull();
   });
 
   it('lets two users own custom exercises with the same name', async () => {
     const a = await signedInUser('catalog-same-a');
     const b = await signedInUser('catalog-same-b');
-    const one = await findOrCreateExercise(a.client, { name: 'Mismo nombre', primaryMuscle: 'core', equipment: 'bodyweight', ownerId: a.userId });
-    const two = await findOrCreateExercise(b.client, { name: 'Mismo nombre', primaryMuscle: 'core', equipment: 'bodyweight', ownerId: b.userId });
+    const one = await findOrCreateExercise(a.client, {
+      name: 'Mismo nombre',
+      primaryMuscle: 'core',
+      equipment: 'bodyweight',
+      ownerId: a.userId,
+    });
+    const two = await findOrCreateExercise(b.client, {
+      name: 'Mismo nombre',
+      primaryMuscle: 'core',
+      equipment: 'bodyweight',
+      ownerId: b.userId,
+    });
     expect(one.id).not.toBe(two.id);
   });
 });

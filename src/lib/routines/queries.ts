@@ -12,10 +12,7 @@ export async function listRoutines(supabase: SupabaseClient, userId: string): Pr
   return data;
 }
 
-export async function getRoutine(
-  supabase: SupabaseClient,
-  routineId: string
-): Promise<Routine | null> {
+export async function getRoutine(supabase: SupabaseClient, routineId: string): Promise<Routine | null> {
   const { data, error } = await supabase
     .from('routines')
     .select('*')
@@ -26,10 +23,7 @@ export async function getRoutine(
   return data;
 }
 
-export async function listRoutineDays(
-  supabase: SupabaseClient,
-  routineId: string
-): Promise<RoutineDay[]> {
+export async function listRoutineDays(supabase: SupabaseClient, routineId: string): Promise<RoutineDay[]> {
   const { data, error } = await supabase
     .from('routine_days')
     .select('*')
@@ -40,10 +34,7 @@ export async function listRoutineDays(
   return data;
 }
 
-export async function getRoutineDay(
-  supabase: SupabaseClient,
-  dayId: string
-): Promise<RoutineDay | null> {
+export async function getRoutineDay(supabase: SupabaseClient, dayId: string): Promise<RoutineDay | null> {
   const { data, error } = await supabase
     .from('routine_days')
     .select('*')
@@ -54,10 +45,7 @@ export async function getRoutineDay(
   return data;
 }
 
-export async function listDayExercises(
-  supabase: SupabaseClient,
-  dayId: string
-): Promise<RoutineExerciseWithName[]> {
+export async function listDayExercises(supabase: SupabaseClient, dayId: string): Promise<RoutineExerciseWithName[]> {
   const { data, error } = await supabase
     .from('routine_exercises')
     .select('*, exercises(name, muscle_group, primary_muscle, image_path)')

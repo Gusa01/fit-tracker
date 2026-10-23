@@ -24,9 +24,7 @@ export function DayCard({ day, routineId, weekdaySchedule, onChanged, onDelete }
   const styles = useMemo(() => makeStyles(colors), [colors]);
   const [name, setName] = useState(day.name);
   const [isRestDay, setIsRestDay] = useState(day.is_rest_day);
-  const [weekdays, setWeekdays] = useState<Weekday[]>(
-    ALL_WEEKDAYS.filter((w) => weekdaySchedule[w] === day.id)
-  );
+  const [weekdays, setWeekdays] = useState<Weekday[]>(ALL_WEEKDAYS.filter((w) => weekdaySchedule[w] === day.id));
 
   async function handleNameBlur() {
     const trimmed = name.trim();

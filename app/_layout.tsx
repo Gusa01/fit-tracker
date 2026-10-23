@@ -15,9 +15,7 @@ initDatabase();
 
 function ThemedRoot({ children }: { children: ReactNode }) {
   const { colors } = useTheme();
-  return (
-    <View style={{ flex: 1, backgroundColor: colors.background }}>{children}</View>
-  );
+  return <View style={{ flex: 1, backgroundColor: colors.background }}>{children}</View>;
 }
 
 export default function RootLayout() {

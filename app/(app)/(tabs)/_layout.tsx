@@ -26,10 +26,19 @@ export default function TabsLayout() {
       }}
     >
       <Tabs.Screen name="index" options={{ title: 'Inicio', tabBarIcon: tabIcon('home-outline', 'home') }} />
-      <Tabs.Screen name="routines" options={{ title: 'Rutinas', headerShown: false, tabBarIcon: tabIcon('list-outline', 'list') }} />
-      <Tabs.Screen name="progress" options={{ title: 'Progreso', tabBarIcon: tabIcon('trending-up-outline', 'trending-up') }} />
+      <Tabs.Screen
+        name="routines"
+        options={{ title: 'Rutinas', headerShown: false, tabBarIcon: tabIcon('list-outline', 'list') }}
+      />
+      <Tabs.Screen
+        name="progress"
+        options={{ title: 'Progreso', tabBarIcon: tabIcon('trending-up-outline', 'trending-up') }}
+      />
       <Tabs.Screen name="history" options={{ title: 'Historial', tabBarIcon: tabIcon('time-outline', 'time') }} />
-      <Tabs.Screen name="settings" options={{ title: 'Ajustes', headerShown: false, tabBarIcon: tabIcon('settings-outline', 'settings') }} />
+      <Tabs.Screen
+        name="settings"
+        options={{ title: 'Ajustes', headerShown: false, tabBarIcon: tabIcon('settings-outline', 'settings') }}
+      />
     </Tabs>
   );
 }

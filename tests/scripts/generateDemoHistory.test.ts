@@ -109,7 +109,13 @@ describe('generateDemoHistory', () => {
     });
     const { sessions } = generateDemoHistory({
       ...base,
-      phases: [phase({ weekdaySchedule: { mon: 'day-a' }, days: [{ dayId: 'day-a', isRestDay: false, exercises: [topSet] }], weeks: 1 })],
+      phases: [
+        phase({
+          weekdaySchedule: { mon: 'day-a' },
+          days: [{ dayId: 'day-a', isRestDay: false, exercises: [topSet] }],
+          weeks: 1,
+        }),
+      ],
     });
     expect(sessions[0].sets.filter((s) => s.setType !== 'warmup')).toEqual([
       { routineExerciseId: 're-bench', setIndex: 1, setType: 'top_set', weight: 40, reps: 5, rir: 1 },
@@ -150,12 +156,27 @@ describe('generateDemoHistory', () => {
     });
     const { sessions, finalStates } = generateDemoHistory({
       ...base,
-      phases: [phase({ weekdaySchedule: { mon: 'day-a' }, days: [{ dayId: 'day-a', isRestDay: false, exercises: [plank] }], weeks: 3 })],
+      phases: [
+        phase({
+          weekdaySchedule: { mon: 'day-a' },
+          days: [{ dayId: 'day-a', isRestDay: false, exercises: [plank] }],
+          weeks: 3,
+        }),
+      ],
     });
     expect(sessions.map((s) => s.sets.map((set) => [set.weight, set.reps, set.rir]))).toEqual([
-      [[0, 30, null], [0, 30, null]],
-      [[0, 35, null], [0, 35, null]],
-      [[0, 40, null], [0, 40, null]],
+      [
+        [0, 30, null],
+        [0, 30, null],
+      ],
+      [
+        [0, 35, null],
+        [0, 35, null],
+      ],
+      [
+        [0, 40, null],
+        [0, 40, null],
+      ],
     ]);
     expect(finalStates).toEqual([]);
   });
@@ -180,8 +201,20 @@ describe('generateDemoHistory', () => {
   it('returns the progression state each weighted exercise ends in', () => {
     const { finalStates } = generateDemoHistory({ ...base, phases: [phase({ weeks: 2 })] });
     expect(finalStates).toEqual([
-      { exerciseId: 'bench', current_weight: 41.25, suggested_next_weight: 42.5, consecutive_hit_count: 2, consecutive_miss_count: 0 },
-      { exerciseId: 'squat', current_weight: 62.5, suggested_next_weight: 65, consecutive_hit_count: 2, consecutive_miss_count: 0 },
+      {
+        exerciseId: 'bench',
+        current_weight: 41.25,
+        suggested_next_weight: 42.5,
+        consecutive_hit_count: 2,
+        consecutive_miss_count: 0,
+      },
+      {
+        exerciseId: 'squat',
+        current_weight: 62.5,
+        suggested_next_weight: 65,
+        consecutive_hit_count: 2,
+        consecutive_miss_count: 0,
+      },
     ]);
   });
 });

@@ -30,12 +30,7 @@ export function resolveTodayDayId(
 ): string | null {
   const entry = weekdaySchedule[weekday];
   if (typeof entry === 'string') return entry;
-  if (
-    entry !== null &&
-    typeof entry === 'object' &&
-    'even_week' in entry &&
-    'odd_week' in entry
-  ) {
+  if (entry !== null && typeof entry === 'object' && 'even_week' in entry && 'odd_week' in entry) {
     const alt = entry as { even_week: unknown; odd_week: unknown };
     const chosen = weekNumber % 2 === 0 ? alt.even_week : alt.odd_week;
     return typeof chosen === 'string' ? chosen : null;

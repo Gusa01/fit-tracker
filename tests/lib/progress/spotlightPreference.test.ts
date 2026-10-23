@@ -2,10 +2,7 @@ jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock')
 );
 
-import {
-  loadSpotlightExerciseId,
-  saveSpotlightExerciseId,
-} from '../../../src/lib/progress/spotlightPreference';
+import { loadSpotlightExerciseId, saveSpotlightExerciseId } from '../../../src/lib/progress/spotlightPreference';
 
 describe('spotlight exercise preference', () => {
   it('returns null when nothing has been saved', async () => {
