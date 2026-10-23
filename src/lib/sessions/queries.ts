@@ -42,6 +42,13 @@ export async function listSessionSets(supabase: SupabaseClient, sessionId: strin
   return data;
 }
 
+/** Raw row of the recent-sessions select, with its joined day. */
+interface RecentSessionRow {
+  id: string;
+  session_date: string;
+  routine_days: { name: string } | null;
+}
+
 export async function listRecentCompletedSessions(
   supabase: SupabaseClient,
   userId: string,
@@ -55,7 +62,7 @@ export async function listRecentCompletedSessions(
     .order('session_date', { ascending: false })
     .limit(limit);
   if (error) throw error;
-  return (data as any[]).map((row) => ({
+  return (data as unknown as RecentSessionRow[]).map((row) => ({
     sessionId: row.id,
     sessionDate: row.session_date,
     dayName: row.routine_days?.name ?? '',

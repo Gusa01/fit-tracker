@@ -104,7 +104,7 @@ export function HomeProgressCard() {
 
       <ProgressChart key={summary.exerciseId} points={points} metric={summary.metric} width={chartWidth} height={160} />
 
-      <Pressable onPress={() => router.push('/(app)/(tabs)/progress' as any)}>
+      <Pressable onPress={() => router.push('/(app)/(tabs)/progress')}>
         <Text style={styles.link}>Ver todo →</Text>
       </Pressable>
 

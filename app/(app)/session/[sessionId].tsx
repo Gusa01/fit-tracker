@@ -38,7 +38,7 @@ export default function SessionScreen() {
 
   async function handleFinish() {
     await completeSession();
-    router.dismissTo('/(app)/(tabs)' as any);
+    router.dismissTo('/(app)/(tabs)');
   }
 
   if (loading) {

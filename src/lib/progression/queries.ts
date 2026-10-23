@@ -1,6 +1,11 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { LoggedSet } from '../sessions/types';
 
+/** Raw row of the `logged_sets` select joined with its session's status. */
+interface TopSetRow extends LoggedSet {
+  workout_sessions: { status: string };
+}
+
 export async function getLatestDeloadEvent(supabase: SupabaseClient, routineId: string): Promise<string | null> {
   const { data, error } = await supabase
     .from('routine_history')
@@ -29,5 +34,5 @@ export async function listRecentTopSets(
     .order('created_at', { ascending: false })
     .limit(limit);
   if (error) throw error;
-  return (data as any[]).map(({ workout_sessions, ...rest }) => rest as LoggedSet);
+  return (data as TopSetRow[]).map(({ workout_sessions, ...rest }) => rest as LoggedSet);
 }

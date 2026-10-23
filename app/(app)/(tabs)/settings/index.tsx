@@ -167,7 +167,7 @@ export default function SettingsScreen() {
 
       <Button title="Enviar aviso de prueba" variant="secondary" disabled={!loaded} onPress={handleTest} />
 
-      <Pressable onPress={() => router.push('/(app)/(tabs)/settings/credits' as any)}>
+      <Pressable onPress={() => router.push('/(app)/(tabs)/settings/credits')}>
         <Card style={styles.row}>
           <AppText variant="heading" style={styles.title}>
             Créditos de imágenes ›

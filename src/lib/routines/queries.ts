@@ -1,5 +1,5 @@
 import { SupabaseClient } from '@supabase/supabase-js';
-import { Routine, RoutineDay, RoutineExerciseWithName, Exercise } from './types';
+import { Routine, RoutineDay, RoutineExercise, RoutineExerciseWithName, Exercise } from './types';
 
 export async function listRoutines(supabase: SupabaseClient, userId: string): Promise<Routine[]> {
   const { data, error } = await supabase
@@ -45,6 +45,11 @@ export async function getRoutineDay(supabase: SupabaseClient, dayId: string): Pr
   return data;
 }
 
+/** Raw row of the `routine_exercises` select, with its joined catalog exercise. */
+interface DayExerciseRow extends RoutineExercise {
+  exercises: { name: string; muscle_group: string | null; primary_muscle: string | null; image_path: string | null };
+}
+
 export async function listDayExercises(supabase: SupabaseClient, dayId: string): Promise<RoutineExerciseWithName[]> {
   const { data, error } = await supabase
     .from('routine_exercises')
@@ -53,7 +58,7 @@ export async function listDayExercises(supabase: SupabaseClient, dayId: string):
     .eq('is_deleted', false)
     .order('order_index');
   if (error) throw error;
-  return (data as any[]).map((row) => ({
+  return (data as DayExerciseRow[]).map((row) => ({
     ...row,
     exercise_name: row.exercises.name,
     muscle_group: row.exercises.muscle_group,

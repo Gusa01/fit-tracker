@@ -81,7 +81,7 @@ export default function RoutinesList() {
           </AppText>
         }
         renderItem={({ item }) => (
-          <Pressable onPress={() => router.push(`/(app)/(tabs)/routines/${item.id}` as any)}>
+          <Pressable onPress={() => router.push(`/(app)/(tabs)/routines/${item.id}`)}>
             <Card style={styles.row}>
               <AppText variant="heading">
                 {item.name}
@@ -103,7 +103,7 @@ export default function RoutinesList() {
         )}
       />
       <View style={styles.newButton}>
-        <Button title="+ Nueva rutina" onPress={() => router.push('/(app)/(tabs)/routines/new' as any)} />
+        <Button title="+ Nueva rutina" onPress={() => router.push('/(app)/(tabs)/routines/new')} />
       </View>
     </Screen>
   );

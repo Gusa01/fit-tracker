@@ -30,7 +30,7 @@ export default function RootLayout() {
     if (!session && !inAuthGroup) {
       router.replace('/(auth)/sign-in');
     } else if (session && inAuthGroup) {
-      router.replace('/(app)/(tabs)' as any);
+      router.replace('/(app)/(tabs)');
     }
   }, [session, isLoading, segments]);
 
@@ -49,7 +49,7 @@ export default function RootLayout() {
   useEffect(() => {
     setupNotifications().catch((err) => console.warn('Could not set up notifications', err));
     const subscription = getNotifications()?.addNotificationResponseReceivedListener(() => {
-      router.dismissTo('/(app)/(tabs)' as any);
+      router.dismissTo('/(app)/(tabs)');
     });
     return () => subscription?.remove();
   }, []);

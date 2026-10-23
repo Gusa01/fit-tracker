@@ -41,7 +41,7 @@ export default function Home() {
   async function handleStart() {
     const sessionId = await startOrResumeSession();
     if (sessionId) {
-      router.push(`/(app)/session/${sessionId}` as any);
+      router.push(`/(app)/session/${sessionId}`);
     }
   }
 
@@ -127,9 +127,7 @@ export default function Home() {
                       <Pressable
                         key={entry.sessionId}
                         style={styles.activityPressable}
-                        onPress={() =>
-                          router.push(`/(app)/(tabs)/history/${entry.sessionId}` as any, { withAnchor: true })
-                        }
+                        onPress={() => router.push(`/(app)/(tabs)/history/${entry.sessionId}`, { withAnchor: true })}
                       >
                         <AppText>
                           {entry.dayName} — {formatShortDate(entry.sessionDate)}
