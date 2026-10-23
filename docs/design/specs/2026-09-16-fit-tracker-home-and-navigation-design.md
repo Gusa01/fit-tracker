@@ -6,7 +6,7 @@ Date: 2026-09-16
 
 The Home screen currently shows only today's resolved day and a start/resume-session button, with "Ver rutinas" and "Cerrar sesión" as loose buttons in its body. This spec turns Home into a small dashboard (weekly schedule at a glance, week progress, recent activity, a consistency streak) and moves the two navigation actions into a drawer, so Home's body is free to be dashboard content instead of a mix of data and app-chrome.
 
-This is an addition on top of the already-implemented spec (`docs/superpowers/specs/2026-09-13-fit-tracker-design.md`) — it doesn't change any existing data model, routine-CRUD, session-logging, or progression-engine behavior. It only reads existing tables and adds new client-side presentation logic plus a navigation-shell change.
+This is an addition on top of the already-implemented spec (`docs/design/specs/2026-09-13-fit-tracker-design.md`) — it doesn't change any existing data model, routine-CRUD, session-logging, or progression-engine behavior. It only reads existing tables and adds new client-side presentation logic plus a navigation-shell change.
 
 ## 2. Non-goals
 

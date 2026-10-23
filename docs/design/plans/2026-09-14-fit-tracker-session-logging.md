@@ -8,7 +8,7 @@
 
 **Tech Stack:** Expo Router, `expo-sqlite` (already a dependency), `@supabase/supabase-js`, new dependencies `@react-native-community/netinfo` (connectivity listener) and `expo-crypto` (client-side UUIDs for offline-created rows), `@react-native-async-storage/async-storage` (already a dependency, used here to remember the in-progress session across app restarts).
 
-**Spec:** `docs/superpowers/specs/2026-09-13-fit-tracker-design.md` — §3 (client/offline architecture), §4 (local SQLite mirror), §7 (client logging flow), §9 (auth, already implemented), §10 (offline sync), §11.3 (offline queue tests).
+**Spec:** `docs/design/specs/2026-09-13-fit-tracker-design.md` — §3 (client/offline architecture), §4 (local SQLite mirror), §7 (client logging flow), §9 (auth, already implemented), §10 (offline sync), §11.3 (offline queue tests).
 
 **Explicitly out of scope (Plan 4 — "progression engine"):** §8's progression/deload/routine-switch computation. This plan prefills the logging weight from `user_exercise_state.current_weight` only — it does **not** compute `suggested_next_weight`, detect deloads, or suggest routine switches. Those are a separate, already-named future plan.
 

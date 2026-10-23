@@ -8,7 +8,7 @@
 
 **Tech Stack:** Expo Router (SDK 57) `expo-router/drawer` (vendors `@react-navigation/drawer` building blocks — no new dependency), existing Supabase + expo-sqlite stack, Jest against the real hosted Supabase project for integration tests.
 
-**Spec:** `docs/superpowers/specs/2026-09-16-fit-tracker-home-and-navigation-design.md`
+**Spec:** `docs/design/specs/2026-09-16-fit-tracker-home-and-navigation-design.md`
 
 ## Global Constraints
 

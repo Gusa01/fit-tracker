@@ -8,7 +8,7 @@
 
 **Tech Stack:** Supabase Postgres (generated columns, RLS, storage), supabase-js v2, Expo / React Native, Jest + ts-jest, tsx scripts.
 
-**Spec:** `docs/superpowers/specs/2026-10-15-fit-tracker-exercise-catalog-design.md`
+**Spec:** `docs/design/specs/2026-10-15-fit-tracker-exercise-catalog-design.md`
 
 ## Global Constraints
 
