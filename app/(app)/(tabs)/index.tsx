@@ -5,13 +5,9 @@ import { useHomeData } from '../../../src/hooks/useHomeData';
 import { WeekCalendarStrip } from '../../../src/components/WeekCalendarStrip';
 import { HomeProgressCard } from '../../../src/components/HomeProgressCard';
 import { AppText, Banner, Button, Card, Screen } from '../../../src/components/ui';
+import { formatShortDate } from '../../../src/lib/progress/format';
 import { ColorTokens } from '../../../src/theme/colors';
 import { useTheme } from '../../../src/theme/ThemeProvider';
-
-function formatShortDate(dateStr: string): string {
-  const [, month, day] = dateStr.split('-');
-  return `${day}/${month}`;
-}
 
 export default function Home() {
   const { colors } = useTheme();

@@ -42,7 +42,7 @@ export function SessionExerciseCard({
   const styles = useMemo(() => makeStyles(colors), [colors]);
   const [weight, setWeight] = useState(initialWeight !== null ? String(initialWeight) : '0');
   const [reps, setReps] = useState('');
-  const [rir, setRir] = useState<number | null>(exercise.rir_min !== null ? exercise.rir_min : null);
+  const [rir, setRir] = useState<number | null>(exercise.rir_min);
   const [saving, setSaving] = useState(false);
   const [editingSet, setEditingSet] = useState<LoggedSet | null>(null);
   const [viewerOpen, setViewerOpen] = useState(false);

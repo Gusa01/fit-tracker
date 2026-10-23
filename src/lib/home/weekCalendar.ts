@@ -41,7 +41,7 @@ export function buildWeekCalendar(
     return {
       weekday,
       label,
-      dayName: isRestDay ? null : day!.name,
+      dayName: isRestDay ? null : day.name,
       isRestDay,
       isToday: weekday === todayWeekday,
     };

@@ -29,13 +29,7 @@ export function WeightStepper({ value, onChange }: WeightStepperProps) {
           <AppText style={styles.buttonText}>-{step}</AppText>
         </Pressable>
       ))}
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        value={value}
-        onChangeText={onChange}
-        placeholderTextColor={colors.textMuted}
-      />
+      <TextInput style={styles.input} keyboardType="numeric" value={value} onChangeText={onChange} />
       {STEPS.map((step) => (
         <Pressable key={`plus-${step}`} style={styles.button} onPress={() => bump(step)}>
           <AppText style={styles.buttonText}>+{step}</AppText>

@@ -16,11 +16,9 @@ import {
 } from '../../../../src/lib/progress/format';
 import { Metric, RecordEntry } from '../../../../src/lib/progress/types';
 import { useTheme } from '../../../../src/theme/ThemeProvider';
-import { ColorTokens } from '../../../../src/theme/colors';
 
 export default function ExerciseProgressDetail() {
   const { colors } = useTheme();
-  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { exerciseId } = useLocalSearchParams<{ exerciseId: string }>();
   const { session } = useAuthSession();
   const { rows, isLoading, error, refetch } = useExerciseProgress(session?.user.id, exerciseId);
@@ -132,20 +130,18 @@ export default function ExerciseProgressDetail() {
   );
 }
 
-function makeStyles(_c: ColorTokens) {
-  return StyleSheet.create({
-    centered: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
-    message: { textAlign: 'center' },
-    retry: { marginTop: 16, alignSelf: 'stretch' },
-    backRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-    back: { fontSize: 22 },
-    title: { fontSize: 22, flexShrink: 1 },
-    toggle: { flexDirection: 'row', gap: 8, alignSelf: 'flex-start' },
-    chartCard: { padding: 12, overflow: 'hidden' },
-    recordsCard: { padding: 12, gap: 0 },
-    cardTitle: { marginBottom: 8 },
-    recordRow: { paddingVertical: 6 },
-    recordHeader: { flexDirection: 'row', justifyContent: 'space-between' },
-    recordDetail: { marginTop: 2 },
-  });
-}
+const styles = StyleSheet.create({
+  centered: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
+  message: { textAlign: 'center' },
+  retry: { marginTop: 16, alignSelf: 'stretch' },
+  backRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  back: { fontSize: 22 },
+  title: { fontSize: 22, flexShrink: 1 },
+  toggle: { flexDirection: 'row', gap: 8, alignSelf: 'flex-start' },
+  chartCard: { padding: 12, overflow: 'hidden' },
+  recordsCard: { padding: 12, gap: 0 },
+  cardTitle: { marginBottom: 8 },
+  recordRow: { paddingVertical: 6 },
+  recordHeader: { flexDirection: 'row', justifyContent: 'space-between' },
+  recordDetail: { marginTop: 2 },
+});

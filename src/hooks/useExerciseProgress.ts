@@ -5,7 +5,7 @@ import { listExerciseSetHistory } from '../lib/progress/queries';
 import { summarizeExercises } from '../lib/progress/summary';
 import { ExerciseSetRow, ExerciseSummary } from '../lib/progress/types';
 
-export const PROGRESS_OFFLINE_MESSAGE = 'Conectate para ver tu progreso';
+const PROGRESS_OFFLINE_MESSAGE = 'Conectate para ver tu progreso';
 
 // Both hooks refetch on focus (not just mount) so returning from a finished session shows it.
 // A request counter ensures an older in-flight fetch never overwrites newer state.

@@ -42,8 +42,7 @@ export default function RootLayout() {
   useEffect(() => {
     const userId = session?.user.id;
     if (!userId) return;
-    const stop = startSyncListener(getDatabase(), supabase, userId);
-    return stop;
+    return startSyncListener(getDatabase(), supabase, userId);
   }, [session?.user.id]);
 
   useEffect(() => {

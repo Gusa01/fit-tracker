@@ -141,14 +141,12 @@ export function useHomeData() {
       setTodayIsRestDay(day.is_rest_day);
 
       if (!day.is_rest_day) {
-        const today = new Date();
-        const todayStr = formatDateOnly(today);
+        const todayStr = formatDateOnly(new Date());
         // Local-first: a pointer for today is authoritative, so an offline completion is
         // still recognized here instead of offering to start a duplicate session.
         const pointer = await loadCurrentSession();
-        const pointerMatchesToday = pointer && pointer.dayId === day.id && pointer.sessionDate === todayStr;
-        if (pointerMatchesToday) {
-          setSessionStatus(pointer!.status === 'completed' ? 'completed' : 'in_progress');
+        if (pointer && pointer.dayId === day.id && pointer.sessionDate === todayStr) {
+          setSessionStatus(pointer.status === 'completed' ? 'completed' : 'in_progress');
         } else {
           const existing = await getSessionForDate(supabase, userId, day.id, todayStr).catch(() => null);
           setSessionStatus(existing ? (existing.status === 'completed' ? 'completed' : 'in_progress') : 'none');
@@ -184,8 +182,7 @@ export function useHomeData() {
         return pointer.sessionId;
       }
 
-      const today = new Date();
-      const sessionDate = formatDateOnly(today);
+      const sessionDate = formatDateOnly(new Date());
       const week = weekNumber ?? 1;
 
       const existing = await getSessionForDate(supabase, userId, todayDayId, sessionDate).catch(() => null);

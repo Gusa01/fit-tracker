@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { View, FlatList, Pressable, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { router } from 'expo-router';
 import { useAuthSession } from '../../../../src/hooks/useAuthSession';
@@ -8,11 +8,9 @@ import { supabase } from '../../../../src/lib/supabase';
 import { activateRoutine, softDeleteRoutine } from '../../../../src/lib/routines/mutations';
 import { AppText, Button, Card, Screen } from '../../../../src/components/ui';
 import { useTheme } from '../../../../src/theme/ThemeProvider';
-import { ColorTokens } from '../../../../src/theme/colors';
 
 export default function RoutinesList() {
   const { colors } = useTheme();
-  const styles = useMemo(() => makeStyles(colors), [colors]);
   const { session } = useAuthSession();
   const userId = session?.user.id;
   const { routines, isLoading, error, refetch } = useRoutines(userId);
@@ -109,11 +107,9 @@ export default function RoutinesList() {
   );
 }
 
-function makeStyles(_c: ColorTokens) {
-  return StyleSheet.create({
-    empty: { textAlign: 'center', marginTop: 32 },
-    row: { marginBottom: 8 },
-    rowActions: { flexDirection: 'row', gap: 8 },
-    newButton: { marginTop: 12 },
-  });
-}
+const styles = StyleSheet.create({
+  empty: { textAlign: 'center', marginTop: 32 },
+  row: { marginBottom: 8 },
+  rowActions: { flexDirection: 'row', gap: 8 },
+  newButton: { marginTop: 12 },
+});

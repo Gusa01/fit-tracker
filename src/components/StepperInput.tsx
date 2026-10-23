@@ -28,13 +28,7 @@ export function StepperInput({ value, onChange, min = 0, max = 99, step = 1 }: S
       <Pressable style={styles.button} onPress={() => bump(-step)}>
         <AppText style={styles.buttonText}>−</AppText>
       </Pressable>
-      <TextInput
-        style={styles.input}
-        keyboardType="number-pad"
-        value={value}
-        onChangeText={onChange}
-        placeholderTextColor={colors.textMuted}
-      />
+      <TextInput style={styles.input} keyboardType="number-pad" value={value} onChangeText={onChange} />
       <Pressable style={styles.button} onPress={() => bump(step)}>
         <AppText style={styles.buttonText}>+</AppText>
       </Pressable>

@@ -10,6 +10,7 @@ import {
 } from '../lib/routines/types';
 import { StepperInput } from './StepperInput';
 import { ExerciseThumbnail } from './ExerciseThumbnail';
+import { ChipRow } from './ChipRow';
 import { AppText, Button, Chip } from './ui';
 import { useTheme } from '../theme/ThemeProvider';
 import { ColorTokens } from '../theme/colors';
@@ -229,34 +230,22 @@ export function ExerciseForm({ exercises, initial, onSubmit, onCancel }: Exercis
           <AppText variant="label" style={styles.label}>
             Músculo principal
           </AppText>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={styles.segmented}>
-              {MUSCLES.map((m) => (
-                <Chip
-                  key={m}
-                  label={MUSCLE_LABEL[m]}
-                  selected={values.primaryMuscle === m}
-                  onPress={() => update('primaryMuscle', m)}
-                />
-              ))}
-            </View>
-          </ScrollView>
+          <ChipRow
+            options={MUSCLES}
+            labelFor={(m) => MUSCLE_LABEL[m]}
+            selected={values.primaryMuscle}
+            onSelect={(m) => update('primaryMuscle', m)}
+          />
 
           <AppText variant="label" style={styles.label}>
             Equipamiento
           </AppText>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={styles.segmented}>
-              {EQUIPMENT.map((e) => (
-                <Chip
-                  key={e}
-                  label={EQUIPMENT_LABEL[e]}
-                  selected={values.equipment === e}
-                  onPress={() => update('equipment', e)}
-                />
-              ))}
-            </View>
-          </ScrollView>
+          <ChipRow
+            options={EQUIPMENT}
+            labelFor={(e) => EQUIPMENT_LABEL[e]}
+            selected={values.equipment}
+            onSelect={(e) => update('equipment', e)}
+          />
         </>
       )}
 
