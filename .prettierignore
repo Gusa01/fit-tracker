@@ -5,3 +5,4 @@ package-lock.json
 .expo
 assets
 docs
+scripts/data

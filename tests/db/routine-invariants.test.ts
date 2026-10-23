@@ -20,7 +20,6 @@ afterAll(async () => {
 });
 
 afterEach(async () => {
-  // Clean up by deactivating all routines created in the test
   await supabase.from('routines').update({ is_active: false }).eq('user_id', userId);
 });
 

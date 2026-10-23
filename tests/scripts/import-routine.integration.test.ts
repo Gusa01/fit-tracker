@@ -9,7 +9,10 @@ import { importRoutine } from '../../scripts/import-routine';
 jest.setTimeout(30000);
 
 const supabase = createAdminClient();
-const fixture = fs.readFileSync(path.join(__dirname, '..', '..', 'rutina_gym_top_set_back_off.md'), 'utf-8');
+const fixture = fs.readFileSync(
+  path.join(__dirname, '..', '..', 'scripts', 'data', 'rutina_gym_top_set_back_off.md'),
+  'utf-8'
+);
 const testEmail = `import-routine-${Date.now()}@example.com`;
 let userId: string;
 

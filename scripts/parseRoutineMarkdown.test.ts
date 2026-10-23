@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { parseRoutineMarkdown } from './parseRoutineMarkdown';
 
-const fixture = fs.readFileSync(path.join(__dirname, '..', 'rutina_gym_top_set_back_off.md'), 'utf-8');
+const fixture = fs.readFileSync(path.join(__dirname, 'data', 'rutina_gym_top_set_back_off.md'), 'utf-8');
 
 describe('parseRoutineMarkdown', () => {
   const routines = parseRoutineMarkdown(fixture);

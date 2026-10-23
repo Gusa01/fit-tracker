@@ -109,7 +109,7 @@ async function main() {
   if (existing) {
     const { error } = await supabase.auth.admin.deleteUser(existing.id);
     if (error) throw error;
-    console.log(`Deleted previous demo user and all of its data.`);
+    console.log('Deleted previous demo user and all of its data.');
   }
 
   const { data: created, error: createError } = await supabase.auth.admin.createUser({
@@ -120,7 +120,7 @@ async function main() {
   if (createError) throw createError;
   const userId = created.user.id;
 
-  const markdown = fs.readFileSync(path.join(__dirname, '..', 'rutina_gym_top_set_back_off.md'), 'utf-8');
+  const markdown = fs.readFileSync(path.join(__dirname, 'data', 'rutina_gym_top_set_back_off.md'), 'utf-8');
   const imported = await importRoutine(supabase, userId, markdown);
   if (!imported.imported || !imported.routineIds) throw new Error(`Routine import failed: ${imported.reason}`);
   const routineIds = imported.routineIds;
