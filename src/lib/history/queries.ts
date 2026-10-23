@@ -6,10 +6,9 @@ import { summarizeSession } from './logic';
 
 export const HISTORY_PAGE_SIZE = 30;
 
-/**
- * Raw row shapes of the selects below. The untyped client infers to-one relations (routine_days, exercises) as
- * arrays, but PostgREST returns them as objects, so the casts go through unknown.
- */
+// Raw row shapes of the selects below. The untyped client infers to-one relations (routine_days, exercises) as
+// arrays, but PostgREST returns them as objects, so the casts go through unknown.
+
 /** Raw row of the `workout_sessions` list select, with its joined relations. */
 interface SessionListRow {
   id: string;

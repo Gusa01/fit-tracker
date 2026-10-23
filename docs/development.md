@@ -54,7 +54,7 @@ Every pull request and every push to `main` runs [`.github/workflows/ci.yml`](..
 
 ## Migrations
 
-This project uses a hosted Supabase project, not a local Docker-based Supabase stack. Migrations live in [`supabase/migrations/`](../supabase/migrations) and are applied with:
+Development and the app target a hosted Supabase project; only CI uses a throwaway local stack. Migrations live in [`supabase/migrations/`](../supabase/migrations) and are applied with:
 
 ```bash
 npx supabase db push

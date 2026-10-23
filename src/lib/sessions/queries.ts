@@ -62,6 +62,7 @@ export async function listRecentCompletedSessions(
     .order('session_date', { ascending: false })
     .limit(limit);
   if (error) throw error;
+  // routine_days is a to-one relation: the untyped client infers an array, PostgREST returns an object.
   return (data as unknown as RecentSessionRow[]).map((row) => ({
     sessionId: row.id,
     sessionDate: row.session_date,

@@ -44,7 +44,7 @@ Screens render and handle input. Hooks own state and decide when to load, write 
 ```text
 app/                 Screens and navigation (expo-router file-based routes)
   (auth)/            Sign-in and sign-up
-  (app)/(tabs)/      Home, Rutinas, Historial, Progreso, Ajustes
+  (app)/(tabs)/      Inicio, Rutinas, Progreso, Historial, Ajustes
   (app)/session/     The live workout screen
 src/components/      Reusable UI; ui/ holds the themed primitives (text, buttons, cards)
 src/hooks/           One hook per screen concern: data loading, mutations, sync triggers
@@ -89,7 +89,7 @@ On every pull request and push to `main`, [CI](.github/workflows/ci.yml) runs th
 ## Tech stack
 
 - **Expo SDK 57 / React Native 0.86**: one codebase, Android build through EAS.
-- **TypeScript**: strict types across app, scripts and tests, with typed routes.
+- **TypeScript**: strict types across app, scripts and tests; expo-router typed routes are checked during development.
 - **expo-router**: file-based navigation.
 - **Supabase**: Postgres, Auth and Storage, with RLS for authorization.
 - **expo-sqlite**: local cache and the offline write queue.
