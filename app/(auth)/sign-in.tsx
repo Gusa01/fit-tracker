@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { TextInput, StyleSheet, View } from 'react-native';
+import { Alert, TextInput, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
 import { supabase } from '../../src/lib/supabase';
 import { AppText, Button, Screen } from '../../src/components/ui';
@@ -61,6 +61,16 @@ export default function SignIn() {
           variant="secondary"
           onPress={() => signIn(DEMO_ACCOUNT)}
           disabled={loading}
+        />
+        <Button
+          title="¿Olvidaste tu contraseña?"
+          variant="ghost"
+          onPress={() =>
+            Alert.alert(
+              '¿Olvidaste tu contraseña?',
+              'Escribile a Agustín y te la resetea. Vas a entrar con una contraseña temporal y la app te va a pedir que elijas una nueva.'
+            )
+          }
         />
         <AppText variant="muted" style={styles.note}>
           Las cuentas son por invitación. Si querés una propia, pedísela a Agustín.

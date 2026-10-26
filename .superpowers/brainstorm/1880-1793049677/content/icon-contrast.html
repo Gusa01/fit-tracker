@@ -1,0 +1,44 @@
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<style>
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .cell { border-radius: 18px; padding: 16px 8px; text-align: center; font: 12px system-ui, sans-serif; }
+  .dark { background: #0B0F14; color: #F3F4F6; border: 1px solid #2A323D; }
+  .light { background: #F7F8FA; color: #111827; border: 1px solid #DDE2E8; }
+  .c { width: 92px; height: 92px; border-radius: 46px; margin: 4px auto 10px; display: flex; align-items: center; justify-content: center; }
+  .c ion-icon { font-size: 46px; }
+  .t { font-weight: 700; }
+  .mode { font-size: 10px; opacity: .6; margin-top: 4px; }
+  /* 1 solid */
+  .dark .v1 { background: #3B82F6; } .dark .v1 ion-icon { color: #0B0F14; }
+  .light .v1 { background: #2563EB; } .light .v1 ion-icon { color: #FFFFFF; }
+  /* 2 ring */
+  .dark .v2 { border: 3px solid #3B82F6; } .dark .v2 ion-icon { color: #3B82F6; }
+  .light .v2 { border: 3px solid #2563EB; } .light .v2 ion-icon { color: #2563EB; }
+  /* 3 neutral */
+  .dark .v3 { background: #151A21; border: 1px solid #2A323D; } .dark .v3 ion-icon { color: #F3F4F6; }
+  .light .v3 { background: #FFFFFF; border: 1px solid #DDE2E8; } .light .v3 ion-icon { color: #111827; }
+  /* 4 soft but brighter */
+  .dark .v4 { background: #1E3A5F; } .dark .v4 ion-icon { color: #93C5FD; }
+  .light .v4 { background: #DBEAFE; } .light .v4 ion-icon { color: #1D4ED8; }
+</style>
+
+<h2>El círculo, con más contraste</h2>
+<p class="subtitle">Cuatro combinaciones, en modo oscuro (arriba) y claro (abajo). Elegí la que más te guste.</p>
+
+<div class="options">
+  <div class="option" data-choice="1" onclick="toggleSelect(this)"><div class="letter">1</div><div class="content"><h3>Círculo azul lleno</h3><p>Ícono oscuro/blanco sobre azul sólido, como los botones principales. El más fuerte.</p></div></div>
+  <div class="option" data-choice="2" onclick="toggleSelect(this)"><div class="letter">2</div><div class="content"><h3>Anillo azul</h3><p>Solo el borde y el ícono en azul, fondo transparente. Liviano.</p></div></div>
+  <div class="option" data-choice="3" onclick="toggleSelect(this)"><div class="letter">3</div><div class="content"><h3>Neutro</h3><p>Círculo del color de las tarjetas, ícono blanco/negro. Sobrio, sin azul.</p></div></div>
+  <div class="option" data-choice="4" onclick="toggleSelect(this)"><div class="letter">4</div><div class="content"><h3>Suave pero más claro</h3><p>Como antes, pero con el ícono bastante más claro, así se despega del fondo.</p></div></div>
+</div>
+
+<div class="grid" style="margin-top:18px">
+  <div class="cell dark"><div class="c v1"><ion-icon name="list-outline"></ion-icon></div><div class="t">1 · Lleno</div><div class="mode">oscuro</div></div>
+  <div class="cell dark"><div class="c v2"><ion-icon name="list-outline"></ion-icon></div><div class="t">2 · Anillo</div><div class="mode">oscuro</div></div>
+  <div class="cell dark"><div class="c v3"><ion-icon name="list-outline"></ion-icon></div><div class="t">3 · Neutro</div><div class="mode">oscuro</div></div>
+  <div class="cell dark"><div class="c v4"><ion-icon name="list-outline"></ion-icon></div><div class="t">4 · Suave claro</div><div class="mode">oscuro</div></div>
+  <div class="cell light"><div class="c v1"><ion-icon name="list-outline"></ion-icon></div><div class="t">1 · Lleno</div><div class="mode">claro</div></div>
+  <div class="cell light"><div class="c v2"><ion-icon name="list-outline"></ion-icon></div><div class="t">2 · Anillo</div><div class="mode">claro</div></div>
+  <div class="cell light"><div class="c v3"><ion-icon name="list-outline"></ion-icon></div><div class="t">3 · Neutro</div><div class="mode">claro</div></div>
+  <div class="cell light"><div class="c v4"><ion-icon name="list-outline"></ion-icon></div><div class="t">4 · Suave claro</div><div class="mode">claro</div></div>
+</div>

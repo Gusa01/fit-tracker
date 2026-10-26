@@ -20,7 +20,8 @@
     "seed-demo": "tsx scripts/seed-demo-user.ts",
     "build-icons": "tsx scripts/build-icons.ts",
     "postinstall": "patch-package",
-    "create-user": "tsx scripts/create-user.ts"
+    "create-user": "tsx scripts/create-user.ts",
+    "reset-password": "tsx scripts/reset-password.ts"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",

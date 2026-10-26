@@ -117,7 +117,7 @@ The full guide, covering environment variables, linking the Supabase CLI, migrat
 1. Friends test it on their phones, and their feedback decides what comes next.
 2. An iOS build.
 3. Sharing routines between users.
-4. What a paid product would need: onboarding without a pre-built routine, routine templates, and data export.
+4. What a paid product would need: open sign-up with emailed password resets, routine templates, and data export.
 
 ## En español
 
