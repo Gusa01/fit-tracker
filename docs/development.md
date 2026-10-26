@@ -122,7 +122,7 @@ npm run create-user -- friend@example.com            # generates a password and 
 npm run create-user -- friend@example.com <password> # or set it yourself
 ```
 
-It uses the service-role key from `.env.local`, marks the email as confirmed and prints the password once. Send it privately.
+It uses the service-role key from `.env.local`, marks the email as confirmed and prints the password once. Send it privately: it is temporary, and on the first sign-in the app asks the friend to choose their own before showing anything else (the account carries a `must_change_password` flag in its user metadata until then).
 
 ## Shared project
 
