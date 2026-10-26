@@ -6,7 +6,7 @@ A gym workout tracker for Android that tells you what to lift today, works offli
 
 <!-- APK: link to the latest GitHub Release -->
 
-**Try the demo account:** email `demo.fittracker@example.com`, password `fittracker123`. It comes with about 12 weeks of training history and resets every Monday and Thursday.
+**Try the demo account:** email `demo.fittracker@example.com`, password `fittracker123`. It comes with about 12 weeks of training history and resets every Monday and Thursday. The sign-in screen has a "Probar con la cuenta demo" button, so you don't need to type them. Other accounts are invite-only.
 
 [![CI](https://github.com/Gusa01/gym-tracker/actions/workflows/ci.yml/badge.svg)](https://github.com/Gusa01/gym-tracker/actions/workflows/ci.yml)
 
@@ -43,7 +43,7 @@ Screens render and handle input. Hooks own state and decide when to load, write 
 
 ```text
 app/                 Screens and navigation (expo-router file-based routes)
-  (auth)/            Sign-in and sign-up
+  (auth)/            Sign-in, with a one-tap demo login
   (app)/(tabs)/      Inicio, Rutinas, Progreso, Historial, Ajustes
   (app)/session/     The live workout screen
 src/components/      Reusable UI; ui/ holds the themed primitives (text, buttons, cards)
@@ -108,7 +108,7 @@ npx supabase db push         # apply the migrations
 npx expo start
 ```
 
-Then sign up in the app and import the starter routine with `npx tsx scripts/import-routine.ts <your-email>`.
+Then create your account with `npm run create-user -- <your-email>` (public sign-ups are closed) and import the starter routine with `npx tsx scripts/import-routine.ts <your-email>`.
 
 The full guide, covering environment variables, linking the Supabase CLI, migrations, the demo account, the scheduled demo reset and building the APK, is in [docs/development.md](docs/development.md).
 

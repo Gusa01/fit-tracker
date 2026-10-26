@@ -19,7 +19,8 @@
     "format:check": "prettier --check app src scripts tests",
     "seed-demo": "tsx scripts/seed-demo-user.ts",
     "build-icons": "tsx scripts/build-icons.ts",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "create-user": "tsx scripts/create-user.ts"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",

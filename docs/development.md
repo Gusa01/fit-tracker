@@ -24,7 +24,7 @@ Setup and operational details for Fit Tracker. For an overview of the project, s
 
    `.env.local` is gitignored and must never be committed.
 
-3. **Turn off "Confirm email"**: in the Supabase dashboard, go to **Authentication → Providers → Email** and disable **Confirm email**. This is required for sign-up/sign-in to work as implemented. It is **not** controlled by any file in this repo — the local `supabase/config.toml`'s `enable_confirmations = false` only applies to a local Supabase stack (`supabase start`), and this project targets a hosted project instead, so that setting is inert here. `supabase db push` (see [Migrations](#migrations)) never pushes auth settings, so this must be done manually in the dashboard for every hosted project.
+3. **Close public sign-ups**: in the Supabase dashboard, go to **Authentication → Sign In / Providers** and turn off **Allow new users to sign up**. The app has no sign-up screen; accounts are created with `npm run create-user` (see [Accounts](#accounts)). Created accounts are already confirmed, so **Confirm email** doesn't matter for them. It is **not** controlled by any file in this repo: `supabase/config.toml` only applies to a local Supabase stack (`supabase start`, used by CI, where sign-ups stay open for the integration tests). `supabase db push` (see [Migrations](#migrations)) never pushes auth settings, so this must be done manually in the dashboard for every hosted project.
 
 ## Linking
 
@@ -79,7 +79,7 @@ npx tsx scripts/import-routine.ts <your-login-email>
 ```
 
 - Requires `SUPABASE_SERVICE_ROLE_KEY` in `.env.local` (see [Setup](#setup)).
-- You must sign up for an account in the app first — the script looks up an existing user by email, it doesn't create one.
+- The account must exist first (create it with `npm run create-user`) — the script looks up an existing user by email, it doesn't create one.
 - It's idempotent by routine name: running it again for a user who already has "Full Body" or "Split 5 días" prints a skip message instead of duplicating.
 
 ## Demo account
@@ -113,9 +113,20 @@ The workflow fails with a clear message if one is missing.
 
 Known limit: GitHub disables scheduled workflows after 60 days without activity in the repository. If that happens, re-enable the workflow from the Actions tab (or push a commit). This is documented, not solved.
 
+## Accounts
+
+Accounts are invite-only. Create one for a friend with:
+
+```bash
+npm run create-user -- friend@example.com            # generates a password and prints it
+npm run create-user -- friend@example.com <password> # or set it yourself
+```
+
+It uses the service-role key from `.env.local`, marks the email as confirmed and prints the password once. Send it privately.
+
 ## Shared project
 
-The APK and the demo account use the same hosted Supabase project as real users. Row Level Security isolates each user's data, and friends testing the app need real accounts there anyway, so there is no separate showcase project. The consequence: anyone who installs the APK can sign up.
+The APK and the demo account use the same hosted Supabase project as real users. Row Level Security isolates each user's data, and friends testing the app need real accounts there anyway, so there is no separate showcase project. Public sign-ups are closed in the dashboard, so installing the APK only gives access to the demo account; every other account is created by the owner (see [Accounts](#accounts)). Closing sign-ups in the app alone wouldn't be enough: the anon key ships inside the APK, so anyone could call the Auth API directly.
 
 ## Building the APK
 
