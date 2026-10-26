@@ -19,7 +19,8 @@
     "format:check": "prettier --check app src scripts tests",
     "seed-demo": "tsx scripts/seed-demo-user.ts",
     "build-icons": "tsx scripts/build-icons.ts",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "create-user": "tsx scripts/create-user.ts"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",
@@ -39,6 +40,7 @@
     "expo-sqlite": "~57.0.3",
     "expo-status-bar": "~57.0.1",
     "expo-system-ui": "~57.0.4",
+    "expo-updates": "~57.0.26",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-native": "0.86.3",

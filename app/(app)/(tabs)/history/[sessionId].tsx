@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { View, Pressable, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSessionDetail } from '../../../../src/hooks/useSessionHistory';
 import { groupSessionSets } from '../../../../src/lib/history/logic';
@@ -103,7 +104,7 @@ export default function SessionHistoryDetail() {
                   hitSlop={12}
                   accessibilityLabel="Corregir serie"
                 >
-                  <AppText style={styles.editIcon}>✎</AppText>
+                  <Ionicons name="pencil-outline" size={18} color={colors.textMuted} style={styles.editIcon} />
                 </Pressable>
               </View>
             ))}
@@ -136,6 +137,6 @@ function makeStyles(c: ColorTokens) {
     setRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
     setLabel: { width: 84 },
     setValues: { flex: 1 },
-    editIcon: { fontSize: 18, paddingHorizontal: 4 },
+    editIcon: { paddingHorizontal: 4 },
   });
 }
