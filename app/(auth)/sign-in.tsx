@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { Alert, TextInput, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
 import { supabase } from '../../src/lib/supabase';
-import { AppText, Button, Screen } from '../../src/components/ui';
+import { AppText, Button, PasswordInput, Screen } from '../../src/components/ui';
 import { ColorTokens } from '../../src/theme/colors';
 import { useTheme } from '../../src/theme/ThemeProvider';
 import { DEMO_ACCOUNT } from '../../src/lib/auth/demoAccount';
@@ -42,14 +42,7 @@ export default function SignIn() {
           value={email}
           onChangeText={setEmail}
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Contraseña"
-          placeholderTextColor={colors.textMuted}
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
+        <PasswordInput placeholder="Contraseña" value={password} onChangeText={setPassword} />
         {error && <AppText color="danger">{error}</AppText>}
         <Button
           title={loading ? 'Ingresando...' : 'Ingresar'}
