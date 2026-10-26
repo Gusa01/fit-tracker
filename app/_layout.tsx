@@ -10,6 +10,7 @@ import { startSyncListener } from '../src/lib/sync/syncService';
 import { cancelAllReminders, setupNotifications } from '../src/lib/reminders/scheduler';
 import { getNotifications } from '../src/lib/reminders/notificationsModule';
 import { ThemeProvider, useTheme } from '../src/theme/ThemeProvider';
+import { mustChangePassword } from '../src/lib/auth/password';
 
 initDatabase();
 
@@ -26,10 +27,14 @@ export default function RootLayout() {
   useEffect(() => {
     if (isLoading) return;
     const inAuthGroup = segments[0] === '(auth)';
+    const onSetPassword = inAuthGroup && segments[1] === 'set-password';
+    const needsPassword = mustChangePassword(session?.user);
 
     if (!session && !inAuthGroup) {
       router.replace('/(auth)/sign-in');
-    } else if (session && inAuthGroup) {
+    } else if (session && needsPassword && !onSetPassword) {
+      router.replace('/(auth)/set-password');
+    } else if (session && !needsPassword && inAuthGroup) {
       router.replace('/(app)/(tabs)');
     }
   }, [session, isLoading, segments]);

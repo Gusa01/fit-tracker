@@ -26,11 +26,17 @@ async function main() {
 
   const password = givenPassword ?? generatePassword(randomBytes(12));
   const supabase = createClient(url, serviceKey, { auth: { persistSession: false } });
-  const { error } = await supabase.auth.admin.createUser({ email, password, email_confirm: true });
+  // The app asks for a new password on first sign-in while this flag is set.
+  const { error } = await supabase.auth.admin.createUser({
+    email,
+    password,
+    email_confirm: true,
+    user_metadata: { must_change_password: true },
+  });
   if (error) throw error;
 
   console.log(`Created ${email}. Password: ${password}`);
-  console.log('Send it privately; it is not stored anywhere else.');
+  console.log('Send it privately. The app asks for a new password on the first sign-in.');
 }
 
 const isMainModule = process.argv[1]?.endsWith('create-user.ts') ?? false;
