@@ -124,6 +124,14 @@ npm run create-user -- friend@example.com <password> # or set it yourself
 
 It uses the service-role key from `.env.local`, marks the email as confirmed and prints the password once. Send it privately: it is temporary, and on the first sign-in the app asks the friend to choose their own before showing anything else (the account carries a `must_change_password` flag in its user metadata until then).
 
+If someone forgets their password, give them a new temporary one:
+
+```bash
+npm run reset-password -- friend@example.com
+```
+
+It sets the `must_change_password` flag again, so the app asks for a new password on the next sign-in. It refuses the demo account, whose password is public; `npm run seed-demo` resets that one. An emailed reset link would need a custom SMTP provider (Supabase's built-in mailer only sends to the project's team) and a deep link into the app; that waits until accounts are open to people the owner doesn't know.
+
 ## Shared project
 
 The APK and the demo account use the same hosted Supabase project as real users. Row Level Security isolates each user's data, and friends testing the app need real accounts there anyway, so there is no separate showcase project. Public sign-ups are closed in the dashboard, so installing the APK only gives access to the demo account; every other account is created by the owner (see [Accounts](#accounts)). Closing sign-ups in the app alone wouldn't be enough: the anon key ships inside the APK, so anyone could call the Auth API directly.

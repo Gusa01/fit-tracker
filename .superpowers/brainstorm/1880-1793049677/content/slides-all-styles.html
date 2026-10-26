@@ -1,0 +1,63 @@
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<style>
+  .rowset { margin: 22px 0 8px; }
+  .rowset h3 { margin-bottom: 8px; }
+  .phones { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+  .phone { width: 190px; border: 2px solid #2A323D; border-radius: 24px; background: #0B0F14; color: #F3F4F6; padding: 12px 11px 11px; font: 12px/1.4 system-ui, sans-serif; min-height: 380px; display: flex; flex-direction: column; }
+  .muted { color: #9CA3AF; font-size: 11px; text-align: center; margin: 6px 3px; }
+  .title { font-weight: 700; font-size: 14px; text-align: center; }
+  .btn { background: #3B82F6; color: #0B0F14; border-radius: 10px; padding: 7px; text-align: center; font-weight: 700; margin-top: auto; }
+  .dots { display: flex; gap: 4px; justify-content: center; margin: 6px 0 8px; }
+  .dots span { width: 6px; height: 6px; border-radius: 3px; background: #2A323D; }
+  .dots span.on { background: #3B82F6; }
+  .circle { width: 100px; height: 100px; border-radius: 50px; background: #1E3A5F; margin: 30px auto 16px; display: flex; align-items: center; justify-content: center; }
+  .circle ion-icon { font-size: 50px; color: #3B82F6; }
+  .trio { display: flex; justify-content: center; align-items: center; gap: 6px; margin: 38px 0 20px; }
+  .trio ion-icon { color: #3B82F6; }
+  .arrow { color: #4B5563; font-size: 16px; }
+  .pill { width: 48px; height: 48px; border-radius: 14px; background: #151A21; border: 1px solid #2A323D; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+  .mini { margin: 22px 2px 14px; background: #151A21; border: 1px solid #2A323D; border-radius: 12px; padding: 9px; font-size: 10.5px; min-height: 96px; }
+  .mini .hd { font-weight: 700; font-size: 11.5px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
+  .mini .ex { display: flex; gap: 7px; align-items: center; padding: 5px 0; border-top: 1px solid #2A323D; }
+  .thumb { width: 24px; height: 24px; border-radius: 6px; background: #FFFFFF; flex: none; }
+  .sub { color: #9CA3AF; font-size: 9.5px; }
+  .ok { background: #052E1A; color: #22C55E; border-radius: 6px; padding: 4px 6px; margin-top: 4px; }
+  .acc { color: #3B82F6; font-weight: 700; }
+  .badge { background: #1E252E; border-radius: 10px; padding: 1px 6px; font-size: 9px; color: #9CA3AF; font-weight: 500; }
+  .chart { height: 42px; border-bottom: 1px solid #2A323D; position: relative; margin: 4px 0 6px; }
+  .chart svg { position: absolute; inset: 0; }
+  .pr { background: #F3F4F6; color: #0B0F14; border-radius: 6px; padding: 4px 6px; font-weight: 700; }
+</style>
+
+<h2>Las 4 pantallas en los 3 estilos</h2>
+<p class="subtitle">Cada fila es un estilo. Elegí el que más te guste para la imagen de arriba.</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)"><div class="letter">A</div><div class="content"><h3>Ícono grande en un círculo</h3></div></div>
+  <div class="option" data-choice="b" onclick="toggleSelect(this)"><div class="letter">B</div><div class="content"><h3>Secuencia de íconos</h3></div></div>
+  <div class="option" data-choice="c" onclick="toggleSelect(this)"><div class="letter">C</div><div class="content"><h3>Mini pantalla real</h3></div></div>
+</div>
+
+<!-- Shared slide texts -->
+<template id="t"></template>
+
+<div class="rowset"><h3>A · Ícono grande en un círculo</h3><div class="phones">
+  <div class="phone"><div class="circle"><ion-icon name="barbell-outline"></ion-icon></div><div class="title">Bienvenido a Fit Tracker</div><div class="muted">Tu rutina, tus series y tu progreso en un solo lugar. Funciona aunque no tengas señal en el gimnasio.</div><div class="dots"><span class="on"></span><span></span><span></span><span></span></div><div class="btn">Siguiente</div></div>
+  <div class="phone"><div class="circle"><ion-icon name="list-outline"></ion-icon></div><div class="title">Primero, armá tu rutina</div><div class="muted">En <b>Rutinas</b>: creá los días, elegí los ejercicios del catálogo y poné series y repeticiones. Después activala.</div><div class="dots"><span></span><span class="on"></span><span></span><span></span></div><div class="btn">Siguiente</div></div>
+  <div class="phone"><div class="circle"><ion-icon name="home-outline"></ion-icon></div><div class="title">Entrená desde Inicio</div><div class="muted">Inicio te dice qué te toca hoy y cuánto levantar. Registrás cada serie al terminarla; la app ajusta el peso para la próxima.</div><div class="dots"><span></span><span></span><span class="on"></span><span></span></div><div class="btn">Siguiente</div></div>
+  <div class="phone"><div class="circle"><ion-icon name="trending-up-outline"></ion-icon></div><div class="title">Mirá cómo avanzás</div><div class="muted">En <b>Progreso</b> ves tus gráficos y récords, y en <b>Historial</b> cada sesión, que podés corregir.</div><div class="dots"><span></span><span></span><span></span><span class="on"></span></div><div class="btn">Crear mi rutina</div></div>
+</div></div>
+
+<div class="rowset"><h3>B · Secuencia de íconos</h3><div class="phones">
+  <div class="phone"><div class="trio"><div class="pill"><ion-icon name="list-outline"></ion-icon></div><span class="arrow">›</span><div class="pill"><ion-icon name="barbell-outline"></ion-icon></div><span class="arrow">›</span><div class="pill"><ion-icon name="trending-up-outline"></ion-icon></div></div><div class="title">Bienvenido a Fit Tracker</div><div class="muted">Tu rutina, tus series y tu progreso en un solo lugar. Funciona aunque no tengas señal en el gimnasio.</div><div class="dots"><span class="on"></span><span></span><span></span><span></span></div><div class="btn">Siguiente</div></div>
+  <div class="phone"><div class="trio"><div class="pill"><ion-icon name="calendar-outline"></ion-icon></div><span class="arrow">›</span><div class="pill"><ion-icon name="barbell-outline"></ion-icon></div><span class="arrow">›</span><div class="pill"><ion-icon name="repeat-outline"></ion-icon></div></div><div class="title">Primero, armá tu rutina</div><div class="muted">En <b>Rutinas</b>: creá los días, elegí los ejercicios del catálogo y poné series y repeticiones. Después activala.</div><div class="dots"><span></span><span class="on"></span><span></span><span></span></div><div class="btn">Siguiente</div></div>
+  <div class="phone"><div class="trio"><div class="pill"><ion-icon name="home-outline"></ion-icon></div><span class="arrow">›</span><div class="pill"><ion-icon name="create-outline"></ion-icon></div><span class="arrow">›</span><div class="pill"><ion-icon name="checkmark-circle-outline"></ion-icon></div></div><div class="title">Entrená desde Inicio</div><div class="muted">Inicio te dice qué te toca hoy y cuánto levantar. Registrás cada serie al terminarla; la app ajusta el peso para la próxima.</div><div class="dots"><span></span><span></span><span class="on"></span><span></span></div><div class="btn">Siguiente</div></div>
+  <div class="phone"><div class="trio"><div class="pill"><ion-icon name="trending-up-outline"></ion-icon></div><span class="arrow">›</span><div class="pill"><ion-icon name="trophy-outline"></ion-icon></div><span class="arrow">›</span><div class="pill"><ion-icon name="time-outline"></ion-icon></div></div><div class="title">Mirá cómo avanzás</div><div class="muted">En <b>Progreso</b> ves tus gráficos y récords, y en <b>Historial</b> cada sesión, que podés corregir.</div><div class="dots"><span></span><span></span><span></span><span class="on"></span></div><div class="btn">Crear mi rutina</div></div>
+</div></div>
+
+<div class="rowset"><h3>C · Mini pantalla real</h3><div class="phones">
+  <div class="phone"><div class="mini"><div class="hd"><span>Hoy: Día A</span><span class="badge">sin señal ✓</span></div><div class="ex"><div class="thumb"></div><div>Press banca con barra<div class="sub">3×8–10 · RIR 2</div></div></div><div class="ok">✓ Serie guardada en el celular</div></div><div class="title">Bienvenido a Fit Tracker</div><div class="muted">Tu rutina, tus series y tu progreso en un solo lugar. Funciona aunque no tengas señal en el gimnasio.</div><div class="dots"><span class="on"></span><span></span><span></span><span></span></div><div class="btn">Siguiente</div></div>
+  <div class="phone"><div class="mini"><div class="hd"><span>Día A · Lun</span><span class="acc">≡</span></div><div class="ex"><div class="thumb"></div><div>Press banca con barra<div class="sub">3×8–10 · RIR 2</div></div></div><div class="ex"><div class="thumb"></div><div>Sentadilla con barra<div class="sub">Top set + back-off</div></div></div></div><div class="title">Primero, armá tu rutina</div><div class="muted">En <b>Rutinas</b>: creá los días, elegí los ejercicios del catálogo y poné series y repeticiones. Después activala.</div><div class="dots"><span></span><span class="on"></span><span></span><span></span></div><div class="btn">Siguiente</div></div>
+  <div class="phone"><div class="mini"><div class="hd"><span>Press banca con barra</span></div><div class="sub">Sugerido para hoy: <span class="acc">62.5 kg</span></div><div class="ok">✓ Serie 1 · 62.5 kg × 10 · RIR 2</div><div class="ok" style="background:#1E252E;color:#9CA3AF">Serie 2 · 62.5 kg × __</div></div><div class="title">Entrená desde Inicio</div><div class="muted">Inicio te dice qué te toca hoy y cuánto levantar. Registrás cada serie al terminarla; la app ajusta el peso para la próxima.</div><div class="dots"><span></span><span></span><span class="on"></span><span></span></div><div class="btn">Siguiente</div></div>
+  <div class="phone"><div class="mini"><div class="hd"><span>Press banca · 1RM</span><span class="sub">↑ 4%</span></div><div class="chart"><svg viewBox="0 0 160 42" preserveAspectRatio="none"><polyline fill="none" stroke="#3B82F6" stroke-width="2" points="0,36 30,32 55,30 80,24 105,22 130,14 160,8"/></svg></div><div class="pr">🏆 Nuevo récord · 65 kg × 8</div></div><div class="title">Mirá cómo avanzás</div><div class="muted">En <b>Progreso</b> ves tus gráficos y récords, y en <b>Historial</b> cada sesión, que podés corregir.</div><div class="dots"><span></span><span></span><span></span><span class="on"></span></div><div class="btn">Crear mi rutina</div></div>
+</div></div>
