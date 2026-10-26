@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { View, Pressable, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { router } from 'expo-router';
 import { useHomeData } from '../../../src/hooks/useHomeData';
@@ -6,6 +6,7 @@ import { WeekCalendarStrip } from '../../../src/components/WeekCalendarStrip';
 import { HomeProgressCard } from '../../../src/components/HomeProgressCard';
 import { AppText, Banner, Button, Card, Screen } from '../../../src/components/ui';
 import { formatShortDate } from '../../../src/lib/progress/format';
+import { loadWelcomeSeen } from '../../../src/lib/onboarding/welcome';
 import { ColorTokens } from '../../../src/theme/colors';
 import { useTheme } from '../../../src/theme/ThemeProvider';
 
@@ -33,6 +34,13 @@ export default function Home() {
     recentActivity,
     consistencyStreak,
   } = useHomeData();
+
+  // First visit on this device: show the welcome guide over Home.
+  useEffect(() => {
+    loadWelcomeSeen().then((seen) => {
+      if (!seen) router.push('/(app)/welcome');
+    });
+  }, []);
 
   async function handleStart() {
     const sessionId = await startOrResumeSession();

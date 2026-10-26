@@ -167,6 +167,14 @@ export default function SettingsScreen() {
 
       <Button title="Enviar aviso de prueba" variant="secondary" disabled={!loaded} onPress={handleTest} />
 
+      <Pressable onPress={() => router.push('/(app)/welcome')}>
+        <Card style={styles.row}>
+          <AppText variant="heading" style={styles.title}>
+            Ver la guía de nuevo ›
+          </AppText>
+        </Card>
+      </Pressable>
+
       <Pressable onPress={() => router.push('/(app)/(tabs)/settings/credits')}>
         <Card style={styles.row}>
           <AppText variant="heading" style={styles.title}>
