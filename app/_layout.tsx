@@ -1,6 +1,6 @@
 import { ReactNode, useEffect } from 'react';
 import { View } from 'react-native';
-import { Slot, useRouter, useSegments } from 'expo-router';
+import { Slot, usePathname, useRouter, useSegments } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useAuthSession } from '../src/hooks/useAuthSession';
@@ -22,12 +22,13 @@ function ThemedRoot({ children }: { children: ReactNode }) {
 export default function RootLayout() {
   const { session, isLoading } = useAuthSession();
   const segments = useSegments();
+  const pathname = usePathname();
   const router = useRouter();
 
   useEffect(() => {
     if (isLoading) return;
     const inAuthGroup = segments[0] === '(auth)';
-    const onSetPassword = inAuthGroup && segments[1] === 'set-password';
+    const onSetPassword = pathname === '/set-password';
     const needsPassword = mustChangePassword(session?.user);
 
     if (!session && !inAuthGroup) {
@@ -37,7 +38,7 @@ export default function RootLayout() {
     } else if (session && !needsPassword && inAuthGroup) {
       router.replace('/(app)/(tabs)');
     }
-  }, [session, isLoading, segments]);
+  }, [session, isLoading, segments, pathname]);
 
   // Covers token expiry and remote sign-out, not just the sign-out button.
   useEffect(() => {
