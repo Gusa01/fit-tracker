@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { View, Text, Pressable, Modal, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { CachedRoutineExercise } from '../lib/sqlite/cache';
 import { LoggedSet, SetType } from '../lib/sessions/types';
@@ -110,7 +111,7 @@ export function SessionExerciseCard({
               {logged.rir !== null ? ` · RIR ${logged.rir}` : ''}
             </Text>
             <Pressable onPress={() => setEditingSet(logged)} hitSlop={12} accessibilityLabel="Corregir serie">
-              <Text style={styles.editIcon}>✎</Text>
+              <Ionicons name="pencil-outline" size={18} color={colors.success} style={styles.editIcon} />
             </Pressable>
           </View>
         );
@@ -207,7 +208,7 @@ function makeStyles(c: ColorTokens) {
     },
     loggedText: { color: c.success },
     loggedTextFlex: { flex: 1 },
-    editIcon: { fontSize: 18, color: c.success, paddingHorizontal: 4 },
+    editIcon: { paddingHorizontal: 4 },
     saveWrap: { marginTop: 4 },
     doneText: { fontWeight: '700', marginTop: 4 },
   });
