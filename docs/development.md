@@ -128,3 +128,15 @@ npx eas-cli build -p android --profile preview
 ```
 
 The build needs `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY`. The anon key is public by design (RLS protects the data), so it can live in the build profile or in EAS environment variables. Never the service-role key.
+
+## Shipping updates
+
+Installed APKs update themselves over the air with EAS Update. Builds from the `preview` profile listen on the `preview` channel, so after merging a change that is JavaScript only:
+
+```bash
+npx eas-cli update --channel preview --message "<what changed>"
+```
+
+The app downloads the update in the background and applies it on the next launch.
+
+Changes to the native side (a new library with native code, an Expo SDK upgrade, or changes to `app.json` plugins) need a new APK instead. The runtime version uses the `fingerprint` policy, which hashes the native configuration, so an update is never delivered to a build whose native code doesn't match it.

@@ -12,7 +12,8 @@
       "env": {
         "EXPO_PUBLIC_SUPABASE_URL": "https://zeqvkzzwevdgsqoossmi.supabase.co",
         "EXPO_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_mmOxGWmR0m3fOgz7uVvL7A_g7vL8lkq"
-      }
+      },
+      "channel": "preview"
     },
     "production": {
       "autoIncrement": true,
@@ -22,7 +23,8 @@
       "env": {
         "EXPO_PUBLIC_SUPABASE_URL": "https://zeqvkzzwevdgsqoossmi.supabase.co",
         "EXPO_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_mmOxGWmR0m3fOgz7uVvL7A_g7vL8lkq"
-      }
+      },
+      "channel": "production"
     }
   }
 }

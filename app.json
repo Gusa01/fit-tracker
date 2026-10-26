@@ -59,6 +59,12 @@
         "projectId": "aa7a7d0e-c77d-4096-a46c-e4dd3ac81a7e"
       }
     },
-    "owner": "gusa01"
+    "owner": "gusa01",
+    "updates": {
+      "url": "https://u.expo.dev/aa7a7d0e-c77d-4096-a46c-e4dd3ac81a7e"
+    },
+    "runtimeVersion": {
+      "policy": "fingerprint"
+    }
   }
 }
