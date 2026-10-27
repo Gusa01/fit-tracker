@@ -1,17 +1,18 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { View, TextInput, Pressable, ScrollView, StyleSheet, Switch, ActivityIndicator, Alert } from 'react-native';
+import { View, TextInput, Pressable, ScrollView, StyleSheet, Switch, ActivityIndicator } from 'react-native';
 import { NestableScrollContainer } from 'react-native-draggable-flatlist';
-import { router } from 'expo-router';
+import { router, Stack } from 'expo-router';
 import { useAuthSession } from '../hooks/useAuthSession';
 import { useRoutine } from '../hooks/useRoutine';
 import { useRoutineDays } from '../hooks/useRoutineDays';
 import { useRoutines } from '../hooks/useRoutines';
+import { SaveStatus, useSaveTracker } from '../hooks/useSaveTracker';
 import { supabase } from '../lib/supabase';
 import { createRoutine, updateRoutine, createDay, reorderDays, softDeleteDay } from '../lib/routines/mutations';
 import { DayReorderList } from './DayReorderList';
 import { DayCard } from './DayCard';
 import { ScrollIntoViewContext } from './ScrollIntoViewContext';
-import { AppText, Button, Screen } from './ui';
+import { AppText, Button, Screen, useToast } from './ui';
 import { useTheme } from '../theme/ThemeProvider';
 import { ColorTokens } from '../theme/colors';
 
@@ -37,6 +38,9 @@ export function RoutineBuilder({ initialRoutineId }: RoutineBuilderProps) {
   const [initialized, setInitialized] = useState(false);
   const [nameError, setNameError] = useState<string | null>(null);
   const [reorderingDays, setReorderingDays] = useState(false);
+  const [finishing, setFinishing] = useState(false);
+  const { status: saveStatus, track, settle } = useSaveTracker();
+  const toast = useToast();
 
   const scrollRef = useRef<ScrollView>(null);
   const contentRef = useRef<View>(null!);
@@ -72,12 +76,14 @@ export function RoutineBuilder({ initialRoutineId }: RoutineBuilderProps) {
       return null;
     }
     setNameError(null);
-    const created = await createRoutine(supabase, userId, {
+    const creating = createRoutine(supabase, userId, {
       name: name.trim(),
       usesTopSetBackoff,
       suggestedDurationWeeks: suggestedDurationWeeks ? Number(suggestedDurationWeeks) : null,
       nextRoutineId,
     });
+    if (!(await track(creating))) return null;
+    const created = await creating;
     setInitialized(true);
     setRoutineId(created.id);
     return created.id;
@@ -90,25 +96,37 @@ export function RoutineBuilder({ initialRoutineId }: RoutineBuilderProps) {
       return;
     }
     setNameError(null);
-    if (routineId) await updateRoutine(supabase, routineId, { name: trimmed });
+    if (routineId && trimmed !== routine?.name) await track(updateRoutine(supabase, routineId, { name: trimmed }));
   }
 
   async function handleToggleTopSet(value: boolean) {
     setUsesTopSetBackoff(value);
-    if (routineId) await updateRoutine(supabase, routineId, { usesTopSetBackoff: value });
+    if (routineId) await track(updateRoutine(supabase, routineId, { usesTopSetBackoff: value }));
   }
 
   async function handleDurationBlur() {
     if (!routineId) return;
-    await updateRoutine(supabase, routineId, {
-      suggestedDurationWeeks: suggestedDurationWeeks ? Number(suggestedDurationWeeks) : null,
-    });
+    await track(
+      updateRoutine(supabase, routineId, {
+        suggestedDurationWeeks: suggestedDurationWeeks ? Number(suggestedDurationWeeks) : null,
+      })
+    );
   }
 
   async function handleSelectNextRoutine(id: string) {
     const next = nextRoutineId === id ? null : id;
     setNextRoutineId(next);
-    if (routineId) await updateRoutine(supabase, routineId, { nextRoutineId: next });
+    if (routineId) await track(updateRoutine(supabase, routineId, { nextRoutineId: next }));
+  }
+
+  async function handleDone() {
+    setFinishing(true);
+    const saved = await settle();
+    setFinishing(false);
+    // A save that failed stays on screen so the change isn't lost without the user noticing.
+    if (!saved) return;
+    if (routineId) toast('Rutina guardada');
+    router.back();
   }
 
   async function handleChanged() {
@@ -119,21 +137,17 @@ export function RoutineBuilder({ initialRoutineId }: RoutineBuilderProps) {
   async function handleAddDay() {
     const id = await ensureRoutine();
     if (!id) return;
-    await createDay(supabase, id, { name: `Día ${days.length + 1}`, isRestDay: false });
+    await track(createDay(supabase, id, { name: `Día ${days.length + 1}`, isRestDay: false }));
     await refetchDays();
   }
 
   async function handleReorderDays(orderedIds: string[]) {
-    try {
-      await reorderDays(supabase, orderedIds);
-    } catch (err) {
-      Alert.alert('Error', err instanceof Error ? err.message : 'No se pudo reordenar los días.');
-    }
+    await track(reorderDays(supabase, orderedIds));
     await refetchDays();
   }
 
   async function handleDeleteDay(dayId: string) {
-    await softDeleteDay(supabase, dayId);
+    await track(softDeleteDay(supabase, dayId));
     await refetchDays();
   }
 
@@ -233,6 +247,7 @@ export function RoutineBuilder({ initialRoutineId }: RoutineBuilderProps) {
                 day={day}
                 routineId={routineId as string}
                 weekdaySchedule={weekdaySchedule}
+                track={track}
                 onChanged={handleChanged}
                 onDelete={handleDeleteDay}
               />
@@ -243,10 +258,28 @@ export function RoutineBuilder({ initialRoutineId }: RoutineBuilderProps) {
         )}
 
         <View style={styles.doneButton}>
-          <Button title="Listo" onPress={() => router.back()} />
+          <Button title="Listo" onPress={handleDone} loading={finishing} />
         </View>
       </NestableScrollContainer>
+      <Stack.Screen options={{ headerRight: () => <SaveStatusLabel status={saveStatus} /> }} />
     </ScrollIntoViewContext.Provider>
+  );
+}
+
+const SAVE_STATUS_TEXT: Record<SaveStatus, string | null> = {
+  idle: null,
+  saving: 'Guardando...',
+  saved: 'Cambios guardados',
+  error: 'Sin guardar',
+};
+
+function SaveStatusLabel({ status }: { status: SaveStatus }) {
+  const text = SAVE_STATUS_TEXT[status];
+  if (!text) return null;
+  return (
+    <AppText variant="muted" color={status === 'error' ? 'danger' : undefined} accessibilityLiveRegion="polite">
+      {text}
+    </AppText>
   );
 }
 
