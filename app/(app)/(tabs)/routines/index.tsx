@@ -86,6 +86,12 @@ export default function RoutinesList() {
                 {item.is_active ? ' ⭐' : ''}
               </AppText>
               <View style={styles.rowActions}>
+                <Button
+                  title="Editar"
+                  variant="secondary"
+                  disabled={busyId === item.id}
+                  onPress={() => router.push(`/(app)/(tabs)/routines/${item.id}`)}
+                />
                 {!item.is_active && (
                   <Button title="Activar" disabled={busyId === item.id} onPress={() => handleActivate(item.id)} />
                 )}
