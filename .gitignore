@@ -38,6 +38,3 @@ expo-env.d.ts
 # @end expo-cli
 # Exercise catalog source downloads (scripts/catalog/fetch-sources.ts)
 scripts/catalog/.cache/
-
-# Local brainstorming companion
-.superpowers/
