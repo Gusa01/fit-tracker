@@ -16,6 +16,8 @@ import {
   cancelAllReminders,
 } from '../../../../src/lib/reminders/scheduler';
 import { supabase } from '../../../../src/lib/supabase';
+import { DEMO_ACCOUNT } from '../../../../src/lib/auth/demoAccount';
+import { useAuthSession } from '../../../../src/hooks/useAuthSession';
 import { getDatabase } from '../../../../src/lib/sqlite/db';
 import { getCachedActiveRoutine } from '../../../../src/lib/sqlite/cache';
 import { AppText, Banner, Button, Card, Chip, Screen } from '../../../../src/components/ui';
@@ -37,6 +39,9 @@ export default function SettingsScreen() {
   const router = useRouter();
   const { colors, preference, setPreference } = useTheme();
   const styles = useMemo(() => makeStyles(colors), [colors]);
+  const { session } = useAuthSession();
+  const email = session?.user.email ?? '';
+  const isDemo = email === DEMO_ACCOUNT.email;
   const [settings, setSettings] = useState<ReminderSettings>(DEFAULT_REMINDER_SETTINGS);
   const [permissionDenied, setPermissionDenied] = useState(false);
   const [hasRoutine, setHasRoutine] = useState(true);
@@ -87,6 +92,16 @@ export default function SettingsScreen() {
 
   return (
     <Screen scroll>
+      <Card>
+        <AppText variant="heading">Cuenta</AppText>
+        <AppText variant="muted">{email}</AppText>
+        {isDemo && (
+          <AppText variant="muted">
+            Estás en la cuenta demo: se reinicia los lunes y jueves, y lo que cargues acá se borra.
+          </AppText>
+        )}
+      </Card>
+
       <Card>
         <AppText variant="heading">Apariencia</AppText>
         <View style={styles.chips}>
