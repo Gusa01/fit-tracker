@@ -4,11 +4,11 @@ A gym workout tracker for Android that tells you what to lift today, works offli
 
 <!-- GIF: docs/media/demo.gif -->
 
-<!-- APK: link to the latest GitHub Release -->
+**[Download the Android APK](https://github.com/Gusa01/fit-tracker/releases/latest)** (sideload; updates install themselves after that).
 
 **Try the demo account:** email `demo.fittracker@example.com`, password `fittracker123`. It comes with about 12 weeks of training history and resets every Monday and Thursday. The sign-in screen has a "Probar con la cuenta demo" button, so you don't need to type them. Other accounts are invite-only.
 
-[![CI](https://github.com/Gusa01/gym-tracker/actions/workflows/ci.yml/badge.svg)](https://github.com/Gusa01/gym-tracker/actions/workflows/ci.yml)
+[![CI](https://github.com/Gusa01/fit-tracker/actions/workflows/ci.yml/badge.svg)](https://github.com/Gusa01/fit-tracker/actions/workflows/ci.yml)
 
 ## Why I built it
 
@@ -67,7 +67,7 @@ tests/               Unit tests (pure logic) and integration tests (real Postgre
 
 **Security lives in the database.** The app ships the public anon key, so the client can't be trusted to filter by user. Every table has Row Level Security: user data is visible only to its owner through `auth.uid()`; catalog exercises are read-only, and users can add only private exercises of their own. The `exercise_set_history` view is created `with (security_invoker = true)` so it runs with the caller's permissions instead of bypassing RLS as its owner. The one privileged function, `merge_legacy_exercises`, is `security definer` with `execute` revoked from `anon` and `authenticated` ([seed migration](supabase/migrations/20261015120100_seed_exercise_catalog.sql)). Policies in SQL are easy to get subtly wrong, so [`rls.test.ts`](tests/db/rls.test.ts) checks them against a real Postgres.
 
-**A catalog migration that kept everyone's history.** Replacing the hand-typed exercise list with a curated catalog risked orphaning routines, charts and progression state. The merge maps each legacy row to the catalog by name or alias, collapses duplicate progression rows to the most recently updated one *before* repointing (so the `(user_id, exercise_id)` key never collides), then repoints routines and state and removes the old rows. Logged sets reference routine exercises rather than exercises, so history needed no rewrite and merged exercises show one combined chart. It is written as a function so [`legacyMerge.integration.test.ts`](tests/lib/exercises/legacyMerge.integration.test.ts) can run it against seeded data; the price is a migration that can't be undone.
+**A catalog migration that kept everyone's history.** Replacing the hand-typed exercise list with a curated catalog risked orphaning routines, charts and progression state. The merge maps each legacy row to the catalog by name or alias, collapses duplicate progression rows to the most recently updated one _before_ repointing (so the `(user_id, exercise_id)` key never collides), then repoints routines and state and removes the old rows. Logged sets reference routine exercises rather than exercises, so history needed no rewrite and merged exercises show one combined chart. It is written as a function so [`legacyMerge.integration.test.ts`](tests/lib/exercises/legacyMerge.integration.test.ts) can run it against seeded data; the price is a migration that can't be undone.
 
 **Reading past PostgREST's 1000-row cap.** Supabase's API truncates every response at 1000 rows without an error, so a long training history would silently lose its oldest sets and the charts would lie. [`progress/queries.ts`](src/lib/progress/queries.ts) reads the history view in pages with a stable order (`session_date`, then `logged_set_id`) until a short page comes back. Heavy users pay a few extra round trips, and the result is cached in SQLite as per-exercise records so live PR detection works offline.
 
