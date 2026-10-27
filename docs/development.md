@@ -150,10 +150,17 @@ The build needs `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY`. 
 
 ## Shipping updates
 
-Installed APKs update themselves over the air with EAS Update. Builds from the `preview` profile listen on the `preview` channel, so after merging a change that is JavaScript only:
+Installed APKs update themselves over the air with EAS Update. Builds from the `preview` profile listen on the `preview` channel, so after merging a change that is JavaScript only, check that the installed build can take it and publish:
 
 ```bash
-npx eas-cli update --channel preview --message "<what changed>"
+npx eas-cli fingerprint:compare --build-id <id of the installed build>
+npx eas-cli update --channel preview --environment preview --platform android --message "<what changed>"
+```
+
+An update is bundled on your machine, not on the build servers, so it does not see the `env` block in `eas.json`. It takes its `EXPO_PUBLIC_*` values from the EAS environment named by `--environment` (`npx eas-cli env:list --environment preview`). If those are missing, the bundle has no Supabase URL, the app throws on start-up, and expo-updates quietly rolls the phone back to the version inside the APK. Right after publishing, confirm the project URL made it into the bundle (`eas update` leaves it in `dist/`). It should print 1; a 0 means the variables are missing, so add them with `eas env:create` and publish again:
+
+```bash
+grep -ac "$(node -p "require('./eas.json').build.preview.env.EXPO_PUBLIC_SUPABASE_URL")" dist/_expo/static/js/android/*.hbc
 ```
 
 The app downloads the update in the background and applies it on the next launch.
