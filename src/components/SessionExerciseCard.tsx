@@ -155,7 +155,8 @@ export function SessionExerciseCard({
           <View style={styles.saveWrap}>
             <Button
               title={saving ? 'Guardando...' : `Guardar serie ${nextSet.setIndex}`}
-              disabled={!weight || !reps || saving}
+              disabled={!weight || !reps}
+              loading={saving}
               onPress={handleLogNext}
             />
           </View>

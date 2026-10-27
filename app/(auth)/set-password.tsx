@@ -35,7 +35,7 @@ export default function SetPassword() {
         <PasswordInput placeholder="Nueva contraseña" value={password} onChangeText={setPassword} />
         <PasswordInput placeholder="Repetí la contraseña" value={confirmation} onChangeText={setConfirmation} />
         {error && <AppText color="danger">{error}</AppText>}
-        <Button title={saving ? 'Guardando...' : 'Guardar contraseña'} onPress={handleSave} disabled={saving} />
+        <Button title={saving ? 'Guardando...' : 'Guardar contraseña'} onPress={handleSave} loading={saving} />
         <Button title="Cerrar sesión" variant="ghost" onPress={() => supabase.auth.signOut()} disabled={saving} />
       </View>
     </Screen>

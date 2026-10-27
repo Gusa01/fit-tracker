@@ -7,7 +7,7 @@ import { editFromValues, validateSetEdit } from '../lib/history/logic';
 import { formatSetLabel } from '../lib/history/format';
 import { WeightStepper } from './WeightStepper';
 import { StepperInput } from './StepperInput';
-import { AppText, Button, Chip } from './ui';
+import { AppText, Button, Chip, useToast } from './ui';
 import { useTheme } from '../theme/ThemeProvider';
 import { ColorTokens } from '../theme/colors';
 
@@ -30,6 +30,7 @@ export function SetEditor({ set, exercise, onSave, onDelete, onClose }: SetEdito
   const styles = useMemo(() => makeStyles(colors), [colors]);
   const [values, setValues] = useState<SetEditValues>({ weight: '', reps: '', rir: null });
   const [saving, setSaving] = useState(false);
+  const toast = useToast();
 
   useEffect(() => {
     if (set) setValues(valuesFrom(set));
@@ -46,6 +47,7 @@ export function SetEditor({ set, exercise, onSave, onDelete, onClose }: SetEdito
     setSaving(true);
     try {
       await onSave(editFromValues(values, exercise, set));
+      toast('Serie corregida');
     } catch {
       Alert.alert('Error', 'No se pudo guardar la corrección. Probá de nuevo.');
     } finally {
@@ -63,6 +65,7 @@ export function SetEditor({ set, exercise, onSave, onDelete, onClose }: SetEdito
           setSaving(true);
           try {
             await onDelete();
+            toast('Serie borrada');
           } catch {
             Alert.alert('Error', 'No se pudo guardar la corrección. Probá de nuevo.');
           } finally {
@@ -125,7 +128,8 @@ export function SetEditor({ set, exercise, onSave, onDelete, onClose }: SetEdito
         <View style={styles.saveWrap}>
           <Button
             title={saving ? 'Guardando...' : 'Guardar'}
-            disabled={problem !== null || saving}
+            disabled={problem !== null}
+            loading={saving}
             onPress={handleSave}
           />
         </View>

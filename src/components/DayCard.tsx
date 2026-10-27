@@ -15,11 +15,13 @@ interface DayCardProps {
   day: RoutineDay;
   routineId: string;
   weekdaySchedule: Record<string, unknown>;
+  // Reports each save to the editor's "Guardando... / Cambios guardados" status.
+  track: (save: Promise<unknown>) => Promise<boolean>;
   onChanged: () => void;
   onDelete: (dayId: string) => void;
 }
 
-export function DayCard({ day, routineId, weekdaySchedule, onChanged, onDelete }: DayCardProps) {
+export function DayCard({ day, routineId, weekdaySchedule, track, onChanged, onDelete }: DayCardProps) {
   const { colors } = useTheme();
   const styles = useMemo(() => makeStyles(colors), [colors]);
   const [name, setName] = useState(day.name);
@@ -33,23 +35,23 @@ export function DayCard({ day, routineId, weekdaySchedule, onChanged, onDelete }
       return;
     }
     if (trimmed === day.name) return;
-    await updateDay(supabase, day.id, { name: trimmed });
+    await track(updateDay(supabase, day.id, { name: trimmed }));
     onChanged();
   }
 
   async function handleToggleRest(value: boolean) {
     setIsRestDay(value);
-    await updateDay(supabase, day.id, { isRestDay: value });
-    if (value && weekdays.length > 0) {
+    const saved = await track(updateDay(supabase, day.id, { isRestDay: value }));
+    if (saved && value && weekdays.length > 0) {
       setWeekdays([]);
-      await setDayWeekdays(supabase, routineId, day.id, []);
+      await track(setDayWeekdays(supabase, routineId, day.id, []));
     }
     onChanged();
   }
 
   async function handleWeekdaysChange(next: Weekday[]) {
     setWeekdays(next);
-    await setDayWeekdays(supabase, routineId, day.id, next);
+    await track(setDayWeekdays(supabase, routineId, day.id, next));
     onChanged();
   }
 

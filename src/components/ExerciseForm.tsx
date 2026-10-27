@@ -337,7 +337,7 @@ export function ExerciseForm({ exercises, initial, onSubmit, onCancel }: Exercis
 
       <View style={styles.actions}>
         <View style={styles.action}>
-          <Button title={saving ? 'Guardando...' : 'Guardar'} onPress={handleSubmit} disabled={saving} />
+          <Button title={saving ? 'Guardando...' : 'Guardar'} onPress={handleSubmit} loading={saving} />
         </View>
         <View style={styles.action}>
           <Button title="Cancelar" variant="secondary" onPress={onCancel} />

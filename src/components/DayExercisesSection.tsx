@@ -18,7 +18,7 @@ import { ExercisePicker } from './ExercisePicker';
 import { useScrollIntoView } from './ScrollIntoViewContext';
 import { RoutineExerciseWithName } from '../lib/routines/types';
 import { formatTargetScheme } from '../lib/sessions/prescribedSets';
-import { AppText, Button } from './ui';
+import { AppText, Button, useToast } from './ui';
 import { useTheme } from '../theme/ThemeProvider';
 import { ColorTokens } from '../theme/colors';
 
@@ -60,6 +60,7 @@ export function DayExercisesSection({ dayId }: DayExercisesSectionProps) {
   // The row whose form was just saved: the form is much taller, so the row may land above the visible area.
   const [revealExerciseId, setRevealExerciseId] = useState<string | null>(null);
   const scrollIntoView = useScrollIntoView();
+  const toast = useToast();
 
   async function handlePickerDone() {
     setAddingExercise(false);
@@ -82,6 +83,7 @@ export function DayExercisesSection({ dayId }: DayExercisesSectionProps) {
       });
       setEditingExerciseId(null);
       setRevealExerciseId(routineExerciseId);
+      toast('Ejercicio guardado');
       await refetch();
     } catch (err) {
       Alert.alert('Error', err instanceof Error ? err.message : 'No se pudo guardar el ejercicio.');
