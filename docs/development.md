@@ -165,4 +165,4 @@ grep -ac "$(node -p "require('./eas.json').build.preview.env.EXPO_PUBLIC_SUPABAS
 
 The app downloads the update in the background and applies it on the next launch.
 
-Changes to the native side (a new library with native code, an Expo SDK upgrade, or changes to `app.json` plugins) need a new APK instead. The runtime version uses the `fingerprint` policy, which hashes the native configuration, so an update is never delivered to a build whose native code doesn't match it. The fingerprint also hashes `.gitignore` (byte for byte, line endings included), so leave it alone unless a new APK is planned; ignore local-only folders in `.git/info/exclude` instead.
+Changes to the native side (a new library with native code, an Expo SDK upgrade, or changes to `app.json` plugins) need a new APK instead. The runtime version uses the `fingerprint` policy, which hashes the native configuration, so an update is never delivered to a build whose native code doesn't match it. `fingerprint.config.js` leaves npm scripts and `.gitignore` out of it, since neither changes the native app. Run `npx eas-cli fingerprint:compare --build-id <id>` before every update anyway.
