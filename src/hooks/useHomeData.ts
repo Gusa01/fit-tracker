@@ -6,9 +6,10 @@ import { useAuthSession } from './useAuthSession';
 import { getDatabase } from '../lib/sqlite/db';
 import { resolveToday, getCachedRoutineDays, getCachedDayExercises } from '../lib/sqlite/cache';
 import { formatDateOnly } from '../lib/sessions/weekResolution';
-import { getSessionForDate, listRecentCompletedSessions } from '../lib/sessions/queries';
+import { getSessionForDate, listRecentCompletedSessions, listSessionsSince } from '../lib/sessions/queries';
 import { buildWeekCalendar, computeWeekProgress, WeekCalendarDay } from '../lib/home/weekCalendar';
 import { computeConsecutiveActiveWeeks } from '../lib/home/streak';
+import { buildOtherDayOptions, OtherDayOption, weekDates } from '../lib/home/otherDays';
 import { saveCurrentSession, loadCurrentSession } from '../lib/sessions/currentSessionStorage';
 import { enqueueWrite } from '../lib/sqlite/pendingWrites';
 import { flushOnly, syncNow } from '../lib/sync/syncService';
@@ -46,6 +47,7 @@ export function useHomeData() {
     []
   );
   const [consistencyStreak, setConsistencyStreak] = useState(0);
+  const [otherDays, setOtherDays] = useState<OtherDayOption[]>([]);
 
   const load = useCallback(async () => {
     if (!userId) return;
@@ -71,6 +73,7 @@ export function useHomeData() {
         setWeekProgress(null);
         setRecentActivity([]);
         setConsistencyStreak(0);
+        setOtherDays([]);
         return;
       }
       setRoutineName(resolved.routine.name);
@@ -81,6 +84,21 @@ export function useHomeData() {
       const days = getCachedRoutineDays(getDatabase(), resolved.routine.id);
       setWeekCalendar(buildWeekCalendar(resolved.routine.weekday_schedule, days, resolved.weekNumber, new Date()));
       setWeekProgress(computeWeekProgress(resolved.weekNumber, resolved.routine.suggested_duration_weeks));
+
+      const monday = formatDateOnly(weekDates(new Date())[0]);
+      const sessionsThisWeek = await listSessionsSince(supabase, userId, monday).catch(() => null);
+      const options = buildOtherDayOptions(
+        resolved.routine.weekday_schedule,
+        days,
+        resolved.routine.started_at as string,
+        sessionsThisWeek ?? [],
+        new Date()
+      );
+      // Offline there's no way to know what was trained this week, so nothing is called pending rather than
+      // nagging about a day that may already be done.
+      setOtherDays(
+        sessionsThisWeek ? options : options.map((o) => ({ ...o, pendingDate: null, pendingWeekday: null }))
+      );
 
       // 200 sessions is enough history for a multi-year streak; the previous default of 30
       // silently capped the counter at ~6 weeks for an actively-training user.
@@ -172,42 +190,47 @@ export function useHomeData() {
 
   const startingRef = useRef(false);
 
-  const startOrResumeSession = useCallback(async (): Promise<string | null> => {
-    if (!userId || !todayDayId) return null;
-    if (startingRef.current) return null;
-    startingRef.current = true;
-    try {
-      const pointer = await loadCurrentSession();
-      if (pointer && pointer.dayId === todayDayId && pointer.sessionDate === formatDateOnly(new Date())) {
-        return pointer.sessionId;
+  // Starts (or resumes) today's session for a routine day: today's scheduled one by default, or another one
+  // picked from "Entrenar otro día". The session is always dated today.
+  const startOrResumeSession = useCallback(
+    async (dayId: string | null = todayDayId): Promise<string | null> => {
+      if (!userId || !dayId) return null;
+      if (startingRef.current) return null;
+      startingRef.current = true;
+      try {
+        const pointer = await loadCurrentSession();
+        if (pointer && pointer.dayId === dayId && pointer.sessionDate === formatDateOnly(new Date())) {
+          return pointer.sessionId;
+        }
+
+        const sessionDate = formatDateOnly(new Date());
+        const week = weekNumber ?? 1;
+
+        const existing = await getSessionForDate(supabase, userId, dayId, sessionDate).catch(() => null);
+        if (existing) {
+          await saveCurrentSession({ sessionId: existing.id, dayId, sessionDate, weekNumber: week });
+          return existing.id;
+        }
+
+        const sessionId = Crypto.randomUUID();
+        const payload = {
+          id: sessionId,
+          user_id: userId,
+          routine_day_id: dayId,
+          session_date: sessionDate,
+          week_number: week,
+          status: 'in_progress' as const,
+        };
+        enqueueWrite(getDatabase(), sessionId, 'workout_sessions', payload);
+        await saveCurrentSession({ sessionId, dayId, sessionDate, weekNumber: week });
+        flushOnly(getDatabase(), supabase).catch(() => {});
+        return sessionId;
+      } finally {
+        startingRef.current = false;
       }
-
-      const sessionDate = formatDateOnly(new Date());
-      const week = weekNumber ?? 1;
-
-      const existing = await getSessionForDate(supabase, userId, todayDayId, sessionDate).catch(() => null);
-      if (existing) {
-        await saveCurrentSession({ sessionId: existing.id, dayId: todayDayId, sessionDate, weekNumber: week });
-        return existing.id;
-      }
-
-      const sessionId = Crypto.randomUUID();
-      const payload = {
-        id: sessionId,
-        user_id: userId,
-        routine_day_id: todayDayId,
-        session_date: sessionDate,
-        week_number: week,
-        status: 'in_progress' as const,
-      };
-      enqueueWrite(getDatabase(), sessionId, 'workout_sessions', payload);
-      await saveCurrentSession({ sessionId, dayId: todayDayId, sessionDate, weekNumber: week });
-      flushOnly(getDatabase(), supabase).catch(() => {});
-      return sessionId;
-    } finally {
-      startingRef.current = false;
-    }
-  }, [userId, todayDayId, weekNumber]);
+    },
+    [userId, todayDayId, weekNumber]
+  );
 
   function dismissDeload() {
     setDeloadDismissed(true);
@@ -251,5 +274,8 @@ export function useHomeData() {
     weekProgress,
     recentActivity,
     consistencyStreak,
+    otherDays,
+    // Today's own scheduled day is already the main button, so only another owed day earns the banner.
+    pendingDay: otherDays.find((o) => o.pendingDate !== null && !(o.dayId === todayDayId && !todayIsRestDay)) ?? null,
   };
 }

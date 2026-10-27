@@ -25,7 +25,7 @@ So I built the app I wanted to use. I train with it, and the plan is to keep imp
 
 ## What it does
 
-- **Today's workout**, resolved from the active routine and the weekday, with sets logged between rest periods. Logging works offline and syncs when the connection comes back.
+- **Today's workout**, resolved from the active routine and the weekday, with sets logged between rest periods. A day missed earlier in the week is offered on Home, and any routine day can be trained instead. Logging works offline and syncs when the connection comes back.
 - **Progression suggestions**: top set / back-off and double progression schemes, a suggested weight for next time, and a deload suggestion after two sessions short of target.
 - **Progress charts** per exercise (estimated 1RM, weight, reps or time), and a banner the moment a set beats a personal record.
 - **Session history** with corrections: edit or delete a logged set after the fact.

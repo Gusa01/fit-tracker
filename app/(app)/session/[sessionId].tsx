@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { getDatabase } from '../../../src/lib/sqlite/db';
-import { resolveToday } from '../../../src/lib/sqlite/cache';
+import { getCachedRoutineDays, resolveToday } from '../../../src/lib/sqlite/cache';
+import { loadCurrentSession } from '../../../src/lib/sessions/currentSessionStorage';
 import { useSessionSets } from '../../../src/hooks/useSessionSets';
 import { SessionExerciseCard } from '../../../src/components/SessionExerciseCard';
 import { PrBanner } from '../../../src/components/PrBanner';
@@ -28,11 +29,20 @@ export default function SessionScreen() {
   const [resolvedDayName, setResolvedDayName] = useState<string | null>(null);
 
   useEffect(() => {
-    const resolved = resolveToday(getDatabase());
-    if (!resolved?.day) return;
-    setResolvedDayName(resolved.day.name);
-    loadForDay(resolved.day.id, resolved.day.name);
-  }, [loadForDay]);
+    (async () => {
+      const resolved = resolveToday(getDatabase());
+      if (!resolved) return;
+      // The session may be for a day other than today's scheduled one (a missed or picked day), and Home
+      // records which in the current-session pointer before opening this screen.
+      const pointer = await loadCurrentSession();
+      const days = getCachedRoutineDays(getDatabase(), resolved.routine.id);
+      const day =
+        (pointer?.sessionId === sessionId ? days.find((d) => d.id === pointer.dayId) : undefined) ?? resolved.day;
+      if (!day) return;
+      setResolvedDayName(day.name);
+      loadForDay(day.id, day.name);
+    })().catch((err) => console.warn('Could not resolve the session day', err));
+  }, [loadForDay, sessionId]);
 
   async function handleFinish() {
     await completeSession();
