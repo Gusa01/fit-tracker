@@ -17,9 +17,21 @@ export function WeekCalendarStrip({ days }: WeekCalendarStripProps) {
       {days.map((day) => (
         <View key={day.weekday} style={[styles.cell, day.isToday && styles.cellToday]}>
           <Text style={[styles.label, day.isToday && styles.labelToday]}>{day.label}</Text>
-          <Text style={[styles.dayName, day.isToday && styles.labelToday]} numberOfLines={2}>
-            {day.isRestDay ? 'Descanso' : day.dayName}
-          </Text>
+          {day.isRestDay ? (
+            // One word that never fits a seventh of a phone: shrink it instead of breaking it mid-word.
+            <Text
+              style={[styles.dayName, day.isToday && styles.labelToday]}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.7}
+            >
+              Descanso
+            </Text>
+          ) : (
+            <Text style={[styles.dayName, day.isToday && styles.labelToday]} numberOfLines={2}>
+              {day.dayName}
+            </Text>
+          )}
         </View>
       ))}
     </View>
