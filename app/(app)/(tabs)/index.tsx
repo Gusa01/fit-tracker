@@ -1,9 +1,11 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { View, Pressable, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { router } from 'expo-router';
 import { useHomeData } from '../../../src/hooks/useHomeData';
 import { WeekCalendarStrip } from '../../../src/components/WeekCalendarStrip';
 import { HomeProgressCard } from '../../../src/components/HomeProgressCard';
+import { OtherDaySheet } from '../../../src/components/OtherDaySheet';
+import { formatDateOnly } from '../../../src/lib/sessions/weekResolution';
 import { AppText, Banner, Button, Card, Screen } from '../../../src/components/ui';
 import { formatShortDate } from '../../../src/lib/progress/format';
 import { loadWelcomeSeen } from '../../../src/lib/onboarding/welcome';
@@ -33,7 +35,12 @@ export default function Home() {
     acceptSwitch,
     recentActivity,
     consistencyStreak,
+    otherDays,
+    pendingDay,
   } = useHomeData();
+  const [pickingDay, setPickingDay] = useState(false);
+  const now = new Date();
+  const yesterday = formatDateOnly(new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1));
 
   // First visit on this device: show the welcome guide over Home.
   useEffect(() => {
@@ -42,8 +49,8 @@ export default function Home() {
     });
   }, []);
 
-  async function handleStart() {
-    const sessionId = await startOrResumeSession();
+  async function handleStart(dayId?: string) {
+    const sessionId = await startOrResumeSession(dayId);
     if (sessionId) {
       router.push(`/(app)/session/${sessionId}`);
     }
@@ -104,7 +111,7 @@ export default function Home() {
                             title={
                               sessionStatus === 'in_progress' ? 'Continuar entrenamiento' : 'Empezar entrenamiento'
                             }
-                            onPress={handleStart}
+                            onPress={() => handleStart()}
                           />
                         )}
                       </>
@@ -112,7 +119,36 @@ export default function Home() {
                   ) : (
                     <AppText>No hay entrenamiento programado para hoy.</AppText>
                   )}
+
+                  {pendingDay && (
+                    <Banner tone="warning">
+                      <AppText color="warning">
+                        {pendingDay.pendingDate === yesterday ? 'Ayer' : `El ${pendingDay.pendingWeekday}`} te tocaba{' '}
+                        {pendingDay.dayName} y no lo hiciste.
+                      </AppText>
+                      <View style={styles.pendingButton}>
+                        <Button
+                          title={`Hacer ${pendingDay.dayName} hoy`}
+                          onPress={() => handleStart(pendingDay.dayId)}
+                        />
+                      </View>
+                    </Banner>
+                  )}
+
+                  {otherDays.length > 0 && (
+                    <Button title="Entrenar otro día ›" variant="ghost" onPress={() => setPickingDay(true)} />
+                  )}
                 </Card>
+
+                <OtherDaySheet
+                  visible={pickingDay}
+                  options={otherDays}
+                  onClose={() => setPickingDay(false)}
+                  onPick={(dayId) => {
+                    setPickingDay(false);
+                    handleStart(dayId);
+                  }}
+                />
 
                 {consistencyStreak > 0 && (
                   <Banner tone="warning">
@@ -208,5 +244,6 @@ function makeStyles(c: ColorTokens) {
     activityChevron: { fontSize: 18 },
     bannerActions: { flexDirection: 'row', gap: 8 },
     bannerAction: { flex: 1 },
+    pendingButton: { marginTop: 8 },
   });
 }

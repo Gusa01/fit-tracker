@@ -30,6 +30,7 @@ describe('palettes', () => {
     ['accent', 'surface'],
     ['accent', 'background'],
     ['onAccent', 'danger'],
+    ['warning', 'surface'],
   ];
 
   for (const [name, palette] of [

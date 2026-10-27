@@ -31,6 +31,24 @@ export async function getSessionForDate(
   return data;
 }
 
+/** Which routine days were trained (started or finished) from `fromDate` on, for the "pending day" check. */
+export async function listSessionsSince(
+  supabase: SupabaseClient,
+  userId: string,
+  fromDate: string
+): Promise<{ routineDayId: string; sessionDate: string }[]> {
+  const { data, error } = await supabase
+    .from('workout_sessions')
+    .select('routine_day_id, session_date')
+    .eq('user_id', userId)
+    .gte('session_date', fromDate);
+  if (error) throw error;
+  return (data as { routine_day_id: string; session_date: string }[]).map((row) => ({
+    routineDayId: row.routine_day_id,
+    sessionDate: row.session_date,
+  }));
+}
+
 export async function listSessionSets(supabase: SupabaseClient, sessionId: string): Promise<LoggedSet[]> {
   const { data, error } = await supabase
     .from('logged_sets')
