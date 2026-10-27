@@ -15,6 +15,7 @@ import {
 } from '../lib/routines/mutations';
 import { ExerciseForm, ExerciseFormValues } from './ExerciseForm';
 import { ExercisePicker } from './ExercisePicker';
+import { useScrollIntoView } from './ScrollIntoViewContext';
 import { RoutineExerciseWithName } from '../lib/routines/types';
 import { formatTargetScheme } from '../lib/sessions/prescribedSets';
 import { AppText, Button } from './ui';
@@ -56,6 +57,9 @@ export function DayExercisesSection({ dayId }: DayExercisesSectionProps) {
 
   const [addingExercise, setAddingExercise] = useState(false);
   const [editingExerciseId, setEditingExerciseId] = useState<string | null>(null);
+  // The row whose form was just saved: the form is much taller, so the row may land above the visible area.
+  const [revealExerciseId, setRevealExerciseId] = useState<string | null>(null);
+  const scrollIntoView = useScrollIntoView();
 
   async function handlePickerDone() {
     setAddingExercise(false);
@@ -77,6 +81,7 @@ export function DayExercisesSection({ dayId }: DayExercisesSectionProps) {
         ...toMutationInput(values),
       });
       setEditingExerciseId(null);
+      setRevealExerciseId(routineExerciseId);
       await refetch();
     } catch (err) {
       Alert.alert('Error', err instanceof Error ? err.message : 'No se pudo guardar el ejercicio.');
@@ -134,7 +139,8 @@ export function DayExercisesSection({ dayId }: DayExercisesSectionProps) {
     );
   }
 
-  if (isLoading) {
+  // A refetch keeps the list on screen; collapsing it to a spinner would shrink the page and move the scroll.
+  if (isLoading && ordered.length === 0) {
     return (
       <View style={styles.section}>
         <AppText variant="title" style={styles.sectionTitle}>
@@ -175,6 +181,14 @@ export function DayExercisesSection({ dayId }: DayExercisesSectionProps) {
               {/* Long-press anywhere on the card lifts it; a tap opens the editor. */}
               <Pressable
                 style={[styles.exerciseRow, isActive && styles.exerciseRowActive]}
+                onLayout={
+                  revealExerciseId === exercise.id
+                    ? (event) => {
+                        setRevealExerciseId(null);
+                        scrollIntoView(event.currentTarget as unknown as View);
+                      }
+                    : undefined
+                }
                 onPress={() => setEditingExerciseId(exercise.id)}
                 onLongPress={drag}
                 delayLongPress={250}

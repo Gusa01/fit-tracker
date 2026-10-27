@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import { View, TextInput, Pressable, StyleSheet, Switch, ActivityIndicator, Alert } from 'react-native';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { View, TextInput, Pressable, ScrollView, StyleSheet, Switch, ActivityIndicator, Alert } from 'react-native';
 import { NestableScrollContainer } from 'react-native-draggable-flatlist';
 import { router } from 'expo-router';
 import { useAuthSession } from '../hooks/useAuthSession';
@@ -10,6 +10,7 @@ import { supabase } from '../lib/supabase';
 import { createRoutine, updateRoutine, createDay, reorderDays, softDeleteDay } from '../lib/routines/mutations';
 import { DayReorderList } from './DayReorderList';
 import { DayCard } from './DayCard';
+import { ScrollIntoViewContext } from './ScrollIntoViewContext';
 import { AppText, Button, Screen } from './ui';
 import { useTheme } from '../theme/ThemeProvider';
 import { ColorTokens } from '../theme/colors';
@@ -25,7 +26,7 @@ export function RoutineBuilder({ initialRoutineId }: RoutineBuilderProps) {
   const userId = session?.user.id;
 
   const [routineId, setRoutineId] = useState<string | undefined>(initialRoutineId);
-  const { routine, isLoading: routineLoading, refetch: refetchRoutine } = useRoutine(routineId);
+  const { routine, refetch: refetchRoutine } = useRoutine(routineId);
   const { days, refetch: refetchDays } = useRoutineDays(routineId);
   const { routines: allRoutines } = useRoutines(userId);
 
@@ -36,6 +37,20 @@ export function RoutineBuilder({ initialRoutineId }: RoutineBuilderProps) {
   const [initialized, setInitialized] = useState(false);
   const [nameError, setNameError] = useState<string | null>(null);
   const [reorderingDays, setReorderingDays] = useState(false);
+
+  const scrollRef = useRef<ScrollView>(null);
+  const contentRef = useRef<View>(null!);
+  const scrollIntoView = useCallback((target: View) => {
+    const scroll = scrollRef.current as unknown as View | null;
+    const content = contentRef.current;
+    if (!scroll || !content) return;
+    scroll.measureInWindow((_x, scrollTop) => {
+      target.measureInWindow((_tx, targetTop) => {
+        if (targetTop >= scrollTop) return;
+        target.measureLayout(content, (_lx, y) => scrollRef.current?.scrollTo({ y: Math.max(0, y - 16) }));
+      });
+    });
+  }, []);
 
   useEffect(() => {
     if (routine && !initialized) {
@@ -122,7 +137,9 @@ export function RoutineBuilder({ initialRoutineId }: RoutineBuilderProps) {
     await refetchDays();
   }
 
-  if (initialRoutineId && (routineLoading || !routine)) {
+  // Only the first load shows the spinner: swapping the editor for it on every refetch remounts the whole
+  // screen, which flashes and throws the scroll position back to the top.
+  if (initialRoutineId && !routine) {
     return (
       <Screen>
         <ActivityIndicator color={colors.accent} />
@@ -134,94 +151,102 @@ export function RoutineBuilder({ initialRoutineId }: RoutineBuilderProps) {
   const pickableRoutines = allRoutines.filter((r) => r.id !== routineId);
 
   return (
-    <NestableScrollContainer style={styles.container} contentContainerStyle={styles.content}>
-      <AppText variant="label" style={styles.label}>
-        Nombre
-      </AppText>
-      <TextInput
-        style={styles.input}
-        placeholder="Ej: Fuerza 5x5, Push/Pull/Legs..."
-        placeholderTextColor={colors.textMuted}
-        value={name}
-        onChangeText={setName}
-        onBlur={handleNameBlur}
-      />
-      {nameError && <AppText color="danger">{nameError}</AppText>}
-
-      <View style={styles.switchRow}>
-        <AppText>Usa top set / back-off</AppText>
-        <Switch
-          value={usesTopSetBackoff}
-          onValueChange={handleToggleTopSet}
-          trackColor={{ false: colors.surfaceMuted, true: colors.accent }}
-          thumbColor={colors.onDark}
+    <ScrollIntoViewContext.Provider value={scrollIntoView}>
+      <NestableScrollContainer
+        // The library types this ref as gesture-handler's ScrollView component; the instance is React Native's ScrollView.
+        ref={scrollRef as never}
+        innerViewRef={contentRef}
+        style={styles.container}
+        contentContainerStyle={styles.content}
+      >
+        <AppText variant="label" style={styles.label}>
+          Nombre
+        </AppText>
+        <TextInput
+          style={styles.input}
+          placeholder="Ej: Fuerza 5x5, Push/Pull/Legs..."
+          placeholderTextColor={colors.textMuted}
+          value={name}
+          onChangeText={setName}
+          onBlur={handleNameBlur}
         />
-      </View>
+        {nameError && <AppText color="danger">{nameError}</AppText>}
 
-      <AppText variant="label" style={styles.label}>
-        Duración sugerida (semanas, opcional)
-      </AppText>
-      <TextInput
-        style={styles.input}
-        placeholder="Ej: 8"
-        placeholderTextColor={colors.textMuted}
-        keyboardType="number-pad"
-        value={suggestedDurationWeeks}
-        onChangeText={setSuggestedDurationWeeks}
-        onBlur={handleDurationBlur}
-      />
-
-      {pickableRoutines.length > 0 && (
-        <View style={styles.pickerSection}>
-          <AppText variant="label">Rutina siguiente (opcional)</AppText>
-          {pickableRoutines.map((r) => (
-            <Pressable
-              key={r.id}
-              style={[styles.pickerRow, nextRoutineId === r.id && styles.pickerRowSelected]}
-              onPress={() => handleSelectNextRoutine(r.id)}
-            >
-              <AppText>{r.name}</AppText>
-            </Pressable>
-          ))}
-        </View>
-      )}
-
-      <View style={styles.daysHeader}>
-        <AppText variant="title">Días</AppText>
-        {days.length > 1 && (
-          <Button
-            title={reorderingDays ? 'Listo' : 'Reordenar'}
-            variant="ghost"
-            onPress={() => setReorderingDays((current) => !current)}
+        <View style={styles.switchRow}>
+          <AppText>Usa top set / back-off</AppText>
+          <Switch
+            value={usesTopSetBackoff}
+            onValueChange={handleToggleTopSet}
+            trackColor={{ false: colors.surfaceMuted, true: colors.accent }}
+            thumbColor={colors.onDark}
           />
+        </View>
+
+        <AppText variant="label" style={styles.label}>
+          Duración sugerida (semanas, opcional)
+        </AppText>
+        <TextInput
+          style={styles.input}
+          placeholder="Ej: 8"
+          placeholderTextColor={colors.textMuted}
+          keyboardType="number-pad"
+          value={suggestedDurationWeeks}
+          onChangeText={setSuggestedDurationWeeks}
+          onBlur={handleDurationBlur}
+        />
+
+        {pickableRoutines.length > 0 && (
+          <View style={styles.pickerSection}>
+            <AppText variant="label">Rutina siguiente (opcional)</AppText>
+            {pickableRoutines.map((r) => (
+              <Pressable
+                key={r.id}
+                style={[styles.pickerRow, nextRoutineId === r.id && styles.pickerRowSelected]}
+                onPress={() => handleSelectNextRoutine(r.id)}
+              >
+                <AppText>{r.name}</AppText>
+              </Pressable>
+            ))}
+          </View>
         )}
-      </View>
-      {reorderingDays ? (
-        <>
-          <AppText variant="muted">Mantené presionado un día y arrastralo.</AppText>
-          <DayReorderList days={days} weekdaySchedule={weekdaySchedule} onReorder={handleReorderDays} />
-        </>
-      ) : (
-        <>
-          {days.map((day) => (
-            <DayCard
-              key={day.id}
-              day={day}
-              routineId={routineId as string}
-              weekdaySchedule={weekdaySchedule}
-              onChanged={handleChanged}
-              onDelete={handleDeleteDay}
+
+        <View style={styles.daysHeader}>
+          <AppText variant="title">Días</AppText>
+          {days.length > 1 && (
+            <Button
+              title={reorderingDays ? 'Listo' : 'Reordenar'}
+              variant="ghost"
+              onPress={() => setReorderingDays((current) => !current)}
             />
-          ))}
+          )}
+        </View>
+        {reorderingDays ? (
+          <>
+            <AppText variant="muted">Mantené presionado un día y arrastralo.</AppText>
+            <DayReorderList days={days} weekdaySchedule={weekdaySchedule} onReorder={handleReorderDays} />
+          </>
+        ) : (
+          <>
+            {days.map((day) => (
+              <DayCard
+                key={day.id}
+                day={day}
+                routineId={routineId as string}
+                weekdaySchedule={weekdaySchedule}
+                onChanged={handleChanged}
+                onDelete={handleDeleteDay}
+              />
+            ))}
 
-          <Button title="+ Nuevo día" variant="secondary" onPress={handleAddDay} />
-        </>
-      )}
+            <Button title="+ Nuevo día" variant="secondary" onPress={handleAddDay} />
+          </>
+        )}
 
-      <View style={styles.doneButton}>
-        <Button title="Listo" onPress={() => router.back()} />
-      </View>
-    </NestableScrollContainer>
+        <View style={styles.doneButton}>
+          <Button title="Listo" onPress={() => router.back()} />
+        </View>
+      </NestableScrollContainer>
+    </ScrollIntoViewContext.Provider>
   );
 }
 
