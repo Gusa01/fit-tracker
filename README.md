@@ -4,6 +4,13 @@ A gym workout tracker for Android that tells you what to lift today, works offli
 
 <!-- GIF: docs/media/demo.gif -->
 
+<p>
+  <img src="docs/media/home.jpg" width="200" alt="Home: this week's plan, today's workout and the training streak" />
+  <img src="docs/media/routine-editor.jpg" width="200" alt="Routine editor: a day's exercises with sets, reps and RIR" />
+  <img src="docs/media/progress.jpg" width="200" alt="Progress: every exercise with a trend sparkline" />
+  <img src="docs/media/settings.jpg" width="200" alt="Settings: theme, reminders and the welcome guide" />
+</p>
+
 **[Download the Android APK](https://github.com/Gusa01/fit-tracker/releases/latest)** (sideload; updates install themselves after that).
 
 **Try the demo account:** email `demo.fittracker@example.com`, password `fittracker123`. It comes with about 12 weeks of training history and resets every Monday and Thursday. The sign-in screen has a "Probar con la cuenta demo" button, so you don't need to type them. Other accounts are invite-only.
