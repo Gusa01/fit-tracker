@@ -25,7 +25,12 @@ export async function flushPendingWrites(supabase: SupabaseClient, writes: Pendi
     const rowId = typeof write.payload.id === 'string' ? write.payload.id : null;
     if (rowId && blockedRows.has(rowId)) continue;
     const onConflict = CONFLICT_TARGETS[write.entity];
-    const { error } = await supabase.from(write.entity).upsert(write.payload, onConflict ? { onConflict } : undefined);
+    // The session screen's "finish" write is status-only. It can't be an upsert: Postgres rejects the
+    // missing NOT NULL columns before it ever sees the existing row, so it has to be a plain update.
+    const isStatusOnlySession = write.entity === 'workout_sessions' && rowId && !('user_id' in write.payload);
+    const { error } = isStatusOnlySession
+      ? await supabase.from(write.entity).update(write.payload).eq('id', rowId)
+      : await supabase.from(write.entity).upsert(write.payload, onConflict ? { onConflict } : undefined);
     if (error) {
       if (write.entity === 'user_exercise_state' && error.code === '23503') {
         // The exercise no longer exists (catalog replaced); retrying can never succeed.

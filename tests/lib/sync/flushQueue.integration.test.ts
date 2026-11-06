@@ -11,6 +11,14 @@ function fakeSupabase(behavior: (table: string, payload: Record<string, unknown>
           calls.push({ table, payload, options });
           return Promise.resolve(behavior(table, payload));
         },
+        update(payload: Record<string, unknown>) {
+          return {
+            eq() {
+              calls.push({ table, payload });
+              return Promise.resolve(behavior(table, payload));
+            },
+          };
+        },
       };
     },
   };
