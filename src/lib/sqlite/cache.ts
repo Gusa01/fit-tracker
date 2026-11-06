@@ -1,6 +1,7 @@
 import { SQLiteDatabase } from 'expo-sqlite';
 import { SupabaseClient } from '@supabase/supabase-js';
-import { getActiveRoutine } from '../sessions/queries';
+import { getActiveRoutine, getSetRirs } from '../sessions/queries';
+import { lastSessionSets } from '../sessions/lastSession';
 import { listRoutineDays, listDayExercises } from '../routines/queries';
 import { RoutineExerciseWithName } from '../routines/types';
 import { computeWeekNumber, weekdayFromDate, resolveTodayDayId } from '../sessions/weekResolution';
@@ -53,6 +54,12 @@ export async function refreshLocalCache(db: SQLiteDatabase, supabase: SupabaseCl
     console.warn('Could not refresh exercise records cache', err);
     return null;
   });
+  const lastSets = history ? lastSessionSets(history) : [];
+  // Without RIR the hint still shows weight and reps, so a failure here only drops that part.
+  const rirs = await getSetRirs(
+    supabase,
+    lastSets.map((s) => s.logged_set_id)
+  ).catch(() => new Map<string, number | null>());
 
   db.withTransactionSync(() => {
     db.runSync('delete from routines_cache');
@@ -63,6 +70,14 @@ export async function refreshLocalCache(db: SQLiteDatabase, supabase: SupabaseCl
     if (history) {
       db.runSync('delete from exercise_records_cache');
       recordsByExercise(history).forEach((records, exerciseId) => writeExerciseRecords(db, exerciseId, records));
+      db.runSync('delete from last_session_sets_cache');
+      lastSets.forEach((s) => {
+        db.runSync(
+          `insert or replace into last_session_sets_cache (exercise_id, set_index, session_date, weight, reps, rir)
+           values (?, ?, ?, ?, ?, ?)`,
+          [s.exercise_id, s.set_index, s.session_date, s.weight, s.reps, rirs.get(s.logged_set_id) ?? null]
+        );
+      });
     }
 
     if (!routine) return;
@@ -226,4 +241,21 @@ export function resolveToday(db: SQLiteDatabase, today: Date = new Date()): Reso
   const days = getCachedRoutineDays(db, routine.id);
   const day = days.find((d) => d.id === dayId) ?? null;
   return { routine, weekNumber, day };
+}
+
+export interface CachedLastSet {
+  set_index: number;
+  session_date: string;
+  weight: number;
+  reps: number;
+  rir: number | null;
+}
+
+/** What was done in each set of this exercise the last time it was trained, keyed by set index. */
+export function getCachedLastSets(db: SQLiteDatabase, exerciseId: string): Record<number, CachedLastSet> {
+  const rows = db.getAllSync<CachedLastSet>(
+    'select set_index, session_date, weight, reps, rir from last_session_sets_cache where exercise_id = ?',
+    [exerciseId]
+  );
+  return Object.fromEntries(rows.map((row) => [row.set_index, row]));
 }

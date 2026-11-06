@@ -87,3 +87,18 @@ export async function listRecentCompletedSessions(
     dayName: row.routine_days?.name ?? '',
   }));
 }
+
+/** RIR isn't in the history view, so the "last time" hint reads it straight from the sets. */
+export async function getSetRirs(supabase: SupabaseClient, setIds: string[]): Promise<Map<string, number | null>> {
+  const rirs = new Map<string, number | null>();
+  // Chunked so the id list never makes the request URL too long.
+  for (let i = 0; i < setIds.length; i += 100) {
+    const { data, error } = await supabase
+      .from('logged_sets')
+      .select('id, rir')
+      .in('id', setIds.slice(i, i + 100));
+    if (error) throw error;
+    (data as { id: string; rir: number | null }[]).forEach((row) => rirs.set(row.id, row.rir));
+  }
+  return rirs;
+}
