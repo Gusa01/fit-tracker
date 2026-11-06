@@ -11,6 +11,14 @@ function fakeSupabase(behavior: (table: string, payload: Record<string, unknown>
           calls.push({ table, payload, options });
           return Promise.resolve(behavior(table, payload));
         },
+        update(payload: Record<string, unknown>) {
+          return {
+            eq() {
+              calls.push({ table, payload });
+              return Promise.resolve(behavior(table, payload));
+            },
+          };
+        },
       };
     },
   };
@@ -131,5 +139,34 @@ describe('flushPendingWrites against the real hosted project', () => {
     expect(rows).toHaveLength(1);
     expect(rows![0].current_weight).toBe(62.5);
     expect(rows![0].consecutive_hit_count).toBe(2);
+  });
+
+  it('marks an already-created session completed from the status-only write the session screen queues', async () => {
+    const { day } = await seedTestRoutine(supabase, userId);
+    const sessionId = crypto.randomUUID();
+    const created = await flushPendingWrites(supabase, [
+      {
+        id: 'create',
+        entity: 'workout_sessions',
+        payload: {
+          id: sessionId,
+          user_id: userId,
+          routine_day_id: day.id,
+          session_date: '2026-03-02',
+          week_number: 1,
+          status: 'in_progress',
+        },
+      },
+    ]);
+    expect(created.failedIds).toEqual([]);
+
+    const completed = await flushPendingWrites(supabase, [
+      { id: 'complete', entity: 'workout_sessions', payload: { id: sessionId, status: 'completed' } },
+    ]);
+    expect(completed).toEqual({ succeededIds: ['complete'], failedIds: [], droppedIds: [] });
+
+    const { data, error } = await supabase.from('workout_sessions').select('status').eq('id', sessionId).single();
+    if (error) throw error;
+    expect(data.status).toBe('completed');
   });
 });
