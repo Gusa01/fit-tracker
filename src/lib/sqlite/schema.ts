@@ -57,6 +57,16 @@ export const CREATE_TABLES_SQL = `
     best_reps real
   );
 
+  create table if not exists last_session_sets_cache (
+    exercise_id text not null,
+    set_index integer not null,
+    session_date text not null,
+    weight real not null,
+    reps real not null,
+    rir integer,
+    primary key (exercise_id, set_index)
+  );
+
   create table if not exists pending_writes (
     id text primary key,
     entity text not null,

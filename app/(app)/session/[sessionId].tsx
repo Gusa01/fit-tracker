@@ -18,6 +18,7 @@ export default function SessionScreen() {
     exercises,
     loggedSets,
     weightByExercise,
+    lastSetsByExercise,
     loading,
     loadForDay,
     logSet,
@@ -69,6 +70,7 @@ export default function SessionScreen() {
             key={exercise.id}
             exercise={exercise}
             initialWeight={weightByExercise[exercise.id] ?? null}
+            lastSets={lastSetsByExercise[exercise.id] ?? {}}
             loggedSets={loggedSets}
             onLogSet={(setIndex, setType, weight, reps, rir) =>
               logSet(exercise.id, setIndex, setType, weight, reps, rir)

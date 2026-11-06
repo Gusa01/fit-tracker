@@ -8,6 +8,7 @@ describe('local SQLite schema', () => {
       'routine_exercises_cache',
       'user_exercise_state_cache',
       'exercise_records_cache',
+      'last_session_sets_cache',
       'pending_writes',
     ]) {
       expect(CREATE_TABLES_SQL).toContain(`create table if not exists ${table}`);

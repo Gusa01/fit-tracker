@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { View, Text, Pressable, Modal, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import { CachedRoutineExercise } from '../lib/sqlite/cache';
+import { CachedLastSet, CachedRoutineExercise } from '../lib/sqlite/cache';
 import { LoggedSet, SetType } from '../lib/sessions/types';
 import { buildPrescribedSets, formatTargetScheme } from '../lib/sessions/prescribedSets';
 import { WeightStepper } from './WeightStepper';
@@ -18,6 +18,8 @@ import { ColorTokens } from '../theme/colors';
 interface SessionExerciseCardProps {
   exercise: CachedRoutineExercise;
   initialWeight: number | null;
+  // What each set (by index) was the last time this exercise was trained; empty the first time.
+  lastSets: Record<number, CachedLastSet>;
   loggedSets: LoggedSet[];
   onLogSet: (setIndex: number, setType: SetType, weight: number, reps: number, rir: number | null) => Promise<void>;
   onCorrectSet: (setId: string, change: SetCorrection) => Promise<void>;
@@ -35,6 +37,7 @@ const SET_TYPE_LABELS: Record<SetType, string> = {
 export function SessionExerciseCard({
   exercise,
   initialWeight,
+  lastSets,
   loggedSets,
   onLogSet,
   onCorrectSet,
@@ -57,6 +60,7 @@ export function SessionExerciseCard({
     loggedSets.filter((s) => s.routine_exercise_id === exercise.id).map((s) => [s.set_index, s])
   );
   const nextSet = prescribed.find((set) => !loggedByIndex.has(set.setIndex));
+  const lastTime = nextSet ? lastSets[nextSet.setIndex] : undefined;
 
   async function handleLogNext() {
     if (!nextSet || !weight || !reps) return;
@@ -122,6 +126,13 @@ export function SessionExerciseCard({
           <AppText variant="heading" style={styles.activeSetTitle}>
             Serie {nextSet.setIndex} de {prescribed.length} — {SET_TYPE_LABELS[nextSet.setType]}
           </AppText>
+          {lastTime && (
+            <AppText variant="muted">
+              Última vez: {lastTime.weight} kg × {lastTime.reps}
+              {exercise.rep_unit === 'seconds' ? 's' : ''}
+              {lastTime.rir !== null ? ` · RIR ${lastTime.rir}` : ''}
+            </AppText>
+          )}
 
           <AppText variant="label" style={styles.label}>
             Peso (kg)

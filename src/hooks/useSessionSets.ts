@@ -6,7 +6,9 @@ import {
   getCachedDayExercises,
   getCachedExerciseState,
   getCachedExerciseRecords,
+  getCachedLastSets,
   mergeCachedExerciseRecords,
+  CachedLastSet,
   CachedRoutineExercise,
 } from '../lib/sqlite/cache';
 import { listSessionSets } from '../lib/sessions/queries';
@@ -35,6 +37,7 @@ export function useSessionSets(sessionId: string | undefined) {
   const [exercises, setExercises] = useState<CachedRoutineExercise[]>([]);
   const [loggedSets, setLoggedSets] = useState<LoggedSet[]>([]);
   const [weightByExercise, setWeightByExercise] = useState<Record<string, number | null>>({});
+  const [lastSetsByExercise, setLastSetsByExercise] = useState<Record<string, Record<number, CachedLastSet>>>({});
   const [loading, setLoading] = useState(true);
   const [prBanner, setPrBanner] = useState<PrBannerData | null>(null);
   const dismissPrBanner = useCallback(() => setPrBanner(null), []);
@@ -62,6 +65,9 @@ export function useSessionSets(sessionId: string | undefined) {
       weights[exercise.id] = state?.suggested_next_weight ?? state?.current_weight ?? null;
     });
     setWeightByExercise(weights);
+    setLastSetsByExercise(
+      Object.fromEntries(dayExercises.map((e) => [e.id, getCachedLastSets(getDatabase(), e.exercise_id)]))
+    );
   }, []);
 
   useEffect(() => {
@@ -186,6 +192,7 @@ export function useSessionSets(sessionId: string | undefined) {
     exercises,
     loggedSets,
     weightByExercise,
+    lastSetsByExercise,
     loading,
     loadForDay,
     logSet,

@@ -3,6 +3,7 @@ import { seedActiveRoutine } from '../../helpers/seedActiveRoutine';
 import {
   getActiveRoutine,
   getSessionForDate,
+  getSetRirs,
   listSessionSets,
   listRecentCompletedSessions,
 } from '../../../src/lib/sessions/queries';
@@ -135,5 +136,52 @@ describe('listRecentCompletedSessions', () => {
     const result = await listRecentCompletedSessions(supabase, userId, 2);
     expect(result).toHaveLength(2);
     expect(result[0].sessionDate).toBe('2026-04-15');
+  });
+});
+
+describe('getSetRirs', () => {
+  it('maps each requested set id to its RIR, null when none was logged', async () => {
+    const { day, routineExercise } = await seedActiveRoutine(supabase, userId);
+    const { data: session, error: sessionError } = await supabase
+      .from('workout_sessions')
+      .insert({
+        user_id: userId,
+        routine_day_id: day.id,
+        session_date: '2026-05-04',
+        week_number: 1,
+        status: 'completed',
+      })
+      .select()
+      .single();
+    if (sessionError) throw sessionError;
+    const { data: sets, error: setsError } = await supabase
+      .from('logged_sets')
+      .insert([
+        {
+          session_id: session.id,
+          routine_exercise_id: routineExercise.id,
+          set_index: 1,
+          set_type: 'working',
+          weight: 60,
+          reps: 9,
+          rir: 1,
+        },
+        {
+          session_id: session.id,
+          routine_exercise_id: routineExercise.id,
+          set_index: 2,
+          set_type: 'working',
+          weight: 60,
+          reps: 8,
+          rir: null,
+        },
+      ])
+      .select('id, set_index');
+    if (setsError) throw setsError;
+    const [first, second] = [...sets].sort((a, b) => a.set_index - b.set_index);
+
+    const rirs = await getSetRirs(supabase, [first.id, second.id]);
+    expect(rirs.get(first.id)).toBe(1);
+    expect(rirs.get(second.id)).toBeNull();
   });
 });
