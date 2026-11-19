@@ -1,6 +1,7 @@
 import {
   summarizeSession,
   groupSessionSets,
+  draftNewSet,
   validateSetEdit,
   editFromValues,
   buildCorrectionPayload,
@@ -33,6 +34,8 @@ function exercise(overrides: Partial<HistoryExercise>): HistoryExercise {
     scheme_type: 'normal',
     rep_unit: 'reps',
     rir_min: 1,
+    sets: 3,
+    backoff_sets: null,
     ...overrides,
   };
 }
@@ -59,7 +62,7 @@ describe('groupSessionSets', () => {
   const squat = exercise({ id: 're-squat', exercise_name: 'Sentadilla', order_index: 0 });
   const curl = exercise({ id: 're-curl', exercise_name: 'Curl', order_index: 2 });
 
-  it('orders exercises by routine order and sets by set index, dropping deleted sets', () => {
+  it('orders exercises by routine order and sets by set index, dropping deleted sets but keeping the exercise', () => {
     const groups = groupSessionSets(
       [
         set({ id: 'b2', routine_exercise_id: 're-bench', set_index: 2 }),
@@ -72,11 +75,59 @@ describe('groupSessionSets', () => {
     expect(groups.map((g) => [g.exercise.id, g.sets.map((s) => s.id)])).toEqual([
       ['re-squat', ['s1']],
       ['re-bench', ['b1', 'b2']],
+      ['re-curl', []],
     ]);
   });
 
   it('skips sets whose exercise is unknown', () => {
-    expect(groupSessionSets([set({ routine_exercise_id: 'gone' })], [bench])).toEqual([]);
+    expect(groupSessionSets([set({ routine_exercise_id: 'gone' })], [bench])).toEqual([{ exercise: bench, sets: [] }]);
+  });
+});
+
+describe('draftNewSet', () => {
+  const bench = exercise({ id: 're-bench', sets: 3 });
+
+  it('fills the first prescribed set that is missing, starting from the last set logged', () => {
+    const draft = draftNewSet(
+      bench,
+      [set({ set_index: 1, weight: 80, reps: 8, rir: 2 }), set({ set_index: 3, weight: 82.5, reps: 6, rir: 1 })],
+      'sess',
+      'new-id',
+      '2026-11-19T12:00:00Z'
+    );
+    expect(draft).toEqual({
+      id: 'new-id',
+      session_id: 'sess',
+      routine_exercise_id: 're-bench',
+      set_index: 2,
+      set_type: 'working',
+      weight: 82.5,
+      reps: 6,
+      rir: 1,
+      created_at: '2026-11-19T12:00:00Z',
+      is_deleted: false,
+    });
+  });
+
+  it('adds one past the last set once every prescribed set is logged', () => {
+    const sets = [1, 2, 3].map((i) => set({ id: `s${i}`, set_index: i }));
+    expect(draftNewSet(bench, sets, 'sess', 'n', 't').set_index).toBe(4);
+  });
+
+  it('starts an exercise with nothing logged at its first set, empty, with the routine RIR', () => {
+    const draft = draftNewSet(exercise({ rir_min: 2 }), [], 'sess', 'n', 't');
+    expect(draft).toMatchObject({ set_index: 1, set_type: 'working', weight: 0, reps: 0, rir: 2 });
+  });
+
+  it('follows a top set / back-off scheme', () => {
+    const topSet = exercise({ scheme_type: 'top_set_backoff', sets: null, backoff_sets: 2 });
+    expect(draftNewSet(topSet, [], 's', 'n', 't').set_type).toBe('top_set');
+    expect(draftNewSet(topSet, [set({ set_index: 1, set_type: 'top_set' })], 's', 'n', 't')).toMatchObject({
+      set_index: 2,
+      set_type: 'back_off',
+    });
+    const full = [1, 2, 3].map((i) => set({ id: `s${i}`, set_index: i }));
+    expect(draftNewSet(topSet, full, 's', 'n', 't')).toMatchObject({ set_index: 4, set_type: 'back_off' });
   });
 });
 

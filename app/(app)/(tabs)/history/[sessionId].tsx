@@ -1,9 +1,10 @@
 import { useMemo, useState } from 'react';
 import { View, Pressable, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import * as Crypto from 'expo-crypto';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSessionDetail } from '../../../../src/hooks/useSessionHistory';
-import { groupSessionSets } from '../../../../src/lib/history/logic';
+import { draftNewSet, groupSessionSets } from '../../../../src/lib/history/logic';
 import { formatSessionTitle, formatSetLabel, formatSetValues } from '../../../../src/lib/history/format';
 import { HistoryExercise } from '../../../../src/lib/history/types';
 import { LoggedSet } from '../../../../src/lib/sessions/types';
@@ -16,8 +17,8 @@ export default function SessionHistoryDetail() {
   const { colors } = useTheme();
   const styles = useMemo(() => makeStyles(colors), [colors]);
   const { sessionId } = useLocalSearchParams<{ sessionId: string }>();
-  const { detail, isLoading, error, refetch, correctSet } = useSessionDetail(sessionId);
-  const [editing, setEditing] = useState<{ set: LoggedSet; exercise: HistoryExercise } | null>(null);
+  const { detail, isLoading, error, refetch, correctSet, addSet } = useSessionDetail(sessionId);
+  const [editing, setEditing] = useState<{ set: LoggedSet; exercise: HistoryExercise; isNew: boolean } | null>(null);
   const [corrected, setCorrected] = useState(false);
 
   const groups = useMemo(() => (detail ? groupSessionSets(detail.sets, detail.exercises) : []), [detail]);
@@ -55,7 +56,8 @@ export default function SessionHistoryDetail() {
 
   async function finish(change: Parameters<typeof correctSet>[1]) {
     if (!editing) return;
-    await correctSet(editing.set.id, change);
+    if (editing.isNew) await addSet(editing.set, change);
+    else await correctSet(editing.set.id, change);
     setEditing(null);
     setCorrected(true);
   }
@@ -82,7 +84,7 @@ export default function SessionHistoryDetail() {
           </Banner>
         )}
 
-        {groups.length === 0 && (
+        {groups.length === 0 && detail.sets.length === 0 && (
           <AppText variant="muted" style={styles.message}>
             Esta sesión no tiene series.
           </AppText>
@@ -91,6 +93,7 @@ export default function SessionHistoryDetail() {
         {groups.map(({ exercise, sets }) => (
           <Card key={exercise.id} style={styles.card}>
             <AppText variant="heading">{exercise.exercise_name}</AppText>
+            {sets.length === 0 && <AppText variant="muted">Sin series registradas</AppText>}
             {sets.map((set) => (
               <View key={set.id} style={styles.setRow}>
                 <AppText variant="muted" style={styles.setLabel}>
@@ -100,7 +103,7 @@ export default function SessionHistoryDetail() {
                   {formatSetValues(set, exercise.rep_unit)}
                 </AppText>
                 <Pressable
-                  onPress={() => setEditing({ set, exercise })}
+                  onPress={() => setEditing({ set, exercise, isNew: false })}
                   hitSlop={12}
                   accessibilityLabel="Corregir serie"
                 >
@@ -108,11 +111,23 @@ export default function SessionHistoryDetail() {
                 </Pressable>
               </View>
             ))}
+            <Button
+              title="+ Agregar serie"
+              variant="ghost"
+              onPress={() =>
+                setEditing({
+                  set: draftNewSet(exercise, sets, detail.id, Crypto.randomUUID(), new Date().toISOString()),
+                  exercise,
+                  isNew: true,
+                })
+              }
+            />
           </Card>
         ))}
 
         <SetEditor
           set={editing?.set ?? null}
+          isNew={editing?.isNew}
           exercise={editing?.exercise ?? null}
           onClose={() => setEditing(null)}
           onSave={finish}

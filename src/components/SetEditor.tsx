@@ -15,6 +15,8 @@ const RIR_OPTIONS = [0, 1, 2, 3, 4];
 
 interface SetEditorProps {
   set: LoggedSet | null;
+  // A set being added after the fact rather than corrected: no delete, and it starts empty if there's nothing to copy.
+  isNew?: boolean;
   exercise: { exercise_name: string; rep_unit: RoutineExerciseRepUnit; rir_min: number | null } | null;
   onSave: (change: SetCorrection) => Promise<void>;
   onDelete: () => Promise<void>;
@@ -22,10 +24,10 @@ interface SetEditorProps {
 }
 
 function valuesFrom(set: LoggedSet): SetEditValues {
-  return { weight: String(set.weight), reps: String(set.reps), rir: set.rir };
+  return { weight: String(set.weight), reps: set.reps > 0 ? String(set.reps) : '', rir: set.rir };
 }
 
-export function SetEditor({ set, exercise, onSave, onDelete, onClose }: SetEditorProps) {
+export function SetEditor({ set, isNew = false, exercise, onSave, onDelete, onClose }: SetEditorProps) {
   const { colors } = useTheme();
   const styles = useMemo(() => makeStyles(colors), [colors]);
   const [values, setValues] = useState<SetEditValues>({ weight: '', reps: '', rir: null });
@@ -47,7 +49,7 @@ export function SetEditor({ set, exercise, onSave, onDelete, onClose }: SetEdito
     setSaving(true);
     try {
       await onSave(editFromValues(values, exercise, set));
-      toast('Serie corregida');
+      toast(isNew ? 'Serie agregada' : 'Serie corregida');
     } catch {
       Alert.alert('Error', 'No se pudo guardar la corrección. Probá de nuevo.');
     } finally {
@@ -134,9 +136,11 @@ export function SetEditor({ set, exercise, onSave, onDelete, onClose }: SetEdito
           />
         </View>
         <View style={styles.secondaryRow}>
-          <View style={styles.secondaryCell}>
-            <Button title="Borrar serie" variant="danger" disabled={saving} onPress={handleDelete} />
-          </View>
+          {!isNew && (
+            <View style={styles.secondaryCell}>
+              <Button title="Borrar serie" variant="danger" disabled={saving} onPress={handleDelete} />
+            </View>
+          )}
           <View style={styles.secondaryCell}>
             <Button title="Cancelar" variant="secondary" disabled={saving} onPress={onClose} />
           </View>

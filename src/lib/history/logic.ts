@@ -1,5 +1,6 @@
 import { RoutineExerciseRepUnit } from '../routines/types';
 import { LoggedSet } from '../sessions/types';
+import { buildPrescribedSets } from '../sessions/prescribedSets';
 import { ExerciseSetGroup, HistoryExercise, SetCorrection, SetEditValues } from './types';
 
 const MAX_RIR = 10;
@@ -12,6 +13,7 @@ export function summarizeSession(sets: Array<{ routine_exercise_id: string; is_d
   return { exerciseCount: new Set(live.map((s) => s.routine_exercise_id)).size, setCount: live.length };
 }
 
+/** Every exercise of the session in routine order, with its live sets; an exercise can have none yet. */
 export function groupSessionSets(sets: LoggedSet[], exercises: HistoryExercise[]): ExerciseSetGroup[] {
   return [...exercises]
     .sort((a, b) => a.order_index - b.order_index)
@@ -20,8 +22,41 @@ export function groupSessionSets(sets: LoggedSet[], exercises: HistoryExercise[]
       sets: sets
         .filter((s) => s.routine_exercise_id === exercise.id && !s.is_deleted)
         .sort((a, b) => a.set_index - b.set_index),
-    }))
-    .filter((group) => group.sets.length > 0);
+    }));
+}
+
+/**
+ * A not-yet-saved set for "Agregar serie": the first prescribed set still missing, or one past the last
+ * logged set when the prescription is complete. Values start from the exercise's last set.
+ */
+export function draftNewSet(
+  exercise: HistoryExercise,
+  sets: LoggedSet[],
+  sessionId: string,
+  id: string,
+  createdAt: string
+): LoggedSet {
+  const prescribed = buildPrescribedSets(exercise);
+  const taken = new Set(sets.map((s) => s.set_index));
+  const missing = prescribed.find((p) => !taken.has(p.setIndex));
+  const setIndex = missing?.setIndex ?? Math.max(0, ...sets.map((s) => s.set_index), prescribed.length) + 1;
+  const setType =
+    missing?.setType ??
+    prescribed[prescribed.length - 1]?.setType ??
+    (exercise.scheme_type === 'top_set_backoff' ? 'back_off' : 'working');
+  const previous = [...sets].sort((a, b) => a.set_index - b.set_index).pop();
+  return {
+    id,
+    session_id: sessionId,
+    routine_exercise_id: exercise.id,
+    set_index: setIndex,
+    set_type: setType,
+    weight: previous?.weight ?? 0,
+    reps: previous?.reps ?? 0,
+    rir: previous?.rir ?? exercise.rir_min,
+    created_at: createdAt,
+    is_deleted: false,
+  };
 }
 
 /** The first problem with the editor's values, in Spanish, or null when they are valid. */

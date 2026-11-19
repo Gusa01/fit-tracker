@@ -28,7 +28,7 @@ So I built the app I wanted to use. I train with it, and the plan is to keep imp
 - **Today's workout**, resolved from the active routine and the weekday, with sets logged between rest periods and each set showing what was done in it last time. A day missed earlier in the week is offered on Home, and any routine day can be trained instead. Logging works offline and syncs when the connection comes back.
 - **Progression suggestions**: top set / back-off and double progression schemes, a suggested weight for next time, and a deload suggestion after two sessions short of target.
 - **Progress charts** per exercise (estimated 1RM, weight, reps or time), and a banner the moment a set beats a personal record.
-- **Session history** with corrections: edit or delete a logged set after the fact.
+- **Session history** with corrections: edit or delete a logged set after the fact, or add one that was never logged.
 - **Reminders** on training days, and a weekly streak with a warning before it breaks.
 - **An exercise catalog** with images, muscle and equipment filters, and search by name or synonym that ignores accents and case.
 - **Dark mode**, following the system or set by hand.

@@ -11,6 +11,8 @@ export interface HistoryExercise {
   scheme_type: RoutineExerciseSchemeType;
   rep_unit: RoutineExerciseRepUnit;
   rir_min: number | null;
+  sets: number | null;
+  backoff_sets: number | null;
 }
 
 export interface HistorySessionRow {
