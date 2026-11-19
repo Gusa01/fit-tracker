@@ -7,6 +7,7 @@ import { getSessionDetail, listCompletedSessions } from '../lib/history/queries'
 import { applyCorrection } from '../lib/history/logic';
 import { queueSetCorrection } from '../lib/history/submitCorrection';
 import { HistorySessionRow, SessionDetail, SetCorrection } from '../lib/history/types';
+import { LoggedSet } from '../lib/sessions/types';
 import { useAuthSession } from './useAuthSession';
 
 const HISTORY_OFFLINE_MESSAGE = 'Conectate para ver tu historial';
@@ -113,5 +114,18 @@ export function useSessionDetail(sessionId: string | undefined) {
     [detail, userId]
   );
 
-  return { detail, isLoading, error, refetch, correctSet };
+  // A forgotten set: the draft from draftNewSet with the editor's values, queued as a full-row insert.
+  const addSet = useCallback(
+    async (draft: LoggedSet, change: SetCorrection) => {
+      if (!userId || change.kind !== 'edit') return;
+      queueSetCorrection(getDatabase(), draft, change);
+      setDetail((current) =>
+        current ? { ...current, sets: applyCorrection([...current.sets, draft], draft.id, change) } : current
+      );
+      syncNow(getDatabase(), supabase, userId).catch(() => {});
+    },
+    [userId]
+  );
+
+  return { detail, isLoading, error, refetch, correctSet, addSet };
 }

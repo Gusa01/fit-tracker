@@ -175,7 +175,25 @@ describe('getSessionDetail', () => {
         scheme_type: 'normal',
         rep_unit: 'reps',
         rir_min: 2,
+        sets: 3,
+        backoff_sets: null,
       },
     ]);
+  });
+
+  it("includes the day's exercises that got no sets, so a forgotten one can be added", async () => {
+    const userId = await createUser('history-detail-skipped');
+    const seeded = await seedTestRoutine(admin, userId);
+    const { data: session, error } = await admin
+      .from('workout_sessions')
+      .insert({ user_id: userId, routine_day_id: seeded.day.id, session_date: '2026-02-04', status: 'completed' })
+      .select('id')
+      .single();
+    if (error) throw error;
+
+    const detail = await getSessionDetail(admin, session.id);
+
+    expect(detail.sets).toEqual([]);
+    expect(detail.exercises.map((e) => e.id)).toEqual([seeded.routineExercise.id]);
   });
 });
